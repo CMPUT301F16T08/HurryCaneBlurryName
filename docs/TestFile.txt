@@ -1,2 +1,5 @@
 Ver 0.1
 - Christina created the repository and it now looks less lonely here.
+
+Ver 0.2
+- Blaz has access!
