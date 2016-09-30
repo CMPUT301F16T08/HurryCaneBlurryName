@@ -3,3 +3,6 @@ Ver 0.1
 
 Ver 0.2
 - Blaz has access!
+
+Ver 0.3
+- Chen has access! -_-
