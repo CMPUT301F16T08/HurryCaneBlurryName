@@ -17,4 +17,8 @@ public class RequestList {
     public boolean contains(Request request) {
         return requests.contains(request);
     }
+
+    public void removeRequest(Request request) {
+        requests.remove(request);
+    }
 }

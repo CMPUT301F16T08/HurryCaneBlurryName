@@ -8,17 +8,21 @@ import junit.framework.TestCase;
  * <h1>Request Test</h1>
  * Tests Request Class
  * <p>
- *     <b>Use Cases</b>
- *     <ul>
- *         <li>UC-1</li>
- *     </ul>
+ * <b>Use Cases</b>
+ * <ul>
+ * <li>UC-1</li>
+ * </ul>
  * </p>
+ *
  * @author Blaz Pocrnja
  * @version 1.0
- * @since 10/12/2016
+ * @since 10 /12/2016
  */
 public class RequestTest extends TestCase{
 
+    /**
+     * Test set locations.
+     */
     public void testSetLocations(){
         Location from = new Location("from");
         Location to = new Location("to");
