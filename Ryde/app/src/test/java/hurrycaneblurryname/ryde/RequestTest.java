@@ -7,12 +7,6 @@ import junit.framework.TestCase;
 /**
  * <h1>Request Test</h1>
  * Tests Request Class
- * <p>
- * <b>Use Cases</b>
- * <ul>
- * <li>UC-1</li>
- * </ul>
- * </p>
  *
  * @author Blaz Pocrnja
  * @version 1.0
@@ -22,6 +16,12 @@ public class RequestTest extends TestCase{
 
     /**
      * Test set locations.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-1</li>
+     *     </ul>
+     * </p>
      */
     public void testSetLocations(){
         Location from = new Location("from");

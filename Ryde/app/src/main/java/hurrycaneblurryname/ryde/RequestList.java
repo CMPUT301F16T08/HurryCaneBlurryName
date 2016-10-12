@@ -21,4 +21,8 @@ public class RequestList {
     public void removeRequest(Request request) {
         requests.remove(request);
     }
+
+    public Request getRequest(int i) {
+        return requests.get(i);
+    }
 }

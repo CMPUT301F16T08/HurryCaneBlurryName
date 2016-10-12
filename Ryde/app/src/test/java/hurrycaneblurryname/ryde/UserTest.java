@@ -29,4 +29,87 @@ public class UserTest extends TestCase{
 
         assertTrue("Request Was Not Added to User Request List!",user.hasRequest(request));
     }
+
+    /**
+     * Test get request.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-2</li>
+     *     </ul>
+     * </p>
+     */
+    public void testGetRequest(){
+        User user = new User();
+        Request request = new Request();
+        user.addRequest(request);
+
+        assertTrue("Request Was Not Retrieved At Index!", user.getRequest(0) == request);
+    }
+
+    /**
+     * Test remove request.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-3</li>
+     *     </ul>
+     * </p>
+     */
+    public void testRemoveRequest(){
+        User user = new User();
+        Request request = new Request();
+        user.addRequest(request);
+        user.removeRequest(request);
+    }
+
+    /**
+     * Test get Username.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-4</li>
+     *         <li>UC-7</li>
+     *     </ul>
+     * </p>
+     */
+    public void testGetUsername(){
+        User user = new User("UniqueUsername");
+
+        assertTrue("Username Not Retrieved!", user.getUsername().equals("UniqueUsername"));
+    }
+
+    /**
+     * Test phone setters and getters.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-4</li>
+     *         <li>UC-7</li>
+     *     </ul>
+     * </p>
+     */
+    public void testPhone(){
+        User user = new User();
+        user.setPhone("7805550001");
+
+        assertTrue("Phone Not Set!",user.getPhone().equals("7805550001"));
+    }
+
+    /**
+     * Test email setters and getters.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-4</li>
+     *         <li>UC-7</li>
+     *     </ul>
+     * </p>
+     */
+    public void testEmail(){
+        User user = new User();
+        user.setEmail("exampleemail@ualberta.ca");
+
+        assertTrue("Email Not Set!",user.getEmail().equals("exampleemail@ualberta.ca"));
+    }
 }
