@@ -21,6 +21,6 @@ public class RequestListTest extends TestCase{
         RequestList requests = new RequestList();
         Request request = new Request();
         requests.addRequest(request);
-        assertTrue("Test Request not contained!",requests.contains(request));
+        assertTrue("Test Request Not Contained!",requests.contains(request));
     }
 }
