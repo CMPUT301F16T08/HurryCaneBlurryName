@@ -1,6 +1,6 @@
 package hurrycaneblurryname.ryde;
 
-import android.test.ActivityInstrumentationTestCase2;
+import junit.framework.TestCase;
 
 /**
  * <h1>RequestList Test</h1>
@@ -13,13 +13,9 @@ import android.test.ActivityInstrumentationTestCase2;
  * </p>
  * @author Blaz Pocrnja
  * @version 1.0
- * @since 2016-10-12
+ * @since 10/12/2016
  */
-public class RequestListTest extends ActivityInstrumentationTestCase2<MainActivity> {
-
-    public RequestListTest() {
-        super(MainActivity.class);
-    }
+public class RequestListTest extends TestCase{
 
     public void testAddRequest(){
         RequestList requests = new RequestList();
@@ -27,6 +23,4 @@ public class RequestListTest extends ActivityInstrumentationTestCase2<MainActivi
         requests.addRequest(request);
         assertTrue("Test Request not contained!",requests.contains(request));
     }
-
-
 }
