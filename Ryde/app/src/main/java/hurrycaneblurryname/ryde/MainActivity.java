@@ -3,6 +3,9 @@ package hurrycaneblurryname.ryde;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
