@@ -27,7 +27,12 @@ public class RequestTest extends TestCase{
         Location from = new Location("from");
         Location to = new Location("to");
         Request request = new Request();
-        request.setLocations(from , to);
+        try{
+            request.setLocations(from , to);
+        }
+        catch(LocationException e){
+            assertTrue("LocationException Thrown!" , false);
+        }
 
         assertTrue("From Location Not Set!" , request.getFrom().equals(from));
         assertTrue("To Location Not Set!" , request.getTo().equals(to));
@@ -88,5 +93,27 @@ public class RequestTest extends TestCase{
         request.setStatus("complete");
 
         assertTrue("Status Not Set!" , request.getStatus().equals("complete"));
+    }
+
+    /**
+     * Test keyword search and description setter
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-1</li>
+     *         <li>UC-9</li>
+     *     </ul>
+     * </p>
+     */
+    public void testDescription(){
+        Request request = new Request();
+        try {
+            request.setDescription("I need a ride. This is an eMerGency!");
+        }
+        catch(DescriptionTooLongException e){
+            assertTrue("DescriptionTooLongException Thrown!" , false);
+        }
+        assertFalse("Keyword Search Broken!" , !request.hasKeyword("emergency"));
+        assertTrue("Description Setter Broken!" , request.hasKeyword("eMerGency"));
     }
 }

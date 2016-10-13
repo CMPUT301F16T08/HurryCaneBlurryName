@@ -2,6 +2,8 @@ package hurrycaneblurryname.ryde;
 
 import android.location.Location;
 
+import java.util.ArrayList;
+
 /**
  * Created by pocrn_000 on 10/11/2016.
  */
@@ -13,14 +15,21 @@ public class Request {
     private Driver driver;
     private String estimate;
     private String status;
+    private String description;
 
     public Request(){
         this.status = "open";
+        this.description = "";
     }
 
-    public void setLocations(Location from, Location to) {
+    public void setLocations(Location from, Location to) throws LocationException{
         this.from = from;
         this.to = to;
+
+        //TODO Determine when to throw location exception
+        if(false){
+            throw new LocationException();
+        }
     }
 
     public Location getFrom() {
@@ -61,5 +70,18 @@ public class Request {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean hasKeyword(String keyword) {
+        return description.toLowerCase().contains(keyword.toLowerCase());
+    }
+
+    public void setDescription(String description) throws DescriptionTooLongException{
+        this.description = description;
+
+        //TODO Determine max length of description
+        if(false){
+            throw new DescriptionTooLongException();
+        }
     }
 }
