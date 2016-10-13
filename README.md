@@ -7,6 +7,7 @@ A CMPUT301 project at the University of Alberta, Fall 2016.
 
 
 
+##LICENSE
 Copyright (c) 2016 GroupHurryCane (aka CMPUT301 Fall 2016 Team 8)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
