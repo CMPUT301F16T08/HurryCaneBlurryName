@@ -1,5 +1,5 @@
 # Ryde
-## aka 'Codename BlurryName'
+#### aka 'Codename BlurryName'
 
 Ryde is a ride-sharing mobilie application that allows users to encourage car-pooling between two locations. 
 
