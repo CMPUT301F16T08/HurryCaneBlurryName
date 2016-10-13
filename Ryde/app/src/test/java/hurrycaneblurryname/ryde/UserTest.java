@@ -23,11 +23,11 @@ public class UserTest extends TestCase{
      * </p>
      */
     public void testAddRequest(){
-        User user = new User();
+        User user = new User("");
         Request request = new Request();
         user.addRequest(request);
 
-        assertTrue("Request Was Not Added to User Request List!",user.hasRequest(request));
+        assertTrue("Request Was Not Added to User Request List!" , user.hasRequest(request));
     }
 
     /**
@@ -40,11 +40,11 @@ public class UserTest extends TestCase{
      * </p>
      */
     public void testGetRequest(){
-        User user = new User();
+        User user = new User("");
         Request request = new Request();
         user.addRequest(request);
 
-        assertTrue("Request Was Not Retrieved At Index!", user.getRequest(0).equals(request));
+        assertTrue("Request Was Not Retrieved At Index!" , user.getRequest(0).equals(request));
     }
 
     /**
@@ -57,12 +57,12 @@ public class UserTest extends TestCase{
      * </p>
      */
     public void testRemoveRequest(){
-        User user = new User();
+        User user = new User("");
         Request request = new Request();
         user.addRequest(request);
         user.removeRequest(request);
 
-        assertFalse("Request Not Removed!",user.hasRequest(request));
+        assertFalse("Request Not Removed!" , user.hasRequest(request));
     }
 
     /**
@@ -72,13 +72,14 @@ public class UserTest extends TestCase{
      *     <ul>
      *         <li>UC-4</li>
      *         <li>UC-7</li>
+     *         <li>UC-8</li>
      *     </ul>
      * </p>
      */
     public void testGetUsername(){
         User user = new User("UniqueUsername");
 
-        assertTrue("Username Not Retrieved!", user.getUsername().equals("UniqueUsername"));
+        assertTrue("Username Not Retrieved!" , user.getUsername().equals("UniqueUsername"));
     }
 
     /**
@@ -88,14 +89,15 @@ public class UserTest extends TestCase{
      *     <ul>
      *         <li>UC-4</li>
      *         <li>UC-7</li>
+     *         <li>UC-8</li>
      *     </ul>
      * </p>
      */
     public void testPhone(){
-        User user = new User();
+        User user = new User("");
         user.setPhone("7805550001");
 
-        assertTrue("Phone Not Set!",user.getPhone().equals("7805550001"));
+        assertTrue("Phone Not Set!" , user.getPhone().equals("7805550001"));
     }
 
     /**
@@ -105,13 +107,14 @@ public class UserTest extends TestCase{
      *     <ul>
      *         <li>UC-4</li>
      *         <li>UC-7</li>
+     *         <li>UC-8</li>
      *     </ul>
      * </p>
      */
     public void testEmail(){
-        User user = new User();
+        User user = new User("");
         user.setEmail("exampleemail@ualberta.ca");
 
-        assertTrue("Email Not Set!",user.getEmail().equals("exampleemail@ualberta.ca"));
+        assertTrue("Email Not Set!" , user.getEmail().equals("exampleemail@ualberta.ca"));
     }
 }

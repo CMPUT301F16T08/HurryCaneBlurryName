@@ -27,10 +27,26 @@ public class RequestTest extends TestCase{
         Location from = new Location("from");
         Location to = new Location("to");
         Request request = new Request();
-        request.setLocations(from,to);
+        request.setLocations(from , to);
 
-        assertTrue("From Location Not Set!", request.getFrom().equals(from));
-        assertTrue("To Location Not Set!", request.getTo().equals(to));
+        assertTrue("From Location Not Set!" , request.getFrom().equals(from));
+        assertTrue("To Location Not Set!" , request.getTo().equals(to));
+    }
+
+    /**
+     * Test estimate setters and getters.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-1</li>
+     *     </ul>
+     * </p>
+     */
+    public void testEstimate(){
+        Request request = new Request();
+        request.setEstimate("50.00");
+
+        assertTrue("Estimate Not Set!" , request.getEstimate().equals("50.00"));
     }
 
     /**
@@ -45,12 +61,32 @@ public class RequestTest extends TestCase{
     public void testDriver(){
         Request request = new Request();
 
-        assertFalse("There Is a Driver!", request.hasDriver());
+        assertFalse("hasDriver Not Working!" , request.hasDriver());
 
-        Driver driver = new Driver();
-        request.addDriver(driver);
+        Driver driver = new Driver("");
+        request.setDriver(driver);
 
-        assertTrue("No Driver Added!", request.hasDriver());
-        assertTrue("Driver Does Not Match!",request.getDriver().equals(driver));
+        assertTrue("hasDriver Not Working!" , request.hasDriver());
+        assertTrue("Driver Does Not Match!" , request.getDriver().equals(driver));
+    }
+
+    /**
+     * Test status setters and getters.
+     * <p>
+     *     <b>Involved in</b>
+     *     <ul>
+     *         <li>UC-6</li>
+     *         <li>UC-10</li>
+     *     </ul>
+     * </p>
+     */
+    public void testStatus(){
+        Request request = new Request();
+
+        assertTrue("Constructor Did Not Set Status to Open!" , request.getStatus().equals("open"));
+
+        request.setStatus("complete");
+
+        assertTrue("Status Not Set!" , request.getStatus().equals("complete"));
     }
 }

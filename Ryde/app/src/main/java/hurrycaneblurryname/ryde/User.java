@@ -11,10 +11,6 @@ public class User {
     private String email;
     private RequestList requests;
 
-    public User(){
-        requests = new RequestList();
-    }
-
     public User(String username){
         requests = new RequestList();
         this.username = username;

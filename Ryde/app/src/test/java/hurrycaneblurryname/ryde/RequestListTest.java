@@ -26,7 +26,7 @@ public class RequestListTest extends TestCase{
         Request request = new Request();
         requests.addRequest(request);
 
-        assertTrue("Test Request Not Contained!",requests.contains(request));
+        assertTrue("Test Request Not Contained!" , requests.contains(request));
     }
 
     /**
@@ -43,6 +43,6 @@ public class RequestListTest extends TestCase{
         Request request = new Request();
         requests.removeRequest(request);
 
-        assertFalse("Test Request Still Contained!", requests.contains(request));
+        assertFalse("Test Request Still Contained!" , requests.contains(request));
     }
 }

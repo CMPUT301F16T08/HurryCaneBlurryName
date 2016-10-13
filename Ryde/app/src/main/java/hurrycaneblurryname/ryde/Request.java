@@ -11,6 +11,12 @@ public class Request {
     private Location from;
     private Location to;
     private Driver driver;
+    private String estimate;
+    private String status;
+
+    public Request(){
+        this.status = "open";
+    }
 
     public void setLocations(Location from, Location to) {
         this.from = from;
@@ -32,11 +38,28 @@ public class Request {
         return true;
     }
 
-    public void addDriver(Driver driver) {
+    public void setDriver(Driver driver) {
         this.driver = driver;
     }
 
     public Driver getDriver() {
         return driver;
+    }
+
+    public void setEstimate(String estimate) {
+        this.estimate = estimate;
+    }
+
+    public String getEstimate() {
+        return estimate;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

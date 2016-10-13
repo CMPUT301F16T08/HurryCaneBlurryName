@@ -5,4 +5,8 @@ package hurrycaneblurryname.ryde;
  */
 
 public class Driver extends User{
+
+    public Driver(String username){
+        super(username);
+    }
 }

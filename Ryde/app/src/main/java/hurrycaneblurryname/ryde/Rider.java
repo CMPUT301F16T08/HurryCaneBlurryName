@@ -5,4 +5,8 @@ package hurrycaneblurryname.ryde;
  */
 
 public class Rider extends User{
+
+    public Rider(String username){
+        super(username);
+    }
 }
