@@ -8,7 +8,7 @@ import junit.framework.TestCase;
  *
  * @author Blaz Pocrnja
  * @version 1.0
- * @since 10 /12/2016
+ * @since 10/12/2016
  */
 public class RequestListTest extends TestCase{
 

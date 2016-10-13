@@ -8,7 +8,7 @@ import junit.framework.TestCase;
  *
  * @author Blaz Pocrnja
  * @version 1.0
- * @since 10 /12/2016
+ * @since 10/12/2016
  */
 public class UserTest extends TestCase{
 
@@ -44,7 +44,7 @@ public class UserTest extends TestCase{
         Request request = new Request();
         user.addRequest(request);
 
-        assertTrue("Request Was Not Retrieved At Index!", user.getRequest(0) == request);
+        assertTrue("Request Was Not Retrieved At Index!", user.getRequest(0).equals(request));
     }
 
     /**
@@ -61,6 +61,8 @@ public class UserTest extends TestCase{
         Request request = new Request();
         user.addRequest(request);
         user.removeRequest(request);
+
+        assertFalse("Request Not Removed!",user.hasRequest(request));
     }
 
     /**
