@@ -11,15 +11,17 @@ public class Request {
     
     private Location from;
     private Location to;
-    private Driver driver;
-    private String estimate;
+    private User rider;
+    private User driver;
+    private Double estimate;
     private String status;
     private String description;
 
     /**
      * Instantiates a new Request.
      */
-    public Request(){
+    public Request(User rider){
+        this.rider = rider;
         this.status = "open";
         this.description = "";
     }
@@ -76,7 +78,7 @@ public class Request {
      *
      * @param driver the driver
      */
-    public void setDriver(Driver driver) {
+    public void setDriver(User driver) {
         this.driver = driver;
     }
 
@@ -85,7 +87,7 @@ public class Request {
      *
      * @return the driver
      */
-    public Driver getDriver() {
+    public User getDriver() {
         return driver;
     }
 
@@ -94,7 +96,7 @@ public class Request {
      *
      * @param estimate the estimate
      */
-    public void setEstimate(String estimate) {
+    public void setEstimate(Double estimate) {
         this.estimate = estimate;
     }
 
@@ -103,7 +105,7 @@ public class Request {
      *
      * @return the estimate
      */
-    public String getEstimate() {
+    public Double getEstimate() {
         return estimate;
     }
 
@@ -118,12 +120,12 @@ public class Request {
     }
 
     /**
-     * Sets status.
+     * Sets status in lowercase.
      *
      * @param status the status
      */
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status.toLowerCase();
     }
 
     /**
@@ -149,5 +151,9 @@ public class Request {
         if(false){
             throw new DescriptionTooLongException();
         }
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 }
