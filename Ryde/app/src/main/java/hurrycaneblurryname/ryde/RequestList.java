@@ -1,11 +1,12 @@
 package hurrycaneblurryname.ryde;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by pocrn_000 on 10/11/2016.
  */
-public class RequestList {
+public class RequestList implements Iterable<Request>{
 
     /**
      * The Requests.
@@ -48,5 +49,22 @@ public class RequestList {
      */
     public Request getRequest(int i) {
         return requests.get(i);
+    }
+
+    public void addAllKeyword(RequestList requests, String keyword) {
+        for(Request i : requests){
+            if(i.hasKeyword(keyword)){
+                this.requests.add(i);
+            }
+        }
+    }
+
+    @Override
+    public Iterator<Request> iterator() {
+        return requests.iterator();
+    }
+
+    public int getSize(){
+        return requests.size();
     }
 }
