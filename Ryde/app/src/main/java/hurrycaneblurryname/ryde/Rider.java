@@ -5,6 +5,8 @@ package hurrycaneblurryname.ryde;
  */
 public class Rider extends User{
 
+    protected RequestList rideRequests;
+
     /**
      * Instantiates a new Rider.
      *
@@ -12,5 +14,14 @@ public class Rider extends User{
      */
     public Rider(String username){
         super(username);
+        rideRequests = new RequestList();
+    }
+
+    public void addRideRequest(Request request) {
+        rideRequests.addRequest(request);
+    }
+
+    public boolean hasRideRequest(Request request) {
+        return rideRequests.contains(request);
     }
 }

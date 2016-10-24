@@ -8,7 +8,9 @@ public class User {
     private String username;
     private String phone;
     private String email;
-    private RequestList requests;
+    private String role;
+    private String cardNumber;
+    protected RequestList requests;
 
     /**
      * Instantiates a new User.
@@ -101,5 +103,17 @@ public class User {
      */
     public String getEmail() {
         return email;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
     }
 }
