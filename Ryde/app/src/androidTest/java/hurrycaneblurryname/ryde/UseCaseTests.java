@@ -10,13 +10,20 @@ import android.test.ActivityInstrumentationTestCase2;
  *
  * @author Blaz Pocrnja
  * @version 1.1
- * @since 10/23/2016
+ * @since 10 /23/2016
  */
 public class UseCaseTests extends ActivityInstrumentationTestCase2{
+    /**
+     * Instantiates a new Use case tests.
+     */
     public UseCaseTests() {
         super(MainActivity.class);
     }
 
+    /**
+     * Test rider requests new ride.
+     * UC-1
+     */
     public void testRiderRequestsNewRide(){
         //Assume User has rider role
         User rider = new User("");
@@ -59,6 +66,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         assertTrue("Request not saved with rider!", rider.hasRequest(request));
     }
 
+    /**
+     * Test view current requests.
+     * UC-2
+     */
     public void testViewCurrentRequests(){
         //1. System displays all ride requests and driver acceptances associated with user
         User user1 = new User("1");
@@ -88,6 +99,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
 
     }
 
+    /**
+     * Test cancel current request.
+     * UC-3
+     */
     public void testCancelCurrentRequest(){
         //1. System prompts for confirmation from user
         //2. User confirms cancellation
@@ -103,6 +118,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         assertFalse("Request was not removed from user's list!",user.hasRequest(request));
     }
 
+    /**
+     * Test contact request driver.
+     * UC-4
+     */
     public void testContactRequestDriver(){
         User user = new User("Mr.Information");
         user.setEmail("myemail@ualberta.ca");
@@ -121,6 +140,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
 
     }
 
+    /**
+     * Test confirm driver acceptance.
+     * UC-5
+     */
     public void testConfirmDriverAcceptance(){
         User rider = new User("");
         User driver = new User("");
@@ -138,6 +161,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         driver.addRequest(request);
     }
 
+    /**
+     * Test confirm completion of request.
+     * UC-6
+     */
     public void testConfirmCompletionOfRequest(){
         User rider = new User("");
         User driver = new User("");
@@ -165,6 +192,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         assertTrue("Credit card not set!" , rider.getCardNumber().equals("1234567890"));
     }
 
+    /**
+     * Test view profile.
+     * UC-7
+     */
     public void testViewProfile(){
         User user = new User("Mr.Information");
         user.setEmail("myemail@ualberta.ca");
@@ -176,6 +207,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         assertTrue("Phone not Set!", user.getPhone().equals("1-780-555-0001"));
     }
 
+    /**
+     * Test edit self profile.
+     * UC-8
+     */
     public void testEditSelfProfile(){
         User user = new User("Mr.Information");
         user.setEmail("myemail@ualberta.ca");
@@ -200,6 +235,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
 
     }
 
+    /**
+     * Test search for open rides.
+     * UC-9
+     */
     public void testSearchForOpenRides(){
         User rider = new User("");
         Request request = new Request(rider);
@@ -224,6 +263,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         assertTrue("'Emergency' keyword not found" , searched.getSize() == 1);
     }
 
+    /**
+     * Test driver accepts request.
+     * UC-10
+     */
     public void testDriverAcceptsRequest(){
         User rider = new User("");
         User driver = new User("");
@@ -244,6 +287,10 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
         //2. System sends Rider acceptance notification
     }
 
+    /**
+     * Test view accepted request.
+     * UC-11
+     */
     public void testViewAcceptedRequest(){
         User rider = new User("");
         User driver = new User("");
