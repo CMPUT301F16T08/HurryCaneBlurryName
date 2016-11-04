@@ -3,6 +3,11 @@ package hurrycaneblurryname.ryde;
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
 
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.Request.RequestList;
+import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.View.MainActivity;
+
 
 /**
  * <h1>Use Case Tests</h1>

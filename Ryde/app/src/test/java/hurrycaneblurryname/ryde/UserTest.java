@@ -2,6 +2,9 @@ package hurrycaneblurryname.ryde;
 
 import junit.framework.TestCase;
 
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.User;
+
 /**
  * <h1>User Test</h1>
  * Tests User Class

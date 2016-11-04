@@ -1,4 +1,4 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.Model.Request;
 
 import java.util.ArrayList;
 import java.util.Iterator;

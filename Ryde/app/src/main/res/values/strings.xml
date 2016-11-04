@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Ryde</string>
+    <string name="Login">Login</string>
+    <string name="User">User:</string>
+    <string name="Password">Password:</string>
+    <string name="createNew">Create an new account</string>
 </resources>

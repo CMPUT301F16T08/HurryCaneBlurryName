@@ -2,6 +2,9 @@ package hurrycaneblurryname.ryde;
 
 import junit.framework.TestCase;
 
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.Request.RequestList;
+
 /**
  * <h1>RequestList Test</h1>
  * Tests RequestList Class
