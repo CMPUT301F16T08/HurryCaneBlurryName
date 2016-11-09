@@ -1,7 +1,5 @@
 package hurrycaneblurryname.ryde.View;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -13,12 +11,12 @@ import hurrycaneblurryname.ryde.R;
 /**
  * The type Main activity.
  */
-public class MainActivity extends AppCompatActivity {
+public class LoginScreenActivity extends AppCompatActivity {
     private TextView signupTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login_screen);
         setTitle(R.string.Login);
 
 
