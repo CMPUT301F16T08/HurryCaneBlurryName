@@ -1,4 +1,4 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.Model;
 
 /**
  * Created by pocrn_000 on 10/12/2016.

@@ -1,8 +1,10 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.Model.Request;
 
 import android.location.Location;
 
-import java.util.ArrayList;
+import hurrycaneblurryname.ryde.DescriptionTooLongException;
+import hurrycaneblurryname.ryde.LocationException;
+import hurrycaneblurryname.ryde.Model.User;
 
 /**
  * Created by pocrn_000 on 10/11/2016.

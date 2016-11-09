@@ -1,4 +1,7 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.Model;
+
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.Request.RequestList;
 
 /**
  * Created by pocrn_000 on 10/12/2016.
