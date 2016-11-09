@@ -17,12 +17,12 @@ public class EditUserProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_profile);
+        setContentView(R.layout.edit_user_profile);
         setTitle(R.string.editTitle);
 
-        this.userEditText = (EditText)findViewById(R.id.userEditText);
-        this.emailEditText = (EditText)findViewById(R.id.emailEditText);
-        this.phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-        this.finishButton = (Button)findViewById(R.id.cancelButton);
+        userEditText = (EditText)findViewById(R.id.userEditText);
+        emailEditText = (EditText)findViewById(R.id.emailEditText);
+        phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+        finishButton = (Button)findViewById(R.id.cancelButton);
     }
 }
