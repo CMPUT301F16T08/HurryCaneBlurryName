@@ -19,5 +19,10 @@ public class EditUserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_profile);
         setTitle(R.string.editTitle);
+
+        this.userEditText = (EditText)findViewById(R.id.userEditText);
+        this.emailEditText = (EditText)findViewById(R.id.emailEditText);
+        this.phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+        this.finishButton = (Button)findViewById(R.id.cancelButton);
     }
 }

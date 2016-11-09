@@ -9,6 +9,7 @@ import hurrycaneblurryname.ryde.Model.Request.RequestList;
 public class User {
 
     private String username;
+    private String password;
     private String phone;
     private String email;
     private String role;
@@ -119,4 +120,13 @@ public class User {
     public String getCardNumber() {
         return cardNumber;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
+
