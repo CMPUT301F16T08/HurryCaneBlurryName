@@ -1,9 +1,10 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,12 +23,12 @@ public class LoginScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_screen);
+        setContentView(R.layout.login_screen);
         setTitle(R.string.Login);
 
-        this.userEditText = (EditText)findViewById(R.id.userEditText);
-        this.passwordEditText = (EditText)findViewById(R.id.userEditText);
-        this.loginButton = (Button)findViewById(R.id.loginButton);
+        userEditText = (EditText)findViewById(R.id.userEditText);
+        passwordEditText = (EditText)findViewById(R.id.userEditText);
+        loginButton = (Button)findViewById(R.id.loginButton);
 
 
         signupTextView = (TextView)findViewById(R.id.reg_text);
@@ -41,13 +42,39 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // check if username/password are empty
+                int textlength = userEditText.getText().length();
+                if (textlength == 0) {
+                    emptyDescAlertDialog("Please fill up the Username!");
+                    return;
+                }
+                textlength = passwordEditText.getText().length();
+                if (textlength == 0) {
+                    emptyDescAlertDialog("Password cannot be empty!");
+                    return;
+                }
                 // TO-DOs
                 // Run ElasticSearch Query, find if user match
                 // Match? get Role, navigate to different main screen
                 // unmatch? Hint: User/Password wrong.
+
                 finish();
             }
         });
 
     }
+
+    private void emptyDescAlertDialog(String errorMsg) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(errorMsg);
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated catch block
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
 }
