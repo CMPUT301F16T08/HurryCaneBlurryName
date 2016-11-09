@@ -7,4 +7,8 @@
     <string name="phone">Phone Number:</string>
     <string name="createNew">Create an new account</string>
     <string name="signup">Sign Up</string>
+    <string name="finish">Finish</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="editTitle">Edit Contact Info:</string>
 </resources>

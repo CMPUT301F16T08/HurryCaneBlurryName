@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".View.SignupActivity">
+    tools:context=".View.EditUserProfile">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,26 +26,11 @@
             android:inputType="text"
             android:textSize="20sp"/>
 
-        <TextView android:id="@+id/passwordTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Password"
-            android:layout_below="@id/userEditText"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"/>
-
-        <EditText android:id="@+id/passwordEditText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/passwordTextView"
-            android:inputType="textPassword"
-            android:textSize="20sp"/>
-
         <TextView android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:layout_below="@id/passwordEditText"
+            android:layout_below="@id/userEditText"
             android:layout_marginTop="20dp"
             android:textSize="20sp"/>
 
@@ -72,25 +57,14 @@
             android:inputType="phone"
             android:textSize="20sp"/>
 
-        <LinearLayout
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/phoneEditText"
+            android:text="@string/finish"
+            android:id="@+id/finishButton"
             android:layout_centerInParent="true"
-            android:layout_marginTop="25dp">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signup"
-                android:id="@+id/signupButton" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:id="@+id/cancelButton"  />
-        </LinearLayout>
+            android:layout_below="@id/phoneEditText"
+            android:layout_marginTop="25dp"/>
 
     </RelativeLayout>
 </ScrollView>
