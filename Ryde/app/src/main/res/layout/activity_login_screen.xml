@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginButton"
         android:layout_marginTop="15dp"
+        android:onClick="onClick"
         android:clickable="true"
         android:text="@string/createNew"
         android:layout_centerInParent="true"
