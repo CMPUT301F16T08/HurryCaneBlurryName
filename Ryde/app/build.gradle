@@ -28,8 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services-maps:9.2.1'
-    //Takes too long to compile; Will need it in the future
-    //compile 'com.google.android.gms:play-services-location:9.6.0'
+    compile 'com.google.android.gms:play-services-location:9.2.1'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:23.1.1'
 }
