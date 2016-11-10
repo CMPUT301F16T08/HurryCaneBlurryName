@@ -110,6 +110,25 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
 
+            <!-- buttons -->
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Complete Request"
+                android:id="@+id/confirmButton"
+                android:layout_below="@id/estTexts"
+                android:layout_marginTop="20dp"
+                android:layout_centerInParent="true"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Cancel Request"
+                android:id="@+id/cancelButton"
+                android:layout_below="@id/confirmButton"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"/>
 
         </RelativeLayout>
 

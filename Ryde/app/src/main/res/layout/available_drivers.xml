@@ -7,22 +7,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".View.OpenRequestsActivity">
+    tools:context=".View.AvailableDriversActivity">
 
     <TextView
-        android:text="Open Requests "
+        android:text="All Availabe Drivers "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/requestsTextView"
+        android:id="@+id/driversTextView"
         android:textSize="24sp" />
 
     <ListView
-        android:id="@+id/openRequests"
+        android:id="@+id/driversListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/requestsTextView"
+        android:layout_below="@+id/driversTextView"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

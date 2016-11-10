@@ -1,31 +1,11 @@
-accepted_requests:
-	(ListView) acceptedRequestsListView
-	
-edit_user_profile:
-	userEditText
-	emailEditText
-	phoneEditText
-	
-	finishButton
-	cancelButton
-	
+User Signup, Login, Profile
+----------------------------------------------
 login_screen:
 	userEditText
 	passwordEditText
 	
-	(TextView)reg_text
+	(TextView)reg_text(onClick)
 	loginButton
-	
-rider_requests:
-	(ListView)riderRequests
-	
-rider_ride_info:
-	descTexts
-	driverUsernameText
-	(TextView)driverClickText
-	
-	statusTexts
-	estTexts
 	
 signup:
 	userEditText
@@ -38,3 +18,48 @@ signup:
 	
 	signupButton
 	cancelButton
+
+edit_user_profile:
+	userEditText
+	emailEditText
+	phoneEditText
+	
+	finishButton
+	cancelButton
+	
+Riders and Drivers
+----------------------------------------------
+new_request:
+	descEditText
+	fromEditText(onClick)
+	toEditText(onClick)
+
+rider_requests:
+	(ListView)riderRequests
+
+rider_ride_info:
+	descTexts
+	driverUsernameText
+	(TextView)driverClickText
+	
+	statusTexts
+	estTexts
+
+rider_confirm_driver:
+	userTexts
+	phoneTexts
+	confirmButton
+	
+available_driver:
+	driversListView
+	
+driver_info:
+	userTexts
+	phoneTexts
+	
+accepted_requests:
+	(ListView) acceptedRequestsListView
+	
+open_requests:
+	(ListView)openRequests
+	

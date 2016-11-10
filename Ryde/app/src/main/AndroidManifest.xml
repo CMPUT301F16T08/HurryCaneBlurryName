@@ -30,7 +30,9 @@
         <activity
             android:name=".View.DriverMainActivity"
             android:label="@string/title_activity_driver_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".View.AvailableDriversActivity" />
+        <activity android:name=".View.NewRequestActivity"></activity>
     </application>
 
 </manifest>
