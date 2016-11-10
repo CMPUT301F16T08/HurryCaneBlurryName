@@ -17,10 +17,10 @@
         </activity>
         <activity android:name=".View.SignupActivity" />
         <activity android:name=".View.EditUserProfile" />
-        <activity android:name=".View.AcceptedRequestsActivity" />
+        <activity android:name=".View.RiderCurrentRequestsActivity" />
         <activity android:name=".View.DriverInfoActivity" />
-        <activity android:name=".View.RiderRequestInfoActivity" />
-        <activity android:name=".View.OpenRequestsActivity" />
+        <activity android:name=".View.RequestHistoryActivity" />
+        <activity android:name=".View.DriverOpenRequestsActivity" />
         <activity android:name=".View.RiderRideInfoActivity" />
         <activity android:name=".View.RiderConfirmDriverActivity" />
         <activity
@@ -32,7 +32,8 @@
             android:label="@string/title_activity_driver_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".View.AvailableDriversActivity" />
-        <activity android:name=".View.NewRequestActivity"></activity>
+        <activity android:name=".View.NewRequestActivity" />
+        <activity android:name=".View.HistoryRideInfo"></activity>
     </application>
 
 </manifest>

@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
-public class OpenRequestsActivity extends AppCompatActivity {
+public class RiderCurrentRequestsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.open_requests);
+        setContentView(R.layout.rider_current_requests);
     }
 }
