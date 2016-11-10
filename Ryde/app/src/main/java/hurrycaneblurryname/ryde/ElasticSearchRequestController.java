@@ -57,7 +57,7 @@ public class ElasticSearchRequestController {
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("request")
+                    .addType("requests")
                     .build();
 
             try {
@@ -67,11 +67,11 @@ public class ElasticSearchRequestController {
                     tweets.addAll(foundTweets);
                 }
                 else {
-                    Log.i("GetError", "The search query failed to find any requests that matched.");
+                    Log.i("ErrorGetRequest", "The search query failed to find any requests that matched.");
                 }
             }
             catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return tweets;
@@ -98,7 +98,7 @@ public class ElasticSearchRequestController {
 
             Delete delete = new Delete.Builder(search_id[0])
                     .index("f16t08")
-                    .type("request")
+                    .type("requests")
                     .build();
 
             try {
@@ -107,11 +107,11 @@ public class ElasticSearchRequestController {
                     //TODO find out what documentResult holds
                 }
                 else {
-                    Log.i("DeleteError", result.getErrorMessage() );
+                    Log.i("ErrorDeleteRequest", result.getErrorMessage() );
                 }
             }
             catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.i("ErrorDeleteRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return null;
@@ -135,7 +135,7 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (Request request: requests) {
-                Index index = new Index.Builder(request).index("f16t08").type("request").build();
+                Index index = new Index.Builder(request).index("f16t08").type("requests").build();
 
                 try {
                     DocumentResult result = client.execute(index);
@@ -177,8 +177,8 @@ public class ElasticSearchRequestController {
 
             ArrayList<User> users = new ArrayList<User>();
 
-            // "{ "from" : 0, "size": 10000, "query": {"match": {"message": "search_parameters[0] "}}}";
-            String search_string = "{ \"from\" : 0, \"size\": 10000, \"query\": {\"match\": {\"message\": \"" + search_parameters[0] + "\"}}}";
+            // "{ "size": 1, "query": {"match": {"message": "search_parameters[0] "}}}";
+            String search_string = "{ \"size\": 1, \"query\": {\"match\": {\"message\": \"" + search_parameters[0] + "\"}}}";
 
             //if input is empty, pull all tweets
             if (search_parameters[0].equals("")) {
@@ -187,7 +187,7 @@ public class ElasticSearchRequestController {
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("request")
+                    .addType("users")
                     .build();
 
             try {
@@ -197,11 +197,11 @@ public class ElasticSearchRequestController {
                     users.addAll(foundUsers);
                 }
                 else {
-                    Log.i("Error", "The search query failed to find any tweets that matched.");
+                    Log.i("ErrorGetUser", "The search query failed to find any users that matched.");
                 }
             }
             catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.i("ErrorGetUser", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return users.get(0);
@@ -227,20 +227,19 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (User user: users) {
-                Index index = new Index.Builder(user).index("f16t08").type("request").build();
+                Index index = new Index.Builder(user).index("f16t08").type("users").build();
 
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
-                        // TODO: setID of the user from elasticsearch
-//                        user.setId(result.getId());
+                        user.setId(result.getId());
                     }
                     else {
-                        Log.i("ErrorAddRequest", "Elastic search was not able to add the request.");
+                        Log.i("ErrorAddUser", "Elastic search was not able to add the user.");
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ErrorAddRequest", "Failed to add a request to elastic search!");
+                    Log.i("ErrorAddUser", "Failed to add a user to elastic search!");
                     e.printStackTrace();
                 }
             }

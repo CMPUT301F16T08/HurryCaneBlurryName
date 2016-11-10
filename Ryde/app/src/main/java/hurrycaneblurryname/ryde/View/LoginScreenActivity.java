@@ -68,7 +68,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                 try {
                     user = getUserTask.get();
                 } catch (Exception e) {
-                    Log.i("LoginError", "Couldn't get user");
+                    Log.i("ErrorLogin", "Couldn't get user");
                     e.printStackTrace();
                 }
 
