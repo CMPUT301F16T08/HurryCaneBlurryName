@@ -15,13 +15,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView3"
+        android:id="@+id/requestsTextView"
         android:textSize="24sp" />
 
     <ListView
+        android:id="@+id/riderRequests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/requestsTextView"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

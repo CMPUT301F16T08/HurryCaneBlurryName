@@ -8,7 +8,7 @@
     <string name="driver">Sign up as a driver</string>
     <string name="createNew">Create an new account</string>
     <string name="signup">Sign Up</string>
-    <string name="finish">Finish</string>
+    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 
     <string name="editTitle">Edit Contact Info:</string>
@@ -19,4 +19,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_driver_main">DriverMainActivity</string>
+
+    <string name="new_request">Create New Request</string>
+
 </resources>

@@ -12,6 +12,7 @@ public class EditUserProfile extends AppCompatActivity {
     private EditText emailEditText;
     private EditText phoneEditText;
     private Button finishButton;
+    private Button cancelButton;
 
 
     @Override
@@ -23,6 +24,7 @@ public class EditUserProfile extends AppCompatActivity {
         userEditText = (EditText)findViewById(R.id.userEditText);
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-        finishButton = (Button)findViewById(R.id.cancelButton);
+        finishButton = (Button)findViewById(R.id.finishButton);
+        cancelButton = (Button)findViewById(R.id.cancelButton);
     }
 }

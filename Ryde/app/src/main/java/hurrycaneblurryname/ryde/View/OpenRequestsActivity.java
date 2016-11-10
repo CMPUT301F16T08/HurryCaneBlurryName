@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
-public class OpenRequestActivity extends AppCompatActivity {
+public class OpenRequestsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
