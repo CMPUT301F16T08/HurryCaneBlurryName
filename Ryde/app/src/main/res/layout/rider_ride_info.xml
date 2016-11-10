@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- MapView inside -->
+        <!-- MapView inside, show location markup -->
         <LinearLayout
             android:id="@+id/rideInfoLayout"
             android:orientation="horizontal"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <!-- MapView inside -->
-            
+
         </LinearLayout>
 
         <RelativeLayout
@@ -39,7 +39,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/descTextView"
-                android:text="This is a sample descriptions.\nthis is the second line\nhello there."
+                android:text="This is a sample descriptions.\nThis is the second line\nHello there."
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
