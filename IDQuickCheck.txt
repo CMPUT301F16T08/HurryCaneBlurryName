@@ -1,0 +1,40 @@
+accepted_requests:
+	(ListView) acceptedRequestsListView
+	
+edit_user_profile:
+	userEditText
+	emailEditText
+	phoneEditText
+	
+	finishButton
+	cancelButton
+	
+login_screen:
+	userEditText
+	passwordEditText
+	
+	(TextView)reg_text
+	loginButton
+	
+rider_requests:
+	(ListView)riderRequests
+	
+rider_ride_info:
+	descTexts
+	driverUsernameText
+	(TextView)driverClickText
+	
+	statusTexts
+	estTexts
+	
+signup:
+	userEditText
+	passwordEditText
+	emailEditText
+	phoneEditText
+	
+	radio_yes
+	radio_no
+	
+	signupButton
+	cancelButton
