@@ -31,4 +31,5 @@ dependencies {
     //Takes too long to compile; Will need it in the future
     //compile 'com.google.android.gms:play-services-location:9.6.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:23.1.1'
 }

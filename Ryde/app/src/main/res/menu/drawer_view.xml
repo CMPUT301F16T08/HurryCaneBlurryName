@@ -1,0 +1,21 @@
+<!-- Source: https://github.com/codepath/android_guides/wiki/Fragment-Navigation-Drawer
+Date Accessed: 11/9/2016
+Author: Codepath
+-->
+<!-- TODO Create Icons i.e. android:icon="@drawable/ic_three"
+     TODO Create Strings
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_first_fragment"
+            android:title="First" />
+        <item
+            android:id="@+id/nav_second_fragment"
+            android:title="Second" />
+        <item
+            android:id="@+id/nav_third_fragment"
+            android:title="Third" />
+    </group>
+</menu>
