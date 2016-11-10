@@ -3,6 +3,11 @@ package hurrycaneblurryname.ryde;
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
 
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.Request.RequestList;
+import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.View.LoginScreenActivity;
+
 
 /**
  * <h1>Use Case Tests</h1>
@@ -17,7 +22,7 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
      * Instantiates a new Use case tests.
      */
     public UseCaseTests() {
-        super(MainActivity.class);
+        super(LoginScreenActivity.class);
     }
 
     /**

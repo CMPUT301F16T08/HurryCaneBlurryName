@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,7 +60,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                 }
                 // TODO
                 // Run ElasticSearch Query, find if user match
-                ElasticSearchRequestController.GetUsers Task getUserTask = new ElasticSearchRequestController.GetUsersTask();
+                ElasticSearchRequestController.GetUsersTask getUserTask = new ElasticSearchRequestController.GetUsersTask();
                 getUserTask.execute(userEditText.getText().toString());
 
                 // Match? get Role, navigate to different main screen
@@ -69,6 +71,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                     Log.i("LoginError", "Couldn't get user");
                     e.printStackTrace();
                 }
+
                 // unmatch? Hint: User/Password wrong.
 
                 finish();

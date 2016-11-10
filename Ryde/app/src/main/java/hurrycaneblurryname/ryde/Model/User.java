@@ -1,4 +1,7 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.Model;
+
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.Request.RequestList;
 
 /**
  * Created by pocrn_000 on 10/12/2016.
@@ -6,6 +9,7 @@ package hurrycaneblurryname.ryde;
 public class User {
 
     private String username;
+    private String password;
     private String phone;
     private String email;
     private String role;
@@ -116,4 +120,13 @@ public class User {
     public String getCardNumber() {
         return cardNumber;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
+

@@ -4,6 +4,9 @@ import android.location.Location;
 
 import junit.framework.TestCase;
 
+import hurrycaneblurryname.ryde.Model.Driver;
+import hurrycaneblurryname.ryde.Model.Request.Request;
+
 /**
  * <h1>Request Test</h1>
  * Tests Request Class
