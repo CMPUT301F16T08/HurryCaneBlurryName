@@ -58,7 +58,8 @@ public class LoginScreenActivity extends AppCompatActivity {
                 // Match? get Role, navigate to different main screen
                 // unmatch? Hint: User/Password wrong.
 
-                finish();
+                Intent intent = new Intent(LoginScreenActivity.this, MapsActivity.class);
+                startActivity(intent);
             }
         });
 
