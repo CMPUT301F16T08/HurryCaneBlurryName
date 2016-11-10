@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
@@ -20,6 +21,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button cancelButton;
 
     private User newUser;
+    int isDriver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class SignupActivity extends AppCompatActivity {
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
         signupButton = (Button)findViewById(R.id.signupButton);
         cancelButton = (Button)findViewById(R.id.cancelButton);
+
+        isDriver = -1;
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -62,10 +66,22 @@ public class SignupActivity extends AppCompatActivity {
                 newUser.setPhone(phoneEditText.getText().toString());
                 newUser.setEmail(emailEditText.getText().toString());
 
+                if (isDriver == 1){
+                    newUser.setRole("driver");
+                }
+                else if(isDriver == 0){
+                    newUser.setRole("rider");
+                }
+                else{
+                    emptyDescAlertDialog("Role selection cannot be empty!");
+                    return;
+                }
+
                 // TO-DOs
                 // save as Gson format
                 // push to server
 
+                finish();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +92,6 @@ public class SignupActivity extends AppCompatActivity {
 
 
     }
-
 
     private void emptyDescAlertDialog(String errorMsg) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -90,4 +105,22 @@ public class SignupActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_yes:
+                if (checked)
+                    isDriver=1;
+                    break;
+            case R.id.radio_no:
+                if (checked)
+                    isDriver=0;
+                    break;
+        }
+    }
+
 }

@@ -20,6 +20,8 @@ public class LoginScreenActivity extends AppCompatActivity {
     private EditText userEditText;
     private EditText passwordEditText;
     private Button loginButton;
+
+    private Button testButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         passwordEditText = (EditText)findViewById(R.id.userEditText);
         loginButton = (Button)findViewById(R.id.loginButton);
 
+        testButton = (Button)findViewById(R.id.testButton);
 
         signupTextView = (TextView)findViewById(R.id.reg_text);
 
@@ -58,7 +61,15 @@ public class LoginScreenActivity extends AppCompatActivity {
                 // Match? get Role, navigate to different main screen
                 // unmatch? Hint: User/Password wrong.
 
-                finish();
+                //finish();
+            }
+        });
+
+        testButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // test to different activities
+                Intent intent = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
+                startActivity(intent);
             }
         });
 

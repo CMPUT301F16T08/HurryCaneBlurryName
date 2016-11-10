@@ -17,14 +17,20 @@
         </activity>
         <activity android:name=".View.SignupActivity" />
         <activity android:name=".View.EditUserProfile" />
-        <activity android:name=".View.DriverMainActivity" />
-        <activity android:name=".View.RiderMainActivity" />
         <activity android:name=".View.AcceptedRequestActivity" />
         <activity android:name=".View.DriverInfoActivity" />
         <activity android:name=".View.RiderRequestInfoActivity" />
         <activity android:name=".View.OpenRequestActivity" />
         <activity android:name=".View.RiderRideInfoActivity" />
-        <activity android:name=".View.RiderConfirmDriverActivity"></activity>
+        <activity android:name=".View.RiderConfirmDriverActivity" />
+        <activity
+            android:name=".View.RiderMainActivity"
+            android:label="@string/title_activity_rider_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.DriverMainActivity"
+            android:label="@string/title_activity_driver_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

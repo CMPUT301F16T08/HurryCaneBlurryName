@@ -5,10 +5,18 @@
     <string name="Password">Password:</string>
     <string name="email">Email:</string>
     <string name="phone">Phone Number:</string>
+    <string name="driver">Sign up as a driver</string>
     <string name="createNew">Create an new account</string>
     <string name="signup">Sign Up</string>
     <string name="finish">Finish</string>
     <string name="cancel">Cancel</string>
 
     <string name="editTitle">Edit Contact Info:</string>
+    <string name="title_activity_rider_main">RiderMainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_driver_main">DriverMainActivity</string>
 </resources>
