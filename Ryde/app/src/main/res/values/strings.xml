@@ -10,16 +10,16 @@
     <string name="signup">Sign Up</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="enter">Enter</string>
+    <string name="request">Confirm Request</string>
 
     <string name="editTitle">Edit Contact Info:</string>
     <string name="title_activity_rider_main">RiderMainActivity</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
     <string name="title_activity_driver_main">DriverMainActivity</string>
-
     <string name="new_request">Create New Request</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

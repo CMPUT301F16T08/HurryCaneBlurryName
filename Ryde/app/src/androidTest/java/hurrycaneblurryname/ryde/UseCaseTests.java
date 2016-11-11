@@ -3,6 +3,8 @@ package hurrycaneblurryname.ryde;
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestList;
 import hurrycaneblurryname.ryde.Model.User;
@@ -36,8 +38,8 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
 
         //1. System prompts Rider for two locations
         //2. Rider submits two locations
-        Location from = new Location("from");
-        Location to = new Location("to");
+        LatLng from = new LatLng(-53.8921983, 152.1984271);
+        LatLng to = new LatLng(-54.0, 153.130491);
         Request request = new Request(rider);
         try{
             request.setLocations(from, to);
@@ -90,8 +92,8 @@ public class UseCaseTests extends ActivityInstrumentationTestCase2{
 
         //2. User selects to view start and end locations
         //3. System displays ride start and end locations on a map
-        Location from = new Location("from");
-        Location to = new Location("to");
+        LatLng from = new LatLng(-53.8921983, 152.1984271);
+        LatLng to = new LatLng(-54.0, 153.130491);
         try{
             request.setLocations(from, to);
         }

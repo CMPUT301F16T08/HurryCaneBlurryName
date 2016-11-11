@@ -2,6 +2,8 @@ package hurrycaneblurryname.ryde;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import junit.framework.TestCase;
 
 import hurrycaneblurryname.ryde.Model.Driver;
@@ -28,8 +30,8 @@ public class RequestTest extends TestCase{
      * </p>
      */
     public void testSetLocations(){
-        Location from = new Location("from");
-        Location to = new Location("to");
+        LatLng from = new LatLng(-53.8921983, 152.1984271);
+        LatLng to = new LatLng(-54.0, 153.130491);
         User user = new User("user");
         Request request = new Request(user);
         try{

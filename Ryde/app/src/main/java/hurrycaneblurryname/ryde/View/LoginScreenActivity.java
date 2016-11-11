@@ -94,6 +94,11 @@ public class LoginScreenActivity extends AppCompatActivity {
                     Log.i("ErrorLogin", "Couldn't get user");
                     e.printStackTrace();
                 }
+
+//                // TODO CHANGE RiderMainActivity to MapsActivity that is above
+//                Intent intent = new Intent(LoginScreenActivity.this, MapsActivity.class);
+//                startActivity(intent);
+
             }
         });
     }

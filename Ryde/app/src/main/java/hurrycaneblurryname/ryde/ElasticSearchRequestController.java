@@ -178,14 +178,13 @@ public class ElasticSearchRequestController {
 
             ArrayList<User> users = new ArrayList<User>();
 
-            // "{ "size": 1, "query": {"match": {"message": "search_parameters[0] "}}}";
+            // "{ "query": {"term": {"username": "search_parameters[0] "}}}";
 
             String search_string = String.format(
                     "{\n" + "    \"query\": {\n" +
                             "       \"term\" : { \"username\" : \"%s\" }\n" +
                             "    }\n" +
                             "}", search_parameters[0]);
-            //String search_string = "{ \"size\": 1, \"query\": {\"match\": {\"message\": \"" + search_parameters[0] + "\"}}}";
 
             //if input is empty, pull all tweets
             if (search_parameters[0].equals("")) {
@@ -275,6 +274,7 @@ public class ElasticSearchRequestController {
          *        object.execute(userObject);
          */
 
+        // TODO look into updating stuff on elasticsearch
         @Override
         protected Void doInBackground(User... users) {
             verifySettings();

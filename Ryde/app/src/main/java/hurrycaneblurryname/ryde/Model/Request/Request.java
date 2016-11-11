@@ -2,6 +2,8 @@ package hurrycaneblurryname.ryde.Model.Request;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import hurrycaneblurryname.ryde.DescriptionTooLongException;
 import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.User;
@@ -11,8 +13,8 @@ import hurrycaneblurryname.ryde.Model.User;
  */
 public class Request {
     
-    private Location from;
-    private Location to;
+    private LatLng from;
+    private LatLng to;
     private User rider;
     private User driver;
     private Double estimate;
@@ -35,7 +37,7 @@ public class Request {
      * @param to   the to
      * @throws LocationException the location exception
      */
-    public void setLocations(Location from, Location to) throws LocationException{
+    public void setLocations(LatLng from, LatLng to) throws LocationException{
         this.from = from;
         this.to = to;
 
@@ -50,7 +52,7 @@ public class Request {
      *
      * @return the from
      */
-    public Location getFrom() {
+    public LatLng getFrom() {
         return from;
     }
 
@@ -59,7 +61,7 @@ public class Request {
      *
      * @return the to
      */
-    public Location getTo() {
+    public LatLng getTo() {
         return to;
     }
 
