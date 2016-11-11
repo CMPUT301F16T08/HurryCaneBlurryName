@@ -12,4 +12,6 @@
     tools:context=".View.RiderMainActivity"
     tools:showIn="@layout/app_bar_rider_main">
 
+    <include layout="@layout/activity_maps" />
+
 </RelativeLayout>
