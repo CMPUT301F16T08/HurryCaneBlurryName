@@ -2,11 +2,16 @@ package hurrycaneblurryname.ryde.Model;
 
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestList;
+import io.searchbox.annotations.JestId;
 
 /**
  * Created by pocrn_000 on 10/12/2016.
  */
 public class User {
+
+
+    @JestId
+    private String id;
 
     private String username;
     private String password;
@@ -25,6 +30,25 @@ public class User {
         requests = new RequestList();
         this.username = username;
     }
+
+    /**
+     * Gets id to be used in elasticsearch
+     *
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets id to be used in elasticsearch
+     *
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     /**
      * Add request.
@@ -127,6 +151,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
 

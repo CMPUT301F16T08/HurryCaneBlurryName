@@ -27,7 +27,7 @@ public class UserTest extends TestCase{
      */
     public void testAddRequest(){
         User user = new User("");
-        Request request = new Request();
+        Request request = new Request(user);
         user.addRequest(request);
 
         assertTrue("Request Was Not Added to User Request List!" , user.hasRequest(request));
@@ -44,7 +44,7 @@ public class UserTest extends TestCase{
      */
     public void testGetRequest(){
         User user = new User("");
-        Request request = new Request();
+        Request request = new Request(user);
         user.addRequest(request);
 
         assertTrue("Request Was Not Retrieved At Index!" , user.getRequest(0).equals(request));
@@ -61,7 +61,7 @@ public class UserTest extends TestCase{
      */
     public void testRemoveRequest(){
         User user = new User("");
-        Request request = new Request();
+        Request request = new Request(user);
         user.addRequest(request);
         user.removeRequest(request);
 

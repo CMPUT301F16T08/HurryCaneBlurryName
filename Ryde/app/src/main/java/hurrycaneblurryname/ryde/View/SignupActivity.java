@@ -1,6 +1,7 @@
 package hurrycaneblurryname.ryde.View;
 
 import android.content.DialogInterface;
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+
+import com.google.gson.Gson;
+
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
+
+import static hurrycaneblurryname.ryde.R.string.User;
 
 public class SignupActivity extends AppCompatActivity {
     private EditText userEditText;
@@ -23,11 +30,13 @@ public class SignupActivity extends AppCompatActivity {
     private User newUser;
     int isDriver;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
         setTitle(R.string.signup);
+
 
         userEditText = (EditText)findViewById(R.id.userEditText);
         passwordEditText = (EditText)findViewById(R.id.passwordEditText);
@@ -79,7 +88,12 @@ public class SignupActivity extends AppCompatActivity {
 
                 // TO-DOs
                 // save as Gson format
+                // do we need to save as a Gson??
                 // push to server
+                ElasticSearchRequestController.AddUserTask addUserTask = new ElasticSearchRequestController.AddUserTask();
+                addUserTask.execute(newUser);
+
+
 
                 finish();
             }
@@ -89,7 +103,6 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
-
 
     }
 

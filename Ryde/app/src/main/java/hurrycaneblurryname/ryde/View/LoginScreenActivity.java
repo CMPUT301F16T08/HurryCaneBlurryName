@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+import hurrycaneblurryname.ryde.Model.Rider;
+import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -56,11 +62,42 @@ public class LoginScreenActivity extends AppCompatActivity {
                     emptyDescAlertDialog("Password cannot be empty!");
                     return;
                 }
-                // TO-DOs
+                // TODO
                 // Run ElasticSearch Query, find if user match
-                // Match? get Role, navigate to different main screen
-                // unmatch? Hint: User/Password wrong.
+                ElasticSearchRequestController.GetUsersTask getUserTask = new ElasticSearchRequestController.GetUsersTask();
+                getUserTask.execute(userEditText.getText().toString());
 
+                // Match? get Role, navigate to different main screen
+                User user;
+                try {
+                    user = getUserTask.get();
+                    if (user.getRole().equals("rider")) {
+                        // intent to RiderMainActivity
+                        // http://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android
+                        Intent RiderMain = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
+                        RiderMain.putExtra("username",user.getUsername());
+                        RiderMain.putExtra("password",user.getPassword());
+                        RiderMain.putExtra("phone",user.getPhone());
+                        RiderMain.putExtra("email",user.getEmail());
+                        RiderMain.putExtra("cardnumber",user.getCardNumber());
+
+                        startActivity(RiderMain);
+                    } else if (user.getRole().equals("driver")) {
+                        // intent to DriverMainActivity
+                        Intent DriverMain = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
+                        DriverMain.putExtra("username",user.getUsername());
+                        DriverMain.putExtra("password",user.getPassword());
+                        DriverMain.putExtra("phone",user.getPhone());
+                        DriverMain.putExtra("email",user.getEmail());
+                        DriverMain.putExtra("cardnumber",user.getCardNumber());
+
+                        startActivity(DriverMain);
+                    }
+
+                } catch (Exception e) {
+                    Log.i("ErrorLogin", "Couldn't get user");
+                    e.printStackTrace();
+                }
                 //finish();
             }
         });
@@ -68,7 +105,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         testButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // test to different activities
-                Intent intent = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
+                Intent intent = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
                 startActivity(intent);
             }
         });

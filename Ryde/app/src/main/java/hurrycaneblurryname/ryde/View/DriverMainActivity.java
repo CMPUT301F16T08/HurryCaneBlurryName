@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import hurrycaneblurryname.ryde.R;
 
@@ -34,6 +35,21 @@ public class DriverMainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // retrive login user info
+        Bundle extras = getIntent().getExtras();
+        String username = extras.getString("username");
+        String password = extras.getString("password");
+        String phone = extras.getString("phone");
+        String email = extras.getString("email");
+        String cardnumber = extras.getString("cardnumber");
+
+        // set username and email
+        View header=navigationView.getHeaderView(0);
+        TextView riderUsername = (TextView)header.findViewById(R.id.driverUsername);
+        TextView riderEmail = (TextView)header.findViewById(R.id.driverEmail);
+        riderUsername.setText(username);
+        riderEmail.setText(email);
     }
 
     @Override

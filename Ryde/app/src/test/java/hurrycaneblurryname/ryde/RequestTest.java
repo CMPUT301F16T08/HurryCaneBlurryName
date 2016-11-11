@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import hurrycaneblurryname.ryde.Model.Driver;
 import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.User;
 
 /**
  * <h1>Request Test</h1>
@@ -29,7 +30,8 @@ public class RequestTest extends TestCase{
     public void testSetLocations(){
         Location from = new Location("from");
         Location to = new Location("to");
-        Request request = new Request();
+        User user = new User("user");
+        Request request = new Request(user);
         try{
             request.setLocations(from , to);
         }
@@ -51,8 +53,9 @@ public class RequestTest extends TestCase{
      * </p>
      */
     public void testEstimate(){
-        Request request = new Request();
-        request.setEstimate("50.00");
+        User user = new User("user");
+        Request request = new Request(user);
+        request.setEstimate(50.00);
 
         assertTrue("Estimate Not Set!" , request.getEstimate().equals("50.00"));
     }
@@ -67,7 +70,8 @@ public class RequestTest extends TestCase{
      * </p>
      */
     public void testDriver(){
-        Request request = new Request();
+        User user = new User("user");
+        Request request = new Request(user);
 
         assertFalse("hasDriver Not Working!" , request.hasDriver());
 
@@ -89,7 +93,8 @@ public class RequestTest extends TestCase{
      * </p>
      */
     public void testStatus(){
-        Request request = new Request();
+        User user = new User("user");
+        Request request = new Request(user);
 
         assertTrue("Constructor Did Not Set Status to Open!" , request.getStatus().equals("open"));
 
@@ -109,7 +114,8 @@ public class RequestTest extends TestCase{
      * </p>
      */
     public void testDescription(){
-        Request request = new Request();
+        User user = new User("user");
+        Request request = new Request(user);
         try {
             request.setDescription("I need a ride. This is an eMerGency!");
         }
