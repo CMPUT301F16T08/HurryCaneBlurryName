@@ -14,10 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
 
 public class RiderMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +42,14 @@ public class RiderMainActivity extends AppCompatActivity
 
 
         // retrive login user info
-        Bundle extras = getIntent().getExtras();
-        String username = extras.getString("username");
-        String password = extras.getString("password");
-        String phone = extras.getString("phone");
-        String email = extras.getString("email");
-        String cardnumber = extras.getString("cardnumber");
+        user = UserHolder.getInstance().getUser();
 
         // set username and email
         View header=navigationView.getHeaderView(0);
         TextView riderUsername = (TextView)header.findViewById(R.id.riderUsername);
         TextView riderEmail = (TextView)header.findViewById(R.id.riderEmail);
-        riderUsername.setText(username);
-        riderEmail.setText(email);
+        riderUsername.setText(user.getUsername());
+        riderEmail.setText(user.getEmail());
 
 
     }
@@ -102,6 +101,7 @@ public class RiderMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_requests) {
 
         } else if (id == R.id.nav_logout) {
+            UserHolder.getInstance().setUser(new User(null));
             finish();
         }
 

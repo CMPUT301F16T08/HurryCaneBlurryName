@@ -16,6 +16,7 @@ import android.widget.TextView;
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Rider;
 import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -71,26 +72,15 @@ public class LoginScreenActivity extends AppCompatActivity {
                 User user;
                 try {
                     user = getUserTask.get();
+                    UserHolder.getInstance().setUser(user);
                     if (user.getRole().equals("rider")) {
                         // intent to RiderMainActivity
-                        // http://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android
+                        // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
                         Intent RiderMain = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
-                        RiderMain.putExtra("username",user.getUsername());
-                        RiderMain.putExtra("password",user.getPassword());
-                        RiderMain.putExtra("phone",user.getPhone());
-                        RiderMain.putExtra("email",user.getEmail());
-                        RiderMain.putExtra("cardnumber",user.getCardNumber());
-
                         startActivity(RiderMain);
                     } else if (user.getRole().equals("driver")) {
                         // intent to DriverMainActivity
                         Intent DriverMain = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
-                        DriverMain.putExtra("username",user.getUsername());
-                        DriverMain.putExtra("password",user.getPassword());
-                        DriverMain.putExtra("phone",user.getPhone());
-                        DriverMain.putExtra("email",user.getEmail());
-                        DriverMain.putExtra("cardnumber",user.getCardNumber());
-
                         startActivity(DriverMain);
                     }
 
