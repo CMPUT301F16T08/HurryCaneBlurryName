@@ -1,10 +1,16 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
 
 public class EditUserProfile extends AppCompatActivity {
@@ -14,6 +20,7 @@ public class EditUserProfile extends AppCompatActivity {
     private Button finishButton;
     private Button cancelButton;
 
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +28,37 @@ public class EditUserProfile extends AppCompatActivity {
         setContentView(R.layout.edit_user_profile);
         setTitle(R.string.editTitle);
 
-        userEditText = (EditText)findViewById(R.id.userEditText);
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
         finishButton = (Button)findViewById(R.id.finishButton);
         cancelButton = (Button)findViewById(R.id.cancelButton);
+
+        // retrive login user info
+        user = UserHolder.getInstance().getUser();
+
+        // display current User info on editText
+        emailEditText.setText(user.getEmail(), TextView.BufferType.EDITABLE);
+        phoneEditText.setText(user.getPhone(), TextView.BufferType.EDITABLE);
+
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                user.setEmail(emailEditText.getText().toString());
+                user.setPhone(phoneEditText.getText().toString());
+                UserHolder.getInstance().setUser(user);
+                // TO-DO
+                // elastic request to update user profile
+                ElasticSearchRequestController.UpdateUserTask updateUserTask = new ElasticSearchRequestController.UpdateUserTask();
+                updateUserTask.execute(user);
+                finish();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 }

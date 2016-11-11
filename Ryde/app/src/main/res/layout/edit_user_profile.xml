@@ -12,25 +12,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView android:id="@+id/userTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/User"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"/>
-
-        <EditText android:id="@+id/userEditText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/userTextView"
-            android:inputType="text"
-            android:textSize="20sp"/>
 
         <TextView android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:layout_below="@id/userEditText"
             android:layout_marginTop="20dp"
             android:textSize="20sp"/>
 

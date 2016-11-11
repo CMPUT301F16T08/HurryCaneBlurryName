@@ -12,6 +12,7 @@ import java.util.List;
 
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -214,6 +215,8 @@ public class ElasticSearchRequestController {
         }
     }
 
+
+    // FIX!!! username unique check!!!
     /**
      * Is called after a user creates a new account.
      * Add a new user to the elasticsearch database.
@@ -247,6 +250,50 @@ public class ElasticSearchRequestController {
                 }
                 catch (Exception e) {
                     Log.i("ErrorAddUser", "Failed to add a user to elastic search!");
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Is called after a user updates his profile.
+     * Update user's profile
+     */
+
+    public static class UpdateUserTask extends AsyncTask<User, Void, Void> {
+
+        /**
+         * Update a new user's information to elasticsearch
+         * @param users User object to build elasticsearch entry
+         * @return null
+         * @usage Declare and initialize a ElasticSearchRequestController.UpdateUserTask object
+         *        object.execute(userObject);
+         */
+
+        @Override
+        protected Void doInBackground(User... users) {
+            verifySettings();
+
+            for (User user: users) {
+                Index index = new Index.Builder(user).index("f16t08").type("users").build();
+
+                try {
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        user.setId(result.getId());
+                        Log.i("Debug", "Successful upgrade user profile");
+                    }
+                    else {
+                        Log.i("ErrorUpgradeUser", "Elastic search was not able to upgrade user profile.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("ErrorUpgradeUser", "Failed to upgrade a user to elastic search!");
                     e.printStackTrace();
                 }
             }

@@ -62,13 +62,4 @@
         android:textSize="15sp"
         />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"
-        android:id="@+id/testButton"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/reg_text"
-        android:layout_marginTop="25dp"/>
-
 </RelativeLayout>

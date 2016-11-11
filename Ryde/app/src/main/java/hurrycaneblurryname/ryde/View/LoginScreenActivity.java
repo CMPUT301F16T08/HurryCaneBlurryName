@@ -27,8 +27,6 @@ public class LoginScreenActivity extends AppCompatActivity {
     private EditText userEditText;
     private EditText passwordEditText;
     private Button loginButton;
-
-    private Button testButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +34,8 @@ public class LoginScreenActivity extends AppCompatActivity {
         setTitle(R.string.Login);
 
         userEditText = (EditText)findViewById(R.id.userEditText);
-        passwordEditText = (EditText)findViewById(R.id.userEditText);
+        passwordEditText = (EditText)findViewById(R.id.passwordEditText);
         loginButton = (Button)findViewById(R.id.loginButton);
-
-        testButton = (Button)findViewById(R.id.testButton);
 
         signupTextView = (TextView)findViewById(R.id.reg_text);
 
@@ -76,30 +72,37 @@ public class LoginScreenActivity extends AppCompatActivity {
                     if (user.getRole().equals("rider")) {
                         // intent to RiderMainActivity
                         // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
-                        Intent RiderMain = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
-                        startActivity(RiderMain);
+                        if (user.getPassword().equals(passwordEditText.getText().toString())) {
+                            Intent RiderMain = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
+                            startActivity(RiderMain);
+                        }
+                        else{
+                            emptyDescAlertDialog("Wrong password!");
+                        }
                     } else if (user.getRole().equals("driver")) {
                         // intent to DriverMainActivity
-                        Intent DriverMain = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
-                        startActivity(DriverMain);
+                        if (user.getPassword().equals(passwordEditText.getText().toString())) {
+                            Intent DriverMain = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
+                            startActivity(DriverMain);
+                        }
+                        else{
+                            emptyDescAlertDialog("Wrong password!");
+                        }
                     }
 
                 } catch (Exception e) {
                     Log.i("ErrorLogin", "Couldn't get user");
                     e.printStackTrace();
                 }
-                //finish();
             }
         });
+    }
 
-        testButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // test to different activities
-                Intent intent = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
-                startActivity(intent);
-            }
-        });
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        userEditText.getText().clear();
+        passwordEditText.getText().clear();
     }
 
     private void emptyDescAlertDialog(String errorMsg) {

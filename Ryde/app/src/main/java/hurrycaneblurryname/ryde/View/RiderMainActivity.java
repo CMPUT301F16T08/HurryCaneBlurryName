@@ -1,5 +1,6 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -97,7 +98,8 @@ public class RiderMainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_edit) {
-            // Handle the camera action
+            Intent editProfile = new Intent(this, EditUserProfile.class);
+            startActivity(editProfile);
         } else if (id == R.id.nav_requests) {
 
         } else if (id == R.id.nav_logout) {
