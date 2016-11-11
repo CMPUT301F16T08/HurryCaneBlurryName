@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -47,7 +48,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import hurrycaneblurryname.ryde.AddRequestCommand;
+import hurrycaneblurryname.ryde.Command;
+import hurrycaneblurryname.ryde.CommandManager;
 import hurrycaneblurryname.ryde.DataParser;
+import hurrycaneblurryname.ryde.LocationException;
+import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -85,6 +92,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //Hide Confirm Request Button Until Two Locations are Chosen
+        Button requestButton = (Button) findViewById(R.id.button_map_request);
+        requestButton.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -117,41 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Remove default toolbar
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
-        //Date Accessed: 11/10/2016
-        //Author: Sahil Jain
-        //Move map graphical buttons
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
-                findFragmentById(R.id.map);
-        View mapView = mapFragment.getView();
-        if (mapView != null &&
-                mapView.findViewById(1) != null) {
-
-            //Get Screen Width
-            DisplayMetrics displaymetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int width = displaymetrics.widthPixels;
-
-            //Get Compass view
-            View compassButton = ((View) mapView.findViewById(1).getParent()).findViewById(5);
-            // and next place it, on bottom right (as Google Maps app)
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
-                    compassButton.getLayoutParams();
-            // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(width-200, 0, 0, 250);
-
-            // Get the button view
-            View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
-            // and next place it, on bottom right (as Google Maps app)
-            layoutParams = (RelativeLayout.LayoutParams)locationButton.getLayoutParams();
-            // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(0, 0, 40, 40);
-
-        }
+        hideConfirmButton();
 
         // Setting onclick event listener for the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -163,6 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (MarkerPoints.size() > 1) {
                     MarkerPoints.clear();
                     mMap.clear();
+                    hideConfirmButton();
                 }
 
                 // Adding new item to the ArrayList
@@ -205,6 +183,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //move map camera
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+                    showConfirmButton();
                 }
 
             }
@@ -537,6 +517,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
         }
+    }
+
+    private void showConfirmButton(){
+
+        Button requestButton = (Button) findViewById(R.id.button_map_request);
+        requestButton.setVisibility(View.VISIBLE);
+
+        //Move map graphical items out of the way
+
+        //GPS Button
+        moveBottomMapButton(2,0,0,40,1000);
+
+    }
+
+    private void hideConfirmButton(){
+        Button requestButton = (Button) findViewById(R.id.button_map_request);
+        requestButton.setVisibility(View.INVISIBLE);
+
+        //GPS Button
+        moveBottomMapButton(2,0,0,40,40);
+    }
+
+    //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
+    //Date Accessed: 11/10/2016
+    //Author: Sahil Jain
+    private void moveBottomMapButton(int id, int left, int top, int right, int bottom){
+        //Move map graphical buttons to specified location
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
+                findFragmentById(R.id.map);
+        View mapView = mapFragment.getView();
+
+        if (mapView != null &&
+                mapView.findViewById(1) != null) {
+
+            //Get view
+            View view = ((View) mapView.findViewById(1).getParent()).findViewById(id);
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    view.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(left, top, right, bottom);
+
+        }
+    }
+
+    public void onRequestConfirm(View view){
+        User user = new User("Blaz-Test");
+        Request request = new Request(user);
+        try {
+            request.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
+        } catch (LocationException e) {
+            e.printStackTrace();
+        }
+
+        CommandManager commandManager =    CommandManager.getInstance();
+        Command command = new AddRequestCommand(request);
+        commandManager.invokeCommand(command);
     }
 }
 

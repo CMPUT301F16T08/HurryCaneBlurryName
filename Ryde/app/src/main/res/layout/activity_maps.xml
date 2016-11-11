@@ -49,11 +49,26 @@ Author: Codepath
                     android:onClick="onSearch" />
         </LinearLayout>
 
-        <fragment
-            android:id="@+id/map"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            class="com.google.android.gms.maps.SupportMapFragment" />
+            android:layout_height="match_parent">
+            <fragment
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+
+            <Button
+                android:text="@string/request"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_map_request"
+                android:onClick="onRequestConfirm"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
 
     </LinearLayout>
 
