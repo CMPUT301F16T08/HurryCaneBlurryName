@@ -9,6 +9,7 @@
     <string name="signup">Sign Up</string>
     <string name="finish">Finish</string>
     <string name="cancel">Cancel</string>
+    <string name="enter">Enter</string>
 
     <string name="editTitle">Edit Contact Info:</string>
     <string name="title_activity_maps">Map</string>

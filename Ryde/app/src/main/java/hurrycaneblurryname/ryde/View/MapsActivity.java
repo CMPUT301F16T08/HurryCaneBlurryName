@@ -3,6 +3,8 @@ package hurrycaneblurryname.ryde.View;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -10,7 +12,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -105,6 +112,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+        }
+
+        //Remove default toolbar
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
+        //Date Accessed: 11/10/2016
+        //Author: Sahil Jain
+        //Move map graphical buttons
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
+                findFragmentById(R.id.map);
+        View mapView = mapFragment.getView();
+        if (mapView != null &&
+                mapView.findViewById(1) != null) {
+
+            //Get Screen Width
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int width = displaymetrics.widthPixels;
+
+            //Get Compass view
+            View compassButton = ((View) mapView.findViewById(1).getParent()).findViewById(5);
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    compassButton.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(width-200, 0, 0, 250);
+
+            // Get the button view
+            View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+            // and next place it, on bottom right (as Google Maps app)
+            layoutParams = (RelativeLayout.LayoutParams)locationButton.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(0, 0, 40, 40);
+
         }
 
         // Setting onclick event listener for the map
@@ -461,6 +507,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             // other 'case' lines to check for other permissions this app might request.
             // You can add here other case statements according to your requirement.
+        }
+    }
+
+    //Source: https://www.youtube.com/watch?v=dr0zEmuDuIk
+    //Date accessed: 11/10/2016
+    //Author: TechAcademy
+    public void onSearch(View view){
+        EditText location_tf = (EditText)findViewById(R.id.text_map_search);
+        String location = location_tf.getText().toString();
+        List<Address> addressList = null;
+
+        if(location != null || !location.equals("")){
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location , 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //Place Marker
+            Address address = addressList.get(0);
+            LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latlng);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            mMap.addMarker(markerOptions);
+            //move map camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
         }
     }
 }

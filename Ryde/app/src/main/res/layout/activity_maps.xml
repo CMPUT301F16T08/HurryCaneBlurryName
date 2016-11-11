@@ -24,6 +24,31 @@ Author: Codepath
             android:layout_height="wrap_content" />
 
         <!-- The main content view where fragment is loaded -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="Search"
+                    android:id="@+id/text_map_search"
+                    android:layout_weight="1.02" />
+
+                <Button
+                    android:text="@string/enter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_map_search"
+                    android:onClick="onSearch" />
+        </LinearLayout>
+
         <fragment
             android:id="@+id/map"
             android:layout_width="match_parent"
