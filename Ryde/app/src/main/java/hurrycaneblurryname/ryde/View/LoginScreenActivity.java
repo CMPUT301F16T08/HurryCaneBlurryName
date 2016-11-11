@@ -73,8 +73,8 @@ public class LoginScreenActivity extends AppCompatActivity {
                         // intent to RiderMainActivity
                         // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
                         if (user.getPassword().equals(passwordEditText.getText().toString())) {
-                            Intent RiderMain = new Intent(LoginScreenActivity.this, RiderMainActivity.class);
-                            startActivity(RiderMain);
+                            Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
+                            startActivity(map);
                         }
                         else{
                             emptyDescAlertDialog("Wrong password!");
@@ -82,8 +82,8 @@ public class LoginScreenActivity extends AppCompatActivity {
                     } else if (user.getRole().equals("driver")) {
                         // intent to DriverMainActivity
                         if (user.getPassword().equals(passwordEditText.getText().toString())) {
-                            Intent DriverMain = new Intent(LoginScreenActivity.this, DriverMainActivity.class);
-                            startActivity(DriverMain);
+                            Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
+                            startActivity(map);
                         }
                         else{
                             emptyDescAlertDialog("Wrong password!");
@@ -94,10 +94,6 @@ public class LoginScreenActivity extends AppCompatActivity {
                     Log.i("ErrorLogin", "Couldn't get user");
                     e.printStackTrace();
                 }
-
-//                // TODO CHANGE RiderMainActivity to MapsActivity that is above
-//                Intent intent = new Intent(LoginScreenActivity.this, MapsActivity.class);
-//                startActivity(intent);
 
             }
         });
