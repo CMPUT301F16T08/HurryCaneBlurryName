@@ -6,9 +6,20 @@
             android:id="@+id/nav_edit"
             android:title="Edit Profile" />
         <item
-            android:id="@+id/nav_requests"
-            android:title="Requests" />
+            android:id="@+id/nav_ride_requests"
+            android:title="My Ride Requests" />
     </group>
+
+    <item android:title="Driver">
+        <menu>
+            <item
+                android:id="@+id/nav_search"
+                android:title="Search Requests" />
+            <item
+                android:id="@+id/nav_pickup"
+                android:title="My Pickups" />
+        </menu>
+    </item>
 
     <item android:title="Options">
         <menu>

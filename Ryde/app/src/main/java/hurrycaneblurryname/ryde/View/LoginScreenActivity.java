@@ -69,30 +69,18 @@ public class LoginScreenActivity extends AppCompatActivity {
                 try {
                     user = getUserTask.get();
                     UserHolder.getInstance().setUser(user);
-                    if (user.getRole().equals("rider")) {
-                        // intent to RiderMainActivity
-                        // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
-                        if (user.getPassword().equals(passwordEditText.getText().toString())) {
-                            Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
-                            startActivity(map);
-                        }
-                        else{
-                            emptyDescAlertDialog("Wrong password!");
-                        }
-                    } else if (user.getRole().equals("driver")) {
-                        // intent to DriverMainActivity
-                        if (user.getPassword().equals(passwordEditText.getText().toString())) {
-                            Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
-                            startActivity(map);
-                        }
-                        else{
-                            emptyDescAlertDialog("Wrong password!");
-                        }
+                    // intent to MainActivity
+                    // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
+                    if (user.getPassword().equals(passwordEditText.getText().toString())) {
+                        Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
+                        startActivity(map);
+                    }
+                    else{
+                        emptyDescAlertDialog("Wrong password!");
                     }
 
                 } catch (Exception e) {
-                    Log.i("ErrorLogin", "Couldn't get user");
-                    e.printStackTrace();
+                    // TODO
                 }
 
             }

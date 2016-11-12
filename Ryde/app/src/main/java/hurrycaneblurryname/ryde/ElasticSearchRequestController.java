@@ -204,6 +204,8 @@ public class ElasticSearchRequestController {
                 }
                 else {
                     Log.i("ErrorGetUser", "The search query failed to find any users that matched.");
+                    User user = new User("");
+                    users.add(user);
                 }
             }
             catch (Exception e) {

@@ -1,6 +1,7 @@
 package hurrycaneblurryname.ryde.View;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -11,17 +12,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -95,7 +93,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rider_main);
+        setContentView(R.layout.activity_main);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -609,6 +607,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestConfirm(View view){
         User user = new User("Blaz-Test");
         Request request = new Request(user);
+
+        // show dialog
+        requestConfirmAlertDialog(request);
+
         try {
             request.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
         } catch (LocationException e) {
@@ -633,7 +635,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.rider_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -665,7 +667,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (id == R.id.nav_edit) {
             Intent editProfile = new Intent(this, EditUserProfile.class);
             startActivity(editProfile);
-        } else if (id == R.id.nav_requests) {
+        } else if (id == R.id.nav_ride_requests) {
+            Intent rideRequests = new Intent(this, MyRideRequestsActivity.class);
+            startActivity(rideRequests);
+        } else if (id == R.id.nav_search) {
+            Intent search = new Intent(this, SearchRequestsActivity.class);
+            startActivity(search);
+        } else if (id == R.id.nav_pickup) {
 
         } else if (id == R.id.nav_logout) {
             UserHolder.getInstance().setUser(new User(null));
@@ -675,6 +683,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void requestConfirmAlertDialog(Request request) {
+        // dialog show detail of habit when selected
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Confirm Request");
+        alertDialogBuilder.setMessage(
+                "\nDescription: "+request.getDescription()+
+                        "\nFrom: "+"From Location"+
+                        "\nTo: "+"To Location");
+        alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO Auto-generated catch block
+            }
+        });
+        alertDialogBuilder.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO
+                // Do elastic search update request
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
 
