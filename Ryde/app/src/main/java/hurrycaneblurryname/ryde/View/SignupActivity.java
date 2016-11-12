@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
 
 import static hurrycaneblurryname.ryde.R.string.User;
@@ -70,32 +72,47 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                newUser = new User(userEditText.getText().toString());
-                newUser.setPassword(passwordEditText.getText().toString());
-                newUser.setPhone(phoneEditText.getText().toString());
-                newUser.setEmail(emailEditText.getText().toString());
+                //check if username exists already
+                ElasticSearchRequestController.GetUsersTask getUsersTask = new ElasticSearchRequestController.GetUsersTask();
+                getUsersTask.execute(userEditText.getText().toString());
 
-                if (isDriver == 1){
-                    newUser.setRole("driver");
-                }
-                else if(isDriver == 0){
-                    newUser.setRole("rider");
-                }
-                else{
-                    emptyDescAlertDialog("Role selection cannot be empty!");
-                    return;
+                User user = new User("");
+                try {
+                    user = getUsersTask.get();
+
+
+                } catch (Exception e) {
+                    Log.i("ErrorGetUser", "Something went wrong when getting user at sign up");
+                    e.printStackTrace();
                 }
 
-                // TO-DOs
-                // save as Gson format
-                // do we need to save as a Gson??
-                // push to server
-                ElasticSearchRequestController.AddUserTask addUserTask = new ElasticSearchRequestController.AddUserTask();
-                addUserTask.execute(newUser);
+                if (user.getUsername().isEmpty()) {
+                    newUser = new User(userEditText.getText().toString());
+                    newUser.setPassword(passwordEditText.getText().toString());
+                    newUser.setPhone(phoneEditText.getText().toString());
+                    newUser.setEmail(emailEditText.getText().toString());
 
+                    if (isDriver == 1){
+                        newUser.setRole("driver");
+                    }
+                    else if(isDriver == 0){
+                        newUser.setRole("rider");
+                    }
+                    else{
+                        emptyDescAlertDialog("Role selection cannot be empty!");
+                        return;
+                    }
 
+                    // push to server
+                    ElasticSearchRequestController.AddUserTask addUserTask = new ElasticSearchRequestController.AddUserTask();
+                    addUserTask.execute(newUser);
+                    finish();
 
-                finish();
+                } else {
+
+                    emptyDescAlertDialog("Username already exists");
+                }
+
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {

@@ -166,7 +166,7 @@ public class ElasticSearchRequestController {
     public static class GetUsersTask extends AsyncTask<String, Void, User> {
 
         /**
-         * Search and get a User with a specific userID string.
+         * Search and get a User with a specific userID string. Pulls all matched and returns only one.
          * @param search_parameters unique userID string
          * @return Single User object
          * @usage Declare and initialize a ElasticSearchRequestController.GetUsersTask object
@@ -204,14 +204,16 @@ public class ElasticSearchRequestController {
                 }
                 else {
                     Log.i("ErrorGetUser", "The search query failed to find any users that matched.");
-                    User user = new User("");
-                    users.add(user);
                 }
-            }
-            catch (Exception e) {
+
+            } catch (Exception e) {
                 Log.i("ErrorGetUser", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                e.printStackTrace();
             }
 
+            if (users.isEmpty()) {
+                return new User("");
+            }
             return users.get(0);
         }
     }
