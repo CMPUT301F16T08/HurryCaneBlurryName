@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 
 import com.google.gson.Gson;
@@ -53,22 +54,22 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int textlength = userEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Username cannot be empty!");
+                    Toast.makeText(SignupActivity.this, "Username cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 textlength = passwordEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Password cannot be empty!");
+                    Toast.makeText(SignupActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 textlength = phoneEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Phone Number cannot be empty!");
+                    Toast.makeText(SignupActivity.this, "Phone Number cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 textlength = emailEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Email cannot be empty!");
+                    Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -82,8 +83,10 @@ public class SignupActivity extends AppCompatActivity {
 
 
                 } catch (Exception e) {
-                    Log.i("ErrorGetUser", "Something went wrong when getting user at sign up");
-                    e.printStackTrace();
+                    // fix for ErrorGetUser?
+                    Toast.makeText(SignupActivity.this, "Something went wrong when getting user at sign up", Toast.LENGTH_SHORT).show();
+                    //Log.i("ErrorGetUser", "Something went wrong when getting user at sign up");
+                    //e.printStackTrace();
                 }
 
                 if (user.getUsername().isEmpty()) {
@@ -99,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                         newUser.setRole("rider");
                     }
                     else{
-                        emptyDescAlertDialog("Role selection cannot be empty!");
+                        Toast.makeText(SignupActivity.this, "Role selection cannot be empty!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -109,8 +112,7 @@ public class SignupActivity extends AppCompatActivity {
                     finish();
 
                 } else {
-
-                    emptyDescAlertDialog("Username already exists");
+                    Toast.makeText(SignupActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -121,19 +123,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void emptyDescAlertDialog(String errorMsg) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(errorMsg);
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                // TODO Auto-generated catch block
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     public void onRadioButtonClicked(View view) {

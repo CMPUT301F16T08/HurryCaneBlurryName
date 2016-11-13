@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Rider;
@@ -51,12 +52,12 @@ public class LoginScreenActivity extends AppCompatActivity {
                 // check if username/password are empty
                 int textlength = userEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Please provide a Username");
+                    Toast.makeText(LoginScreenActivity.this, "Please provide a Username!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 textlength = passwordEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Password cannot be empty");
+                    Toast.makeText(LoginScreenActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -77,12 +78,12 @@ public class LoginScreenActivity extends AppCompatActivity {
                         startActivity(map);
                     }
                     else{
-                        emptyDescAlertDialog("Wrong password");
+                        Toast.makeText(LoginScreenActivity.this, "Wrong password!", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
                     // no user was found
-                    emptyDescAlertDialog("Username not found");
+                    Toast.makeText(LoginScreenActivity.this, "Username not found!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -94,19 +95,6 @@ public class LoginScreenActivity extends AppCompatActivity {
         super.onStart();
         userEditText.getText().clear();
         passwordEditText.getText().clear();
-    }
-
-    private void emptyDescAlertDialog(String errorMsg) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(errorMsg);
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                // TODO Auto-generated catch block
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
 }
