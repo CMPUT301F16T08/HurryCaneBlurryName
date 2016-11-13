@@ -6,7 +6,7 @@ import hurrycaneblurryname.ryde.Model.Request.Request;
  * Implementation of the Command Interface to add a request.
  */
 
-public class AddRequestCommand implements Command{
+public class AddRequestCommand extends Command{
 
     private Request request;
 
@@ -21,12 +21,4 @@ public class AddRequestCommand implements Command{
         addRequestsTask.execute(request);
     }
 
-    @Override
-    public void unexecute(){
-    }
-
-    @Override
-    public boolean isReversible(){
-        return false;
-    }
 }

@@ -1,53 +1,79 @@
 package hurrycaneblurryname.ryde;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
  * Singleton/Command Pattern.
  * Keeps track of commands executed in a linked list.
+ * Stores commands in a file to execute later if offline
  */
 
 public class CommandManager {
-    private LinkedList<Command> historyList;
-    private LinkedList<Command> redoList;
+    private ArrayList<Command> offlineList;
+    private static final String FILENAME = "commands.sav";
 
     // CommandManager is a singleton
     private static final CommandManager instance = new CommandManager();
 
     private CommandManager() {
-        historyList = new LinkedList<Command>();
-        redoList = new LinkedList<Command>();
+        offlineList = new ArrayList<Command>();
     }
 
-    // invoke a command and add it to history list
-    public void invokeCommand( Command command ) {
-        command.execute();
-        if (command.isReversible()) {
-            historyList.addFirst( command );
-        }
-        else {
-            historyList.clear();
-        }
-        if (redoList.size() > 0) {
-            redoList.clear();
-        }
+    // invoke a command if online/otherwise add to list
+    public void invokeCommand(Context context, Command command ) {
+        //FileManager fileManager = new FileManager(context);
+        //offlineList = fileManager.loadFromFile(FILENAME);
+
+        //if(isNetworkAvailable(context)){
+
+            //Check if there are any other commands in queue
+            //if(offlineList.isEmpty()){
+                command.execute();
+            //}
+            //else{
+            //    invokeAll(context);
+            //}
+        //}
+        //else{
+        //    offlineList.add(command);
+        //}
+
+        //Save List
+        //fileManager.saveInFile(offlineList,FILENAME);
     }
 
-    public void undo() {
-        if (historyList.size() > 0) {
-            Command command = historyList.removeFirst();
-            command.unexecute();
-            redoList.addFirst( command );
+    /*public void invokeAll(Context context){
+        FileManager fileManager = new FileManager(context);
+        offlineList = fileManager.loadFromFile(FILENAME);
+
+        if(isNetworkAvailable(context)) {
+            while (!offlineList.isEmpty()) {
+                offlineList.get(0).execute();
+                offlineList.remove(0);
+            }
+
         }
+
+        //Save List
+        fileManager.saveInFile(offlineList, FILENAME);
+    }*/
+
+    //Check if offline
+    //Source: http://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+    //Date Accessed: 11/12/2016
+    //Author: Alexandre Jasmin
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public void redo() {
-        if (redoList.size() > 0) {
-            Command command = redoList.removeFirst();
-            command.execute();
-            historyList.addFirst( command );
-        }
-    }
 
     public static CommandManager getInstance() {
         return instance;

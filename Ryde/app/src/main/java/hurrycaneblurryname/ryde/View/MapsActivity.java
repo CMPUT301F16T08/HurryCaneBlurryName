@@ -1,6 +1,7 @@
 package hurrycaneblurryname.ryde.View;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +9,8 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.NavigationView;
@@ -20,6 +23,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,6 +66,7 @@ import hurrycaneblurryname.ryde.AddRequestCommand;
 import hurrycaneblurryname.ryde.Command;
 import hurrycaneblurryname.ryde.CommandManager;
 import hurrycaneblurryname.ryde.DataParser;
+import hurrycaneblurryname.ryde.DescriptionTooLongException;
 import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
@@ -89,6 +94,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
+    Request sendRequest = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +142,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         TextView riderEmail = (TextView)header.findViewById(R.id.riderEmail);
         riderUsername.setText(user.getUsername());
         riderEmail.setText(user.getEmail());
+
     }
 
     /**
@@ -605,21 +612,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void onRequestConfirm(View view){
-        User user = new User("Blaz-Test");
-        Request request = new Request(user);
-
-        // show dialog
-        requestConfirmAlertDialog(request);
+        User user = UserHolder.getInstance().getUser();
+        sendRequest = new Request(user);
 
         try {
-            request.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
+            sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
         } catch (LocationException e) {
             e.printStackTrace();
         }
 
-        CommandManager commandManager =    CommandManager.getInstance();
-        Command command = new AddRequestCommand(request);
-        commandManager.invokeCommand(command);
+        //TODO Estimate price of trip
+
+        // set description dialog
+        setDescriptionAlertDialog();
+
     }
 
     @Override
@@ -685,25 +691,78 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    private void requestConfirmAlertDialog(Request request) {
-        // dialog show detail of habit when selected
+    //Source: http://stackoverflow.com/questions/10903754/input-text-dialog-android
+    //Date Accessed: 11/12/2016
+    //Author: Aaron
+    private void setDescriptionAlertDialog(){
+        //text dialog to input an optional string description for the ride request
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Confirm Request");
-        alertDialogBuilder.setMessage(
-                "\nDescription: "+request.getDescription()+
-                        "\nFrom: "+"From Location"+
-                        "\nTo: "+"To Location");
+        alertDialogBuilder.setTitle("Description");
+
+        final EditText input = new EditText(this);
+        // Specify the type of input expected
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        alertDialogBuilder.setView(input);
+
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 // TODO Auto-generated catch block
             }
         });
-        alertDialogBuilder.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Confirm",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                // TODO
-                // Do elastic search update request
+                //TODO Shorten input text if too long
+                try {
+                    sendRequest.setDescription(input.getText().toString());
+                } catch (DescriptionTooLongException e) {
+                    e.printStackTrace();
+                }
+                requestConfirmAlertDialog();
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void requestConfirmAlertDialog() {
+        // dialog show detail of habit when selected
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Confirm Request");
+        alertDialogBuilder.setMessage(
+                "\nFrom: "+sendRequest.getFrom().toString()+
+                        "\nTo: "+sendRequest.getTo().toString() +
+                        "\n\nDescription: "+sendRequest.getDescription() +
+                        "\nEstimate: " + sendRequest.getEstimate());
+        alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO Auto-generated catch block
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Send",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                //elastic search update request
+                CommandManager commandManager = CommandManager.getInstance();
+                Command command = new AddRequestCommand(sendRequest);
+                commandManager.invokeCommand(MapsActivity.this,command);
+
+                ConnectivityManager connectivityManager
+                        = (ConnectivityManager) MapsActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+                if(activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+                    Toast.makeText(MapsActivity.this,"Request Sent!",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(MapsActivity.this,"Request Stored!",Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
