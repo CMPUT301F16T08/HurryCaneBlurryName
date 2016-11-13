@@ -51,36 +51,38 @@ public class LoginScreenActivity extends AppCompatActivity {
                 // check if username/password are empty
                 int textlength = userEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Please fill up the Username!");
+                    emptyDescAlertDialog("Please provide a Username");
                     return;
                 }
                 textlength = passwordEditText.getText().length();
                 if (textlength == 0) {
-                    emptyDescAlertDialog("Password cannot be empty!");
+                    emptyDescAlertDialog("Password cannot be empty");
                     return;
                 }
-                // TODO
+
                 // Run ElasticSearch Query, find if user match
-                ElasticSearchRequestController.GetUsersTask getUserTask = new ElasticSearchRequestController.GetUsersTask();
-                getUserTask.execute(userEditText.getText().toString());
+                ElasticSearchRequestController.GetUsersTask getUsersTask = new ElasticSearchRequestController.GetUsersTask();
+                getUsersTask.execute(userEditText.getText().toString());
 
                 // Match? get Role, navigate to different main screen
                 User user;
                 try {
-                    user = getUserTask.get();
+                    user = getUsersTask.get();
                     UserHolder.getInstance().setUser(user);
                     // intent to MainActivity
                     // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
+
                     if (user.getPassword().equals(passwordEditText.getText().toString())) {
                         Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
                         startActivity(map);
                     }
                     else{
-                        emptyDescAlertDialog("Wrong password!");
+                        emptyDescAlertDialog("Wrong password");
                     }
 
                 } catch (Exception e) {
-                    // TODO
+                    // no user was found
+                    emptyDescAlertDialog("Username not found");
                 }
 
             }
