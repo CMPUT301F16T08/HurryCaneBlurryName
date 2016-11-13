@@ -11,29 +11,69 @@
     android:rowCount="3"
     android:columnCount="1">
 
-    <Button
-        android:layout_width="400dp"
-        android:layout_height="100dp"
-        android:text="Open Request List"
-        android:textSize="24sp"
-        android:id="@+id/openRequestsButton"
-        android:layout_alignParentTop="true"/>
+    <!--Source:
+    http://stackoverflow.com/questions/17693578/android-how-to-display-2-listviews-in-one-activity-one-after-the-other-->
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:id="@+id/scrollView">
 
-    <Button
-        android:layout_width="400dp"
-        android:layout_height="100dp"
-        android:text="Offer"
-        android:textSize="24sp"
-        android:id="@+id/offerButton"
-        android:layout_centerInParent="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dip" >
 
-    <Button
-        android:layout_width="400dp"
-        android:layout_height="100dp"
-        android:text="Closed Request List"
-        android:textSize="24sp"
-        android:id="@+id/closedRequestButton"
-        android:layout_alignParentBottom="true"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:text="Open Request List" />
 
+            <ListView
+                android:id="@+id/openView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#4A9C67" >
+            </ListView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:text="Offer" />
+
+            <ListView
+                android:id="@+id/offerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#f4dc42" >
+            </ListView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="20dip"
+                android:textSize="18sp"
+                android:text="Closed Request List" />
+
+            <ListView
+                android:id="@+id/closedView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#ea4444" >
+            </ListView>
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
