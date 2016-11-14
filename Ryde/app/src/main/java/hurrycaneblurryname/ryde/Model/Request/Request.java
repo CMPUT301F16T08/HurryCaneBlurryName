@@ -31,6 +31,7 @@ public class Request {
         this.rider = rider;
         this.status = "open";
         this.description = "";
+        this.driver = new User("");
     }
 
     /**

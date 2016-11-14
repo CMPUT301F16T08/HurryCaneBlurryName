@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.w3c.dom.Text;
@@ -60,6 +61,10 @@ public class RideInfoActivity extends AppCompatActivity {
 
         driverClickTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if (request.getDriver().equals(null))
+                {
+                    Toast.makeText(RideInfoActivity.this, "No driver has accepted this request!", Toast.LENGTH_SHORT).show();
+                }
                 RequestUserHolder.getInstance().setUser(request.getDriver());
                 Intent intent = new Intent(RideInfoActivity.this, ProfileInfoActivity.class);
                 startActivity(intent);
@@ -77,7 +82,10 @@ public class RideInfoActivity extends AppCompatActivity {
     private void setTextViewContent(Request request){
         descTextView.setText(request.getDescription());
         riderTextView.setText(request.getRider().getUsername());
-        driverTextView.setText(request.getDriver().getUsername());
+        if (!request.getDriver().getUsername().equals(""))
+        {
+            driverTextView.setText(request.getDriver().getUsername());
+        }
         //fromTextView.setText(request.getFrom().toString());
         //toTextView.setText(request.getTo().toString());
         statusTextView.setText(request.getStatus());

@@ -121,7 +121,6 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         fakeuser.setEmail("fake@aaa.com");
         fakeuser.setPhone("1111111");
         Request fake = new Request(fakeuser);
-        fake.setDriver(fakeuser);
         fake.setEstimate(50.0);
         openRequests.add(fake);
 
