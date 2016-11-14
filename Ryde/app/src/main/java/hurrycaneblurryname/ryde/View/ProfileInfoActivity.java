@@ -6,15 +6,15 @@ import android.os.Bundle;
 import hurrycaneblurryname.ryde.R;
 
 /**
- * The type Rider Ride Info activity.
+ * The type Driver Profile Info activity.
  * Author: Chen
  */
 
-public class RiderRideInfoActivity extends AppCompatActivity {
+public class ProfileInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rider_ride_info);
+        setContentView(R.layout.profile_info);
     }
 }

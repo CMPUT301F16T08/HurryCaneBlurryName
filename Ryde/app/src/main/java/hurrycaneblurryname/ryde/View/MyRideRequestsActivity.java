@@ -1,5 +1,6 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
+import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -57,8 +59,11 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         openView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Get habit name
-                String str = parent.getItemAtPosition(position).toString();
+                //Get request to show and start RideInfo
+                Request requestToPass = openRequests.get(position);
+                RequestHolder.getInstance().setRequest(requestToPass);
+                Intent info = new Intent(MyRideRequestsActivity.this, RideInfoActivity.class);
+                startActivity(info);
 
             }
         });
@@ -67,8 +72,11 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         offerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Get habit name
-                String str = parent.getItemAtPosition(position).toString();
+                //Get request to show and start RideInfo
+                Request requestToPass = openRequests.get(position);
+                RequestHolder.getInstance().setRequest(requestToPass);
+                Intent info = new Intent(MyRideRequestsActivity.this, RideInfoActivity.class);
+                startActivity(info);
 
             }
         });
@@ -77,8 +85,11 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         closedView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Get habit name
-                String str = parent.getItemAtPosition(position).toString();
+                //Get request to show and start RideInfo
+                Request requestToPass = openRequests.get(position);
+                RequestHolder.getInstance().setRequest(requestToPass);
+                Intent info = new Intent(MyRideRequestsActivity.this, RideInfoActivity.class);
+                startActivity(info);
 
             }
         });
@@ -118,7 +129,7 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         offerText = (TextView)findViewById(R.id.offerText);
         closedText = (TextView)findViewById(R.id.closedText);
 
-        if(!openRequests.isEmpty())
+        if((!openRequests.isEmpty()) && (!requestList.isEmpty()))
         {
             openText.setVisibility(View.GONE);
         }

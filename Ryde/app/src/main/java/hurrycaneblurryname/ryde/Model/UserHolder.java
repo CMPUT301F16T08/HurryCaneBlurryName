@@ -1,10 +1,11 @@
 package hurrycaneblurryname.ryde.Model;
 
 /**
- * Created by Zone on 2016/11/11.
+ * Singleton class to temporary hold login user
+ * Author: Chen
+ * Reference: http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
  */
 
-// http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
 public class UserHolder {
     private User user;
     public User getUser(){

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".View.RiderRideInfoActivity">
+    tools:context=".View.RideInfoActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,6 +44,36 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
 
+            <!-- rider info -->
+            <TextView android:id="@+id/riderTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rider: "
+                android:layout_marginTop="20dp"
+                android:textSize="24sp"
+                android:layout_below="@id/descTexts"/>
+
+            <TextView android:id="@+id/riderUsernameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/riderTextView"
+                android:text="Username"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView android:id="@+id/riderClickText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/riderUsernameText"
+                android:text="Check to see Rider Profile"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#ff0000ff"
+                android:onClick="onClick"
+                android:clickable="true"/>
+
             <!-- driver info -->
             <TextView android:id="@+id/driverTextView"
                 android:layout_width="wrap_content"
@@ -51,7 +81,7 @@
                 android:text="Driver: "
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"
-                android:layout_below="@id/descTexts"/>
+                android:layout_below="@id/riderClickText"/>
 
             <TextView android:id="@+id/driverUsernameText"
                 android:layout_width="wrap_content"
@@ -74,12 +104,48 @@
                 android:onClick="onClick"
                 android:clickable="true"/>
 
+            <!-- From -->
+            <TextView android:id="@+id/fromTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From: "
+                android:layout_below="@id/driverClickText"
+                android:layout_marginTop="20dp"
+                android:textSize="24sp"/>
+
+            <TextView android:id="@+id/fromTexts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fromTextView"
+                android:text="(52,113)"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"/>
+
+            <!-- to -->
+            <TextView android:id="@+id/toTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To: "
+                android:layout_below="@id/fromTexts"
+                android:layout_marginTop="20dp"
+                android:textSize="24sp"/>
+
+            <TextView android:id="@+id/toTexts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toTextView"
+                android:text="(52,113)"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"/>
+
             <!-- status -->
             <TextView android:id="@+id/statusTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status: "
-                android:layout_below="@id/driverClickText"
+                android:layout_below="@id/toTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
 

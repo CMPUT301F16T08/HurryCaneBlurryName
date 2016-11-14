@@ -27,10 +27,10 @@
         <activity android:name=".View.SignupActivity" />
         <activity android:name=".View.EditUserProfile" />
         <activity android:name=".View.RiderCurrentRequestsActivity" />
-        <activity android:name=".View.DriverInfoActivity" />
+        <activity android:name=".View.ProfileInfoActivity" />
         <activity android:name=".View.RequestHistoryActivity" />
         <activity android:name=".View.DriverOpenRequestsActivity" />
-        <activity android:name=".View.RiderRideInfoActivity" />
+        <activity android:name=".View.RideInfoActivity" />
         <activity android:name=".View.RiderConfirmDriverActivity" />
         <activity android:name=".View.AvailableDriversActivity" />
         <activity android:name=".View.HistoryRideInfo" />
