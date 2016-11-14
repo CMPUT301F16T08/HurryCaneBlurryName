@@ -57,7 +57,7 @@ public class RideInfoActivity extends AppCompatActivity {
         driverClickTextView = (TextView)findViewById(R.id.driverClickText);
 
         cancelButton = (Button)findViewById(R.id.cancelButton);
-
+        request = RequestHolder.getInstance().getRequest();
         driverClickTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (request.getDriver().getUsername().equals(""))
