@@ -125,14 +125,21 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         User fakeuser = new User("fake");
         fakeuser.setEmail("fake@aaa.com");
         fakeuser.setPhone("1111111");
-        Request fake = new Request(fakeuser);
-        fake.setEstimate(50.0);
-        fake.setId("1.no driver");
-        openRequests.add(fake);
+        Request fake1 = new Request(fakeuser);
+        fake1.setEstimate(50.0);
+        fake1.setId("1.no driver");
+        openRequests.add(fake1);
         Request fake2 = new Request(fakeuser);
-        fake.setId("2.has driver");
-        fake.setEstimate(30.0);
-        fake.setDriver(fakeuser);
+        fake2.setId("2.has driver");
+        fake2.setEstimate(30.0);
+        fake2.setDriver(fakeuser);
+        fake2.setStatus("accepted");
+        offers.add(fake2);
+        Request fake3 = new Request(fakeuser);
+        fake3.setId("3.closed");
+        fake3.setEstimate(30.0);
+        fake3.setDriver(fakeuser);
+        fake3.setStatus("closed");
         offers.add(fake2);
 
         // factor all lists
