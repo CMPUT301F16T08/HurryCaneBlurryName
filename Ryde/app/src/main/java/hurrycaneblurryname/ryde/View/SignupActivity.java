@@ -57,69 +57,7 @@ public class SignupActivity extends AppCompatActivity {
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                int textlength = userEditText.getText().length();
-                if (textlength == 0) {
-                    Toast.makeText(SignupActivity.this, "Username cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                textlength = passwordEditText.getText().length();
-                if (textlength == 0) {
-                    Toast.makeText(SignupActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                textlength = phoneEditText.getText().length();
-                if (textlength == 0) {
-                    Toast.makeText(SignupActivity.this, "Phone Number cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                textlength = emailEditText.getText().length();
-                if (textlength == 0) {
-                    Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //check if username exists already
-                ElasticSearchRequestController.GetUsersTask getUsersTask = new ElasticSearchRequestController.GetUsersTask();
-                getUsersTask.execute(userEditText.getText().toString());
-
-                User user = new User("");
-                try {
-                    user = getUsersTask.get();
-
-
-                } catch (Exception e) {
-                    // fix for ErrorGetUser?
-                    Toast.makeText(SignupActivity.this, "Something went wrong when getting user at sign up", Toast.LENGTH_SHORT).show();
-                    //Log.i("ErrorGetUser", "Something went wrong when getting user at sign up");
-                    //e.printStackTrace();
-                }
-
-                if (user.getUsername().isEmpty()) {
-                    newUser = new User(userEditText.getText().toString());
-                    newUser.setPassword(passwordEditText.getText().toString());
-                    newUser.setPhone(phoneEditText.getText().toString());
-                    newUser.setEmail(emailEditText.getText().toString());
-
-                    if (isDriver == 1){
-                        newUser.setRole("driver");
-                    }
-                    else if(isDriver == 0){
-                        newUser.setRole("rider");
-                    }
-                    else{
-                        Toast.makeText(SignupActivity.this, "Role selection cannot be empty!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // push to server
-                    ElasticSearchRequestController.AddUserTask addUserTask = new ElasticSearchRequestController.AddUserTask();
-                    addUserTask.execute(newUser);
-                    finish();
-
-                } else {
-                    Toast.makeText(SignupActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();
-                }
-
+                signUp();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +82,71 @@ public class SignupActivity extends AppCompatActivity {
                 if (checked)
                     isDriver=0;
                     break;
+        }
+    }
+
+    private void signUp() {
+        int textlength = userEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(SignupActivity.this, "Username cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        textlength = passwordEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(SignupActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        textlength = phoneEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(SignupActivity.this, "Phone Number cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        textlength = emailEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //check if username exists already
+        ElasticSearchRequestController.GetUsersTask getUsersTask = new ElasticSearchRequestController.GetUsersTask();
+        getUsersTask.execute(userEditText.getText().toString());
+
+        User user = new User("");
+        try {
+            user = getUsersTask.get();
+
+
+        } catch (Exception e) {
+            // fix for ErrorGetUser?
+            Toast.makeText(SignupActivity.this, "Something went wrong when getting user at sign up", Toast.LENGTH_SHORT).show();
+            //Log.i("ErrorGetUser", "Something went wrong when getting user at sign up");
+            //e.printStackTrace();
+        }
+
+        if (user.getUsername().isEmpty()) {
+            newUser = new User(userEditText.getText().toString());
+            newUser.setPassword(passwordEditText.getText().toString());
+            newUser.setPhone(phoneEditText.getText().toString());
+            newUser.setEmail(emailEditText.getText().toString());
+
+            if (isDriver == 1){
+                newUser.setRole("driver");
+            }
+            else if(isDriver == 0){
+                newUser.setRole("rider");
+            }
+            else{
+                Toast.makeText(SignupActivity.this, "Role selection cannot be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // push to server
+            ElasticSearchRequestController.AddUserTask addUserTask = new ElasticSearchRequestController.AddUserTask();
+            addUserTask.execute(newUser);
+            finish();
+
+        } else {
+            Toast.makeText(SignupActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();
         }
     }
 

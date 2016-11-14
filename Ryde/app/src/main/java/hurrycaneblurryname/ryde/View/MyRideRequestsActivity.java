@@ -12,6 +12,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
@@ -121,25 +123,34 @@ public class MyRideRequestsActivity extends AppCompatActivity {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
 
-        // fake request need to remove
+        // TODO dummy request need to remove
         User fakeuser = new User("fake");
         fakeuser.setEmail("fake@aaa.com");
         fakeuser.setPhone("1111111");
+
         Request fake1 = new Request(fakeuser);
         fake1.setEstimate(50.0);
-        fake1.setId("1.no driver");
-        openRequests.add(fake1);
+
         Request fake2 = new Request(fakeuser);
-        fake2.setId("2.has driver");
         fake2.setEstimate(30.0);
         fake2.setDriver(fakeuser);
         fake2.setStatus("accepted");
-        offers.add(fake2);
+
         Request fake3 = new Request(fakeuser);
-        fake3.setId("3.closed");
         fake3.setEstimate(70.0);
         fake3.setDriver(fakeuser);
         fake3.setStatus("closed");
+
+        try {
+            fake1.setDescription("1.no driver");
+            fake2.setDescription("2.has driver");
+            fake3.setDescription("3.closed");
+        } catch (Exception e) {
+            Log.i("DescripError", "Description too long");
+        }
+
+        openRequests.add(fake1);
+        offers.add(fake2);
         closedRequests.add(fake3);
 
         // factor all lists

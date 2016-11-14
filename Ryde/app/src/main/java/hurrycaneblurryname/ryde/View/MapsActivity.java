@@ -140,7 +140,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         View header=navigationView.getHeaderView(0);
         TextView riderUsername = (TextView)header.findViewById(R.id.riderUsername);
         TextView riderEmail = (TextView)header.findViewById(R.id.riderEmail);
-        riderUsername.setText(user.getUsername());
+         riderUsername.setText(user.getUsername());
         riderEmail.setText(user.getEmail());
 
     }
@@ -617,6 +617,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         try {
             sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
+            Log.i("RequestLatLng", sendRequest.getFrom().toString() + " " + sendRequest.getTo().toString());
         } catch (LocationException e) {
             e.printStackTrace();
         }

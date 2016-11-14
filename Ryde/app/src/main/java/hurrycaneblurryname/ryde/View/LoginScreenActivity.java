@@ -44,51 +44,13 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         signupTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(LoginScreenActivity.this, SignupActivity.class);
-                startActivity(intent);
+                signUp();
             }
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // check if username/password are empty
-                int textlength = userEditText.getText().length();
-                if (textlength == 0) {
-                    Toast.makeText(LoginScreenActivity.this, "Please provide a Username!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                textlength = passwordEditText.getText().length();
-                if (textlength == 0) {
-                    Toast.makeText(LoginScreenActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Run ElasticSearch Query, find if user match
-                ElasticSearchRequestController.GetUsersTask getUsersTask = new ElasticSearchRequestController.GetUsersTask();
-                getUsersTask.execute(userEditText.getText().toString());
-
-                // Match? get Role, navigate to different main screen
-                User user;
-                try {
-                    user = getUsersTask.get();
-                    UserHolder.getInstance().setUser(user);
-                    // intent to MainActivity
-                    // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
-
-                    if (user.getPassword().equals(passwordEditText.getText().toString())) {
-                        Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
-                        startActivity(map);
-                    }
-                    else{
-                        Toast.makeText(LoginScreenActivity.this, "Wrong password!", Toast.LENGTH_SHORT).show();
-                    }
-                    passwordEditText.getText().clear();
-
-                } catch (Exception e) {
-                    // no user was found
-                    Toast.makeText(LoginScreenActivity.this, "Username not found!", Toast.LENGTH_SHORT).show();
-                }
-
+                login();
             }
         });
     }
@@ -100,4 +62,52 @@ public class LoginScreenActivity extends AppCompatActivity {
         passwordEditText.getText().clear();
     }
 
+    private void signUp() {
+        Intent intent = new Intent(LoginScreenActivity.this, SignupActivity.class);
+        startActivity(intent);
+    }
+
+    private void login() {
+        // check if username/password are empty
+        int textlength = userEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(LoginScreenActivity.this, "Please provide a Username!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        textlength = passwordEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(LoginScreenActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Run ElasticSearch Query, find if user match
+        ElasticSearchRequestController.GetUsersTask getUsersTask = new ElasticSearchRequestController.GetUsersTask();
+        getUsersTask.execute(userEditText.getText().toString());
+
+        // Match? get Role, navigate to different main screen
+        User user;
+        try {
+            user = getUsersTask.get();
+            UserHolder.getInstance().setUser(user);
+            // intent to MainActivity
+            // http://stackoverflow.com/questions/4878159/whats-the-best-way-to-share-data-between-activities
+            // authored by Cristian
+            // Accessed November 4, 2016
+
+
+            if (user.getPassword().equals(passwordEditText.getText().toString())) {
+                Intent map = new Intent(LoginScreenActivity.this, MapsActivity.class);
+                startActivity(map);
+            }
+            else{
+                Toast.makeText(LoginScreenActivity.this, "Wrong password!", Toast.LENGTH_SHORT).show();
+            }
+            passwordEditText.getText().clear();
+
+        } catch (Exception e) {
+            // no user was found
+            Toast.makeText(LoginScreenActivity.this, "Username not found!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }

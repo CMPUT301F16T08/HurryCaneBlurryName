@@ -93,10 +93,11 @@ public class RideInfoActivity extends AppCompatActivity {
         {
             driverTextView.setText(request.getDriver().getUsername());
         }
-        //fromTextView.setText(request.getFrom().toString());
-        //toTextView.setText(request.getTo().toString());
+        fromTextView.setText(request.getFrom().toString());
+        toTextView.setText(request.getTo().toString());
         statusTextView.setText(request.getStatus());
         feeTextView.setText(request.getEstimate().toString());
+
     }
 
     private void cancelAlertDialog() {

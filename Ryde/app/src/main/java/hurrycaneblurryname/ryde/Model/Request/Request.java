@@ -33,6 +33,8 @@ public class Request {
         this.description = "";
         this.driver = new User("");
         this.estimate = 0.0;
+        this.from = new LatLng(0.0, 0.0);
+        this.to = new LatLng(0.0, 0.0);
     }
 
     /**
@@ -85,7 +87,7 @@ public class Request {
      * @return the boolean
      */
     public boolean hasDriver() {
-        if(driver == null){
+        if(driver.getUsername().isEmpty()){
             return false;
         }
         return true;
@@ -184,9 +186,7 @@ public class Request {
     }
 
     /**
-     * toString method
-     * Gets Jest/ElasticSearch id.
-     *
+     * Gets Jest/ElasticSearch id. Do not print this to the app.
      * @return the id
      */
     public String getId() {
@@ -195,8 +195,8 @@ public class Request {
 
     /**
      * Sets Jest/ElasticSearch id. String Id should be what is returned by the JestClient result.
-     *
-     * @param id the id
+     * Do not set this to anything else
+     * @param id the JestId
      */
     public void setId(String id) {
         this.id = id;
@@ -204,7 +204,7 @@ public class Request {
 
     @Override
     public String toString() {
-        return this.id;
+        return this.description;
     }
 
 }
