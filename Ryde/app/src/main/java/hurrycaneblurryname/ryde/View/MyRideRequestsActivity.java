@@ -78,7 +78,7 @@ public class MyRideRequestsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Get request to show and start RideInfo
-                Request requestToPass = openRequests.get(position);
+                Request requestToPass = offers.get(position);
                 RequestHolder.getInstance().setRequest(requestToPass);
                 Intent info = new Intent(MyRideRequestsActivity.this, RideInfoActivity.class);
                 startActivity(info);
@@ -91,7 +91,7 @@ public class MyRideRequestsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Get request to show and start RideInfo
-                Request requestToPass = openRequests.get(position);
+                Request requestToPass = closedRequests.get(position);
                 RequestHolder.getInstance().setRequest(requestToPass);
                 Intent info = new Intent(MyRideRequestsActivity.this, RideInfoActivity.class);
                 startActivity(info);
@@ -137,10 +137,10 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         offers.add(fake2);
         Request fake3 = new Request(fakeuser);
         fake3.setId("3.closed");
-        fake3.setEstimate(30.0);
+        fake3.setEstimate(70.0);
         fake3.setDriver(fakeuser);
         fake3.setStatus("closed");
-        offers.add(fake2);
+        closedRequests.add(fake3);
 
         // factor all lists
         factorLists();
