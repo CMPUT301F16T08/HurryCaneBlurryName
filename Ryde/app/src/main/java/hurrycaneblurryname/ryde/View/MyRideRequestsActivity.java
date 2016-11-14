@@ -133,7 +133,7 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         fake.setId("2.has driver");
         fake.setEstimate(30.0);
         fake.setDriver(fakeuser);
-        openRequests.add(fake2);
+        offers.add(fake2);
 
         // factor all lists
         factorLists();
