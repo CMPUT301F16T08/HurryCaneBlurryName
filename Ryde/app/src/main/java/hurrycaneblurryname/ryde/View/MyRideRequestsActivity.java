@@ -124,22 +124,25 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         }
 
         // TODO dummy request need to remove
-        User fakeuser = new User("fake");
+        User fakeuser = new User("dummyDriver");
         fakeuser.setEmail("fake@aaa.com");
         fakeuser.setPhone("1111111");
 
-        Request fake1 = new Request(fakeuser);
+        Request fake1 = new Request(user);
         fake1.setEstimate(50.0);
+        fake1.setId("dummy1");
 
-        Request fake2 = new Request(fakeuser);
+        Request fake2 = new Request(user);
         fake2.setEstimate(30.0);
         fake2.setDriver(fakeuser);
         fake2.setStatus("accepted");
+        fake2.setId("dummy2");
 
-        Request fake3 = new Request(fakeuser);
+        Request fake3 = new Request(user);
         fake3.setEstimate(70.0);
         fake3.setDriver(fakeuser);
         fake3.setStatus("closed");
+        fake3.setId("dummy3");
 
         try {
             fake1.setDescription("1.no driver");

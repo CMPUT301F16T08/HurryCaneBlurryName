@@ -117,6 +117,7 @@ public class RideInfoActivity extends AppCompatActivity {
                 // delete from server
                 ElasticSearchRequestController.DeleteRequestsTask deleteRequestTask = new ElasticSearchRequestController.DeleteRequestsTask();
                 deleteRequestTask.execute(request);
+                finish();
             }
 
         });
