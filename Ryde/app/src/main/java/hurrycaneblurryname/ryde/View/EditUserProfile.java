@@ -12,7 +12,10 @@ import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
-
+/**
+ * The type Edit User Profile activity.
+ * Author: Chen
+ */
 public class EditUserProfile extends AppCompatActivity {
     private EditText userEditText;
     private EditText emailEditText;

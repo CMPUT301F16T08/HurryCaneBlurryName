@@ -8,6 +8,13 @@ import android.widget.ListView;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type My Ride Info activity.
+ * Author: Chen
+ * Storyboard by: Blaz
+ * Code Reuse from: asg1-Blaz
+ */
+
 public class MyRideRequestsActivity extends AppCompatActivity {
 
     //Arrays

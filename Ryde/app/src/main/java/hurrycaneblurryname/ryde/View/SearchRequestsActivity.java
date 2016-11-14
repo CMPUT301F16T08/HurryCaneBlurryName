@@ -5,6 +5,12 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Search Requests activity.
+ * Author: Chen
+ * Storyboard by: Blaz
+ */
+
 public class SearchRequestsActivity extends AppCompatActivity {
 
     @Override

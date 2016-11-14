@@ -22,6 +22,11 @@ import hurrycaneblurryname.ryde.R;
 
 import static hurrycaneblurryname.ryde.R.string.User;
 
+/**
+ * The type Signup activity.
+ * Author: Chen
+ * Modified by: Cho
+ */
 public class SignupActivity extends AppCompatActivity {
     private EditText userEditText;
     private EditText passwordEditText;

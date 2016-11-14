@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Request History activity.
+ * Author: Chen
+ */
+
 public class RequestHistoryActivity extends AppCompatActivity {
 
     @Override

@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Available Drivers activity.
+ * Author: Chen
+ */
+
 public class AvailableDriversActivity extends AppCompatActivity {
 
     @Override

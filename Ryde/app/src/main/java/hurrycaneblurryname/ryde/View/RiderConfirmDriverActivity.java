@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Rider Confirm Driver activity.
+ * Author: Chen
+ */
+
 public class RiderConfirmDriverActivity extends AppCompatActivity {
 
     @Override

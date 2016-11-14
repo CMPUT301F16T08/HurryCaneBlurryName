@@ -22,6 +22,8 @@ import hurrycaneblurryname.ryde.R;
 
 /**
  * The type Main activity.
+ * Author: Chen
+ * Modified by: Blaz, Cho
  */
 public class LoginScreenActivity extends AppCompatActivity {
     private TextView signupTextView;

@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Driver Open Requests activity.
+ * Author: Chen
+ */
+
 public class DriverOpenRequestsActivity extends AppCompatActivity {
 
     @Override

@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Rider Current Requests activity.
+ * Author: Chen
+ */
+
 public class RiderCurrentRequestsActivity extends AppCompatActivity {
 
     @Override

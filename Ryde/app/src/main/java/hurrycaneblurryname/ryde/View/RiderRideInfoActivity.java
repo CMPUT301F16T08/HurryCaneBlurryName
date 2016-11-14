@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import hurrycaneblurryname.ryde.R;
 
+/**
+ * The type Rider Ride Info activity.
+ * Author: Chen
+ */
+
 public class RiderRideInfoActivity extends AppCompatActivity {
 
     @Override
