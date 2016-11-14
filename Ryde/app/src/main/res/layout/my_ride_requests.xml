@@ -31,7 +31,7 @@
                 android:layout_marginTop="10dip"
                 android:gravity="center_vertical"
                 android:textSize="18sp"
-                android:text="Open Request List" />
+                android:text="@string/open_list_request" />
 
             <TextView
                 android:id="@+id/openText"
@@ -41,7 +41,7 @@
                 android:layout_marginLeft="18dip"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
-                android:text="No open requests." />
+                android:text="@string/no_open" />
 
             <ListView
                 android:id="@+id/openView"
@@ -57,7 +57,7 @@
                 android:layout_marginTop="20dip"
                 android:gravity="center_vertical"
                 android:textSize="18sp"
-                android:text="Offer" />
+                android:text="@string/offer" />
 
             <TextView
                 android:id="@+id/offerText"
@@ -67,7 +67,7 @@
                 android:layout_marginLeft="18dip"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
-                android:text="No offers." />
+                android:text="@string/no_offer" />
 
             <ListView
                 android:id="@+id/offerView"
@@ -83,7 +83,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="20dip"
                 android:textSize="18sp"
-                android:text="Closed Request List" />
+                android:text="@string/closed_request_list" />
 
             <TextView
                 android:id="@+id/closedText"
@@ -93,7 +93,7 @@
                 android:layout_marginLeft="18dip"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
-                android:text="No closed requests." />
+                android:text="@string/no_closed" />
 
             <ListView
                 android:id="@+id/closedView"

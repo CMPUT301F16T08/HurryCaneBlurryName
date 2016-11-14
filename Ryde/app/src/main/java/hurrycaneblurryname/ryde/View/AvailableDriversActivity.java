@@ -16,5 +16,6 @@ public class AvailableDriversActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.available_drivers);
+        setTitle("Available Drivers");
     }
 }

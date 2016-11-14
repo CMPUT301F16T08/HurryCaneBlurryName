@@ -32,7 +32,7 @@
             <TextView android:id="@+id/userTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User: "
+                android:text="@string/User"
                 android:layout_marginTop="10dp"
                 android:textSize="24sp"/>
 
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/userTextView"
-                android:text="Username"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -49,7 +49,7 @@
             <TextView android:id="@+id/emailTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email: "
+                android:text="@string/email"
                 android:layout_below="@id/userTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/emailTextView"
-                android:text="example@exmaple.com"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -67,7 +67,7 @@
             <TextView android:id="@+id/phoneTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone Number: "
+                android:text="@string/phone"
                 android:layout_below="@id/emailTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/phoneTextView"
-                android:text="780-000-0000"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -92,12 +92,12 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Call"
+                    android:text="@string/call"
                     android:id="@+id/callButton" />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="@string/Email"
                     android:id="@+id/emailButton"
                     android:layout_marginTop="10dp" />
             </LinearLayout>

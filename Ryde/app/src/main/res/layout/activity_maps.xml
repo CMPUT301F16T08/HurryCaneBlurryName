@@ -30,7 +30,7 @@ Author: Codepath
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:hint="Search"
+                    android:hint="@string/search"
                     android:id="@+id/text_map_search"
                     android:layout_weight="1.02" />
 

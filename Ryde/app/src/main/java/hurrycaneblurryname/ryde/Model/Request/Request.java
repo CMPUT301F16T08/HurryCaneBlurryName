@@ -32,6 +32,7 @@ public class Request {
         this.status = "open";
         this.description = "";
         this.driver = new User("");
+        this.estimate = 0.0;
     }
 
     /**
@@ -188,11 +189,6 @@ public class Request {
      *
      * @return the id
      */
-    @Override
-    public String toString() {
-        return id;
-    }
-
     public String getId() {
         return id;
     }
@@ -204,6 +200,11 @@ public class Request {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return this.id;
     }
 
 }

@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -100,12 +102,15 @@ public class MyRideRequestsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
 
-    protected void onStart() {
-        super.onStart();
+        requestList.clear();
+        openRequests.clear();
+        offers.clear();
+        closedRequests.clear();
+        //TODO deleted requests take a while to be reflected in these lists.
 
-        //Load in datas
-        user = UserHolder.getInstance().getUser();
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
@@ -122,18 +127,35 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         fakeuser.setPhone("1111111");
         Request fake = new Request(fakeuser);
         fake.setEstimate(50.0);
+        fake.setId("1.no driver");
         openRequests.add(fake);
+        Request fake2 = new Request(fakeuser);
+        fake.setId("2.has driver");
+        fake.setEstimate(30.0);
+        fake.setDriver(fakeuser);
+        openRequests.add(fake2);
 
-        for (Request r : requestList ) {
-            String status = r.getStatus();
-            if(status.equals("open")) {
-                openRequests.add(r);
-            } else if (status.equals("accepted")) {
-                offers.add(r);
-            } else if (status.equals("closed")) {
-                closedRequests.add(r);
-            }
-        }
+        // factor all lists
+        factorLists();
+
+        openViewAdapter.notifyDataSetChanged();
+        offerViewAdapter.notifyDataSetChanged();
+        closedViewAdapter.notifyDataSetChanged();
+        changeTextStatus();
+        ListUtils.setDynamicHeight(openView);
+        ListUtils.setDynamicHeight(closedView);
+        ListUtils.setDynamicHeight(offerView);
+
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Load in datas
+        user = UserHolder.getInstance().getUser();
 
         openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
         openView.setAdapter(openViewAdapter);
@@ -143,8 +165,6 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
         closedViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, closedRequests);
         closedView.setAdapter(closedViewAdapter);
-
-        changeTextStatus();
 
     }
 
@@ -166,6 +186,40 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         if (closedRequests.size()>0)
         {
             closedText.setVisibility(View.GONE);
+        }
+    }
+
+    private void factorLists(){
+        for (Request r : requestList ) {
+            String status = r.getStatus();
+            if(status.equals("open")) {
+                openRequests.add(r);
+            } else if (status.equals("accepted")) {
+                offers.add(r);
+            } else if (status.equals("closed")) {
+                closedRequests.add(r);
+            }
+        }
+    }
+
+    public static class ListUtils {
+        public static void setDynamicHeight(ListView mListView) {
+            ListAdapter mListAdapter = mListView.getAdapter();
+            if (mListAdapter == null) {
+                // when adapter is null
+                return;
+            }
+            int height = 0;
+            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+            for (int i = 0; i < mListAdapter.getCount(); i++) {
+                View listItem = mListAdapter.getView(i, null, mListView);
+                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                height += listItem.getMeasuredHeight();
+            }
+            ViewGroup.LayoutParams params = mListView.getLayoutParams();
+            params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
+            mListView.setLayoutParams(params);
+            mListView.requestLayout();
         }
     }
 

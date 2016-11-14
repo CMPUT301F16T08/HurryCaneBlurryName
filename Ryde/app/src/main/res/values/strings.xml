@@ -1,4 +1,5 @@
 <resources>
+    <!-- login and signup -->
     <string name="app_name">Ryde</string>
     <string name="Login">Login</string>
     <string name="User">User:</string>
@@ -12,7 +13,41 @@
     <string name="cancel">Cancel</string>
     <string name="enter">Enter</string>
     <string name="request">Confirm Request</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
+    <!-- activity_maps -->
+    <string name="search">Search</string>
+
+    <!-- my_ride_requests -->
+    <string name="open_list_request">Open Request List</string>
+    <string name="no_open">No open requests.</string>
+    <string name="offer">Offer</string>
+    <string name="no_offer">No offers.</string>
+    <string name="closed_request_list">Closed Request List</string>
+    <string name="no_closed">No closed requests.</string>
+
+    <!-- profile_info -->
+    <string name="call">Call</string>
+    <string name="Email">Email</string>
+
+    <!-- ride_info -->
+    <string name="desc">Description:</string>
+    <string name="rider">Rider: </string>
+    <string name="Driver">Driver: </string>
+    <string name="from">From: </string>
+    <string name="to">To: </string>
+    <string name="status">Status: </string>
+    <string name="est">Fee Estimate: </string>
+    <string name="riderClick">Check to see Rider Profile</string>
+    <string name="driverClick">Check to see Driver Profile</string>
+    <string name="completeRequest">Complete Request</string>
+    <string name="cancelRequest">Cancel Request</string>
+
+    <!-- search_requests -->
+    <string name="searchRequest">Search Request&#8230;</string>
+
+    <string name="unavailable">unavailable</string>
     <string name="editTitle">Edit Contact Info:</string>
     <string name="title_activity_rider_main">RiderMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

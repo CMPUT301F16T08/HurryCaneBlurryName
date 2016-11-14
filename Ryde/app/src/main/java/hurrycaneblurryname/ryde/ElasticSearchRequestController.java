@@ -63,7 +63,7 @@ public class ElasticSearchRequestController {
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests")
+                    .addType("requests2")   //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
@@ -108,7 +108,7 @@ public class ElasticSearchRequestController {
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests")
+                    .addType("requests2") //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
@@ -149,7 +149,11 @@ public class ElasticSearchRequestController {
             for (Request r : requests) {
 
                 try {
-                    DocumentResult result = client.execute(new Update.Builder(r).index("f16t08").type("requests").id("1").build());
+                    DocumentResult result = client.execute(new Update.Builder(r)
+                            .index("f16t08")
+                            .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
+                            .id("1")
+                            .build());
                     if (result.isSucceeded()) {
                         //TODO find out what documentResult holds
                         Log.i("UpdatedRequest", "Updated request with ID " + r.getId());
@@ -186,7 +190,7 @@ public class ElasticSearchRequestController {
             for (Request r : requests) {
                 Delete delete = new Delete.Builder(r.getId())
                         .index("f16t08")
-                        .type("requests")
+                        .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -222,7 +226,10 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (Request request: requests) {
-                Index index = new Index.Builder(request).index("f16t08").type("requests").build();
+                Index index = new Index.Builder(request)
+                        .index("f16t08")
+                        .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
+                        .build();
 
                 try {
                     DocumentResult result = client.execute(index);

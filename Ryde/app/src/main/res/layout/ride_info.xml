@@ -32,14 +32,14 @@
             <TextView android:id="@+id/descTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description: "
+                android:text="@string/desc"
                 android:layout_marginTop="10dp"
                 android:textSize="24sp"/>
             <TextView android:id="@+id/descTexts"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/descTextView"
-                android:text="This is a sample descriptions.\nThis is the second line\nHello there."
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -48,7 +48,7 @@
             <TextView android:id="@+id/riderTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rider: "
+                android:text="@string/rider"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"
                 android:layout_below="@id/descTexts"/>
@@ -57,37 +57,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/riderTextView"
-                android:text="Username"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
-
-            <TextView android:id="@+id/riderClickText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/riderUsernameText"
-                android:text="Check to see Rider Profile"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="20dp"
-                android:textColor="#ff0000ff"
-                android:onClick="onClick"
-                android:clickable="true"/>
 
             <!-- driver info -->
             <TextView android:id="@+id/driverTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Driver: "
+                android:text="@string/driver"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"
-                android:layout_below="@id/riderClickText"/>
+                android:layout_below="@id/riderUsernameText"/>
 
             <TextView android:id="@+id/driverUsernameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/driverTextView"
-                android:text="Username"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -96,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/driverUsernameText"
-                android:text="Check to see Driver Profile"
+                android:text="@string/driverClick"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"
@@ -108,7 +96,7 @@
             <TextView android:id="@+id/fromTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From: "
+                android:text="@string/from"
                 android:layout_below="@id/driverClickText"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
@@ -117,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fromTextView"
-                android:text="(52,113)"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -126,7 +114,7 @@
             <TextView android:id="@+id/toTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To: "
+                android:text="@string/to"
                 android:layout_below="@id/fromTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
@@ -135,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/toTextView"
-                android:text="(52,113)"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -144,7 +132,7 @@
             <TextView android:id="@+id/statusTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status: "
+                android:text="@string/status"
                 android:layout_below="@id/toTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
@@ -153,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/statusTextView"
-                android:text="Incomplete"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -162,7 +150,7 @@
             <TextView android:id="@+id/estTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fee Estimate: "
+                android:text="@string/est"
                 android:layout_below="@id/statusTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
@@ -171,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/estTextView"
-                android:text="$20"
+                android:text="@string/unavailable"
                 android:textSize="18sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
@@ -181,7 +169,7 @@
             <Button
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="Complete Request"
+                android:text="@string/completeRequest"
                 android:id="@+id/confirmButton"
                 android:layout_below="@id/estTexts"
                 android:layout_marginTop="20dp"
@@ -190,7 +178,7 @@
             <Button
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="Cancel Request"
+                android:text="@string/cancelRequest"
                 android:id="@+id/cancelButton"
                 android:layout_below="@id/confirmButton"
                 android:layout_centerInParent="true"

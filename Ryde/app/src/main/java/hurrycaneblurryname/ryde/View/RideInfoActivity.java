@@ -1,15 +1,19 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import org.w3c.dom.Text;
 
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
@@ -28,8 +32,10 @@ public class RideInfoActivity extends AppCompatActivity {
     private TextView toTextView;
     private TextView statusTextView;
     private TextView feeTextView;
-    private TextView riderClickTextView;
     private TextView driverClickTextView;
+
+    private Button completeButton;      //TODO
+    private Button cancelButton;
 
     private Request request;
 
@@ -48,28 +54,29 @@ public class RideInfoActivity extends AppCompatActivity {
         statusTextView = (TextView)findViewById(R.id.statusTexts);
         feeTextView = (TextView)findViewById(R.id.estTexts);
 
-        riderClickTextView = (TextView)findViewById(R.id.riderClickText);
         driverClickTextView = (TextView)findViewById(R.id.driverClickText);
 
-        riderClickTextView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                RequestUserHolder.getInstance().setUser(request.getRider());
-                Intent intent = new Intent(RideInfoActivity.this, ProfileInfoActivity.class);
-                startActivity(intent);
-            }
-        });
+        cancelButton = (Button)findViewById(R.id.cancelButton);
 
         driverClickTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (request.getDriver().equals(null))
+                if (request.getDriver().getUsername().equals(""))
                 {
                     Toast.makeText(RideInfoActivity.this, "No driver has accepted this request!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 RequestUserHolder.getInstance().setUser(request.getDriver());
                 Intent intent = new Intent(RideInfoActivity.this, ProfileInfoActivity.class);
                 startActivity(intent);
             }
         });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                cancelAlertDialog();
+            }
+        });
+
     }
 
     protected void onStart() {
@@ -91,4 +98,29 @@ public class RideInfoActivity extends AppCompatActivity {
         statusTextView.setText(request.getStatus());
         feeTextView.setText(request.getEstimate().toString());
     }
+
+    private void cancelAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Cancel a request");
+        alertDialogBuilder.setMessage("Are you sure you want to cancel this request?");
+        alertDialogBuilder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO Auto-generated catch block
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Yes",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // delete from server
+                ElasticSearchRequestController.DeleteRequestsTask deleteRequestTask = new ElasticSearchRequestController.DeleteRequestsTask();
+                deleteRequestTask.execute(request);
+            }
+
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
 }

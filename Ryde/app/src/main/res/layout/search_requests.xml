@@ -20,7 +20,7 @@
         <EditText android:id="@+id/SearchEditText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:hint="Search Request..."
+            android:hint="@string/searchRequest"
             android:inputType="text"
             android:maxLines="1"
             android:layout_weight="1.02"/>
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:id="@+id/searchButton"
-            android:text="Search" />
+            android:text="@string/enter" />
     </LinearLayout>
 
     <ListView
