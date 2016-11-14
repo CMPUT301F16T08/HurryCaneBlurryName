@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,12 +25,11 @@ import hurrycaneblurryname.ryde.R;
 public class MyRideRequestsActivity extends AppCompatActivity {
 
     //Arrays
-    //TO-DO
 
-//    private ArrayList<> requestList = new ArrayList<>();
+    private ArrayList<Request> requestList = new ArrayList<Request>();
     private ArrayList<Request> openRequests = new ArrayList<Request>();
-//    private ArrayList<> offers = new ArrayList<>();
-//    private ArrayList<> closedRequests = new ArrayList<>();
+    private ArrayList<Request> offers = new ArrayList<Request>();
+    private ArrayList<Request> closedRequests = new ArrayList<Request>();
 
 
     //ListViews
@@ -38,11 +38,14 @@ public class MyRideRequestsActivity extends AppCompatActivity {
     private ListView closedView;
 
     //Adapters
-
     private ArrayAdapter<Request> openViewAdapter;
-//    private ArrayAdapter<float> offerViewAdapter;
-//    private ArrayAdapter<Request> closedViewAdapter;
+    private ArrayAdapter<Request> offerViewAdapter;
+    private ArrayAdapter<Request> closedViewAdapter;
 
+    // Status TextView
+    private TextView openText;
+    private TextView offerText;
+    private TextView closedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,7 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-
+        changeTextStatus();
         //Load in datas
         ElasticSearchRequestController.GetOpenRequestsTask getOpenRequests = new ElasticSearchRequestController.GetOpenRequestsTask();
         getOpenRequests.execute();
@@ -101,18 +104,34 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
         openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
         openView.setAdapter(openViewAdapter);
-        /*
-        offerViewAdapter = new ArrayAdapter<Habit>(this, R.layout.list_item, offers);
+
+        offerViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, offers);
         offerView.setAdapter(offerViewAdapter);
 
-        closedViewAdapter = new ArrayAdapter<Habit>(this, R.layout.list_item, closedRequests);
+        closedViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, closedRequests);
         closedView.setAdapter(closedViewAdapter);
 
-        ListUtils.setDynamicHeight(openView);
-        ListUtils.setDynamicHeight(offerView);
-        ListUtils.setDynamicHeight(closedView);
-        */
+    }
 
+    private void changeTextStatus(){
+        openText = (TextView)findViewById(R.id.openText);
+        offerText = (TextView)findViewById(R.id.offerText);
+        closedText = (TextView)findViewById(R.id.closedText);
+
+        if(!openRequests.isEmpty())
+        {
+            openText.setVisibility(View.GONE);
+        }
+
+        if (!offers.isEmpty())
+        {
+            offerText.setVisibility(View.GONE);
+        }
+
+        if (!closedRequests.isEmpty())
+        {
+            closedText.setVisibility(View.GONE);
+        }
     }
 
 }
