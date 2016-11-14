@@ -48,7 +48,7 @@ public class ElasticSearchRequestController {
         protected ArrayList<Request> doInBackground(String... searchParam) {
             verifySettings();
 
-            ArrayList<Request> tweets = new ArrayList<Request>();
+            ArrayList<Request> requests = new ArrayList<Request>();
 
             // search for first 10 requests with geolocation
             // Default to 500m
@@ -65,7 +65,7 @@ public class ElasticSearchRequestController {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
-                    tweets.addAll(foundTweets);
+                    requests.addAll(foundTweets);
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any requests that matched.");
@@ -75,7 +75,7 @@ public class ElasticSearchRequestController {
                 Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
-            return tweets;
+            return requests;
         }
     }
 
