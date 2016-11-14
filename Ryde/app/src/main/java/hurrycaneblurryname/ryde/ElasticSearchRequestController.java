@@ -30,7 +30,7 @@ public class ElasticSearchRequestController {
     /**
      * Task handling getting requests for the Driver with given search parameters from elasticsearch
      *
-     * TODO: handle searching by geolocation (coordinates and landmarks) and current location
+     * TODO: handle searching by current location, takes in keyword as destination
      */
     public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
