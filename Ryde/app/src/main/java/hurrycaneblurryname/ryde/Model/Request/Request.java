@@ -66,6 +66,15 @@ public class Request {
     }
 
     /**
+     * get Driver.
+     *
+     * @return rider the rider
+     */
+    public User getRider() {
+        return rider;
+    }
+
+    /**
      * Has driver boolean.
      *
      * @return the boolean
@@ -157,7 +166,21 @@ public class Request {
         }
     }
 
+    /**
+     * Get description.
+     *
+     * @return description
+     */
     public String getDescription() {
+        return this.description;
+    }
+
+    /**
+     * toString method
+     *
+     */
+    @Override
+    public String toString(){
         return this.description;
     }
 }

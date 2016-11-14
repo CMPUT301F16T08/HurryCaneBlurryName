@@ -45,12 +45,30 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
 
-            <!-- status -->
+            <!-- email -->
+            <TextView android:id="@+id/emailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email: "
+                android:layout_below="@id/userTexts"
+                android:layout_marginTop="20dp"
+                android:textSize="24sp"/>
+
+            <TextView android:id="@+id/emailTexts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emailTextView"
+                android:text="example@exmaple.com"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"/>
+
+            <!-- phone -->
             <TextView android:id="@+id/phoneTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone Number: "
-                android:layout_below="@id/userTexts"
+                android:layout_below="@id/emailTexts"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
 
@@ -64,14 +82,25 @@
                 android:layout_marginLeft="20dp"/>
 
             <!-- buttons -->
-            <Button
-                android:layout_width="200dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contact Driver"
-                android:id="@+id/contactButton"
                 android:layout_below="@id/phoneTexts"
+                android:orientation="vertical"
                 android:layout_marginTop="20dp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Call"
+                    android:id="@+id/callButton" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:id="@+id/emailButton"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
 
         </RelativeLayout>
 

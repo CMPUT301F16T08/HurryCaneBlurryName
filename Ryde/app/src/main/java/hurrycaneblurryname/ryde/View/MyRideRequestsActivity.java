@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
+import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -113,6 +114,15 @@ public class MyRideRequestsActivity extends AppCompatActivity {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
 
+        // fake request need to remove
+        User fakeuser = new User("fake");
+        fakeuser.setEmail("fake@aaa.com");
+        fakeuser.setPhone("1111111");
+        Request fake = new Request(fakeuser);
+        fake.setDriver(fakeuser);
+        fake.setEstimate(50.0);
+        openRequests.add(fake);
+
         openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
         openView.setAdapter(openViewAdapter);
 
@@ -129,17 +139,17 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         offerText = (TextView)findViewById(R.id.offerText);
         closedText = (TextView)findViewById(R.id.closedText);
 
-        if((!openRequests.isEmpty()) && (!requestList.isEmpty()))
+        if(openRequests.size()==0)
         {
             openText.setVisibility(View.GONE);
         }
 
-        if (!offers.isEmpty())
+        if (offers.size()==0)
         {
             offerText.setVisibility(View.GONE);
         }
 
-        if (!closedRequests.isEmpty())
+        if (closedRequests.size()==0)
         {
             closedText.setVisibility(View.GONE);
         }

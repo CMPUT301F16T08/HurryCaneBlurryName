@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
@@ -39,11 +40,6 @@ public class EditUserProfile extends AppCompatActivity {
         // retrive login user info
         user = UserHolder.getInstance().getUser();
 
-        // display current User info on editText
-        emailEditText.setText(user.getEmail(), TextView.BufferType.EDITABLE);
-        phoneEditText.setText(user.getPhone(), TextView.BufferType.EDITABLE);
-
-
         finishButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 user.setEmail(emailEditText.getText().toString());
@@ -62,6 +58,17 @@ public class EditUserProfile extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    protected void onStart() {
+        super.onStart();
+        // retrive clicked user info
+        user = RequestUserHolder.getInstance().getUser();
+
+        // display current User info on editText
+        emailEditText.setText(user.getEmail(), TextView.BufferType.EDITABLE);
+        phoneEditText.setText(user.getPhone(), TextView.BufferType.EDITABLE);
 
     }
 }
