@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
+import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -26,8 +28,9 @@ import hurrycaneblurryname.ryde.R;
 
 public class MyRideRequestsActivity extends AppCompatActivity {
 
-    //Arrays
+    private User user;
 
+    //Arrays
     private ArrayList<Request> requestList = new ArrayList<Request>();
     private ArrayList<Request> openRequests = new ArrayList<Request>();
     private ArrayList<Request> offers = new ArrayList<Request>();
@@ -100,17 +103,28 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-        changeTextStatus();
+
         //Load in datas
-        ElasticSearchRequestController.GetOpenRequestsTask getOpenRequests = new ElasticSearchRequestController.GetOpenRequestsTask();
-        getOpenRequests.execute();
+        user = UserHolder.getInstance().getUser();
+
+        ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
+        getMyRequests.execute(user.getUsername());
         try {
-            openRequests = getOpenRequests.get();
-            if (openRequests.isEmpty()) {
-                Log.i("Empty", "open is empty");
-            }
+            requestList = getMyRequests.get();
+
         } catch (Exception e) {
             Log.i("ErrorGetRequest", "Failed to get open requests");
+        }
+
+        for (Request r : requestList ) {
+            String status = r.getStatus();
+            if(status.equals("open")) {
+                openRequests.add(r);
+            } else if (status.equals("accepted")) {
+                offers.add(r);
+            } else if (status.equals("closed")) {
+                closedRequests.add(r);
+            }
         }
 
         openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
@@ -121,6 +135,8 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
         closedViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, closedRequests);
         closedView.setAdapter(closedViewAdapter);
+
+        changeTextStatus();
 
     }
 

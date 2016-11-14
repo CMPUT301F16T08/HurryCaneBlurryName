@@ -82,6 +82,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                     else{
                         Toast.makeText(LoginScreenActivity.this, "Wrong password!", Toast.LENGTH_SHORT).show();
                     }
+                    passwordEditText.getText().clear();
 
                 } catch (Exception e) {
                     // no user was found

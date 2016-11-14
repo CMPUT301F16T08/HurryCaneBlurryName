@@ -18,6 +18,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 /**
  * Controller for handling querying for request object from elasticsearch server
@@ -35,7 +36,7 @@ public class ElasticSearchRequestController {
     public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Querying for requests starting at the current geolocation
+         * Querying for requests starting at the at current geolocation within 500m
          * @param searchParam query parameters.
          *                          [0] should be current geolocation lat
          *                          [1] should be current geolocation lon
@@ -49,11 +50,15 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             ArrayList<Request> requests = new ArrayList<Request>();
-
+            String search_string;
             // search for first 10 requests with geolocation
             // Default to 500m
-            // "{"from": 0, "size":10000, "filter" : {"geo_distance" : { "distance" : "500m", "location" :  [ -113.49026, 53.54565 ]}}}";
-            String search_string = "{\"from\": 0, \"size\":10000, \"filter\" : {\"geo_distance\" : { \"distance\" : \"500m\", \"location\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
+            // "{"from": 0, "size":10, "filter" : {"geo_distance" : { "distance" : "500m", "location" :  [ -113.49026, 53.54565 ]}}}";
+            if (searchParam.length == 2) {
+                search_string = "{\"from\": 0, \"size\":10, \"filter\" : {\"geo_distance\" : { \"distance\" : \"500m\", \"from\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
+            } else {
+                search_string = "";
+            }
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
@@ -79,14 +84,12 @@ public class ElasticSearchRequestController {
         }
     }
 
-    public static class GetOpenRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class GetRiderRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Querying for requests starting at the current geolocation
+         * Querying for all of a rider's created requests that haven't been opened.
          * @param searchParam query parameters.
-         *                          [0] should be current geolocation lat
-         *                          [1] should be current geolocation lon
-         *
+         *                                     searchParam[0] should be the username
          * @return array of requests that are closest to current geolocation
          * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
          *        object.execute("search parameter");
@@ -99,9 +102,10 @@ public class ElasticSearchRequestController {
 
             // TODO filter for own username only!!!!
             // Default to 500m
-            //{"size" : 10, "query" : { "match" : { "status" : "open" }}, "filter" : {"geo_distance" : { "distance" : "500m", "from" :  { "lat": 53.56838158542664, "lon": -113.4578289091587}}}}
-            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"status\" : \"open\" }}, \"filter\" : {\"geo_distance\" : { \"distance\" : \"500m\", \"from\" :  { \"lat\": 53.56838158542664, \"lon\": -113.4578289091587}}}}";
+            //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"rider.username\" : \""+ searchParam[0] +"\" }}}";
 
+            Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
                     .addType("requests")
@@ -127,38 +131,74 @@ public class ElasticSearchRequestController {
 
     /**
      * Delete a request by its unique ID from ElasticSearch.
-     *
      */
 
-    public static class DeleteRequestsTask extends AsyncTask<String, Void, Void> {
+    public static class UpdateRequestsTask extends AsyncTask<Request, Void, Void> {
 
         /**
-         * Delete the request information from ElasticSearch, usually after a request is completed.
-         * @param search_id search_id[0] is the unique ID stored with each Request object
+         * Update the request information from ElasticSearch with the request object.
+         * @param requests request objects to be removed from elasticsearch
          * @return null
          * @usage Declare and initialize a ElasticSearchRequestController.DeleteRequestsTask object
          *        object.execute("IDparameter");
          */
         @Override
-        protected Void doInBackground(String... search_id) {
+        protected Void doInBackground(Request... requests) {
             verifySettings();
 
-            Delete delete = new Delete.Builder(search_id[0])
-                    .index("f16t08")
-                    .type("requests")
-                    .build();
+            for (Request r : requests) {
 
-            try {
-                DocumentResult result = client.execute(delete);
-                if (result.isSucceeded()) {
-                    //TODO find out what documentResult holds
-                }
-                else {
-                    Log.i("ErrorDeleteRequest", result.getErrorMessage() );
+                try {
+                    DocumentResult result = client.execute(new Update.Builder(r).index("f16t08").type("requests").id("1").build());
+                    if (result.isSucceeded()) {
+                        //TODO find out what documentResult holds
+                        Log.i("UpdatedRequest", "Updated request with ID " + r.getId());
+                    } else {
+                        Log.i("ErrorUpdateRequest", "could not update request with ID " + r.getId());
+                    }
+                } catch (Exception e) {
+                    Log.i("ErrorUpdateRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 }
             }
-            catch (Exception e) {
-                Log.i("ErrorDeleteRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+            return null;
+        }
+    }
+
+
+    /**
+     * Delete a request by its unique ID from ElasticSearch.
+     */
+
+    public static class DeleteRequestsTask extends AsyncTask<Request, Void, Void> {
+
+        /**
+         * Delete the request information from ElasticSearch, usually after a request is completed.
+         * @param requests request objects to be removed from elasticsearch
+         * @return null
+         * @usage Declare and initialize a ElasticSearchRequestController.DeleteRequestsTask object
+         *        object.execute("IDparameter");
+         */
+        @Override
+        protected Void doInBackground(Request... requests) {
+            verifySettings();
+
+            for (Request r : requests) {
+                Delete delete = new Delete.Builder(r.getId())
+                        .index("f16t08")
+                        .type("requests")
+                        .build();
+
+                try {
+                    DocumentResult result = client.execute(delete);
+                    if (result.isSucceeded()) {
+                        //TODO find out what documentResult holds
+                    } else {
+                        Log.i("ErrorDeleteRequest", "could not delete request with ID " + r.getId());
+                    }
+                } catch (Exception e) {
+                    Log.i("ErrorDeleteRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
             }
 
             return null;
@@ -187,8 +227,7 @@ public class ElasticSearchRequestController {
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
-                        // TODO: setID of the request from elasticsearch
-//                        request.setId(result.getId());
+                        request.setId(result.getId());
                     }
                     else {
                         Log.i("ErrorAddRequest", "Elastic search was not able to add the request.");
@@ -212,7 +251,7 @@ public class ElasticSearchRequestController {
     public static class GetUsersTask extends AsyncTask<String, Void, User> {
 
         /**
-         * Search and get a User with a specific userID string. Pulls all matched and returns only one.
+         * Search and get a User with a specific userID string. Pulls all matched and returns only top.
          * @param search_parameters unique userID string
          * @return Single User object
          * @usage Declare and initialize a ElasticSearchRequestController.GetUsersTask object

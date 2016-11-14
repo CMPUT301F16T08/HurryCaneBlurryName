@@ -7,12 +7,15 @@ import com.google.android.gms.maps.model.LatLng;
 import hurrycaneblurryname.ryde.DescriptionTooLongException;
 import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.User;
+import io.searchbox.annotations.JestId;
 
 /**
  * Created by pocrn_000 on 10/11/2016.
  */
 public class Request {
 
+    @JestId
+    private String id;
     private LatLng from;
     private LatLng to;
     private User rider;
@@ -157,7 +160,35 @@ public class Request {
         }
     }
 
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
     public String getDescription() {
+        return this.description;
+    }
+
+    /**
+     * Gets Jest/ElasticSearch id.
+     *
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets Jest/ElasticSearch id. String Id should be what is returned by the JestClient result.
+     *
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
         return this.description;
     }
 }
