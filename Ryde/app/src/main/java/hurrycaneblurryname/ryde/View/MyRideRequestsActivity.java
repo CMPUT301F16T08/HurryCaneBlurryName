@@ -100,12 +100,15 @@ public class MyRideRequestsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
 
-    protected void onStart() {
-        super.onStart();
+        requestList.clear();
+        openRequests.clear();
+        offers.clear();
+        closedRequests.clear();
+        //TODO deleted requests take a while to be reflected in these lists.
 
-        //Load in datas
-        user = UserHolder.getInstance().getUser();
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
@@ -116,14 +119,6 @@ public class MyRideRequestsActivity extends AppCompatActivity {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
 
-        // fake request need to remove
-        User fakeuser = new User("fake");
-        fakeuser.setEmail("fake@aaa.com");
-        fakeuser.setPhone("1111111");
-        Request fake = new Request(fakeuser);
-        fake.setDriver(fakeuser);
-        fake.setEstimate(50.0);
-        openRequests.add(fake);
 
         for (Request r : requestList ) {
             String status = r.getStatus();
@@ -135,6 +130,21 @@ public class MyRideRequestsActivity extends AppCompatActivity {
                 closedRequests.add(r);
             }
         }
+        openViewAdapter.notifyDataSetChanged();
+        offerViewAdapter.notifyDataSetChanged();
+        closedViewAdapter.notifyDataSetChanged();
+        changeTextStatus();
+
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Load in datas
+        user = UserHolder.getInstance().getUser();
 
         openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
         openView.setAdapter(openViewAdapter);
@@ -144,8 +154,6 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
         closedViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, closedRequests);
         closedView.setAdapter(closedViewAdapter);
-
-        changeTextStatus();
 
     }
 

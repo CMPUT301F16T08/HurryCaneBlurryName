@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 
 import org.w3c.dom.Text;
 
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
@@ -30,6 +32,9 @@ public class RideInfoActivity extends AppCompatActivity {
     private TextView riderClickTextView;
     private TextView driverClickTextView;
 
+    private Button completeButton;      //TODO
+    private Button cancelButton;
+
     private Request request;
 
     @Override
@@ -50,6 +55,8 @@ public class RideInfoActivity extends AppCompatActivity {
         riderClickTextView = (TextView)findViewById(R.id.riderClickText);
         driverClickTextView = (TextView)findViewById(R.id.driverClickText);
 
+        cancelButton = (Button)findViewById(R.id.cancelButton);
+
         riderClickTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RequestUserHolder.getInstance().setUser(request.getRider());
@@ -65,6 +72,19 @@ public class RideInfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                //TODO add a confirmation
+
+                ElasticSearchRequestController.DeleteRequestsTask deleteRequestTask = new ElasticSearchRequestController.DeleteRequestsTask();
+                deleteRequestTask.execute(request);
+
+                finish();
+            }
+        });
+
     }
 
     protected void onStart() {
