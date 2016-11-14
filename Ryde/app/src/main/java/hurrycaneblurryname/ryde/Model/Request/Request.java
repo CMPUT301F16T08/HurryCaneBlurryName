@@ -12,7 +12,7 @@ import hurrycaneblurryname.ryde.Model.User;
  * Created by pocrn_000 on 10/11/2016.
  */
 public class Request {
-    
+
     private LatLng from;
     private LatLng to;
     private User rider;
