@@ -2,10 +2,16 @@ package hurrycaneblurryname.ryde.View;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -19,12 +25,12 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
     //Arrays
     //TO-DO
-    /*
-    private ArrayList<> requestList = new ArrayList<>();
-    private ArrayList<> openRequests = new ArrayList<>();
-    private ArrayList<> offers = new ArrayList<>();
-    private ArrayList<> closedRequests = new ArrayList<>();
-    */
+
+//    private ArrayList<> requestList = new ArrayList<>();
+    private ArrayList<Request> openRequests = new ArrayList<Request>();
+//    private ArrayList<> offers = new ArrayList<>();
+//    private ArrayList<> closedRequests = new ArrayList<>();
+
 
     //ListViews
     private ListView openView;
@@ -32,11 +38,11 @@ public class MyRideRequestsActivity extends AppCompatActivity {
     private ListView closedView;
 
     //Adapters
-    /*
+
     private ArrayAdapter<Request> openViewAdapter;
-    private ArrayAdapter<float> offerViewAdapter;
-    private ArrayAdapter<Request> closedViewAdapter;
-    */
+//    private ArrayAdapter<float> offerViewAdapter;
+//    private ArrayAdapter<Request> closedViewAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +88,20 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         super.onStart();
 
         //Load in datas
-        /*
-        openViewAdapter = new ArrayAdapter<Habit>(this, R.layout.list_item, openRequests);
-        openView.setAdapter(openViewAdapter);
+        ElasticSearchRequestController.GetOpenRequestsTask getOpenRequests = new ElasticSearchRequestController.GetOpenRequestsTask();
+        getOpenRequests.execute();
+        try {
+            openRequests = getOpenRequests.get();
+            if (openRequests.isEmpty()) {
+                Log.i("Empty", "open is empty");
+            }
+        } catch (Exception e) {
+            Log.i("ErrorGetRequest", "Failed to get open requests");
+        }
 
+        openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
+        openView.setAdapter(openViewAdapter);
+        /*
         offerViewAdapter = new ArrayAdapter<Habit>(this, R.layout.list_item, offers);
         offerView.setAdapter(offerViewAdapter);
 

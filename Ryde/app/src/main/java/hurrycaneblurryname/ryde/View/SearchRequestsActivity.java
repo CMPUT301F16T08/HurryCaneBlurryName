@@ -45,6 +45,9 @@ public class SearchRequestsActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (SearchEditText.getText().length() == 0) {
+                    // TODO Search boxes all say the same thing. Specify what they should be searching!
+                    // Will refactor
+                    // Query for requests that that in current area and the search keyword should be the destination
                     Toast.makeText(SearchRequestsActivity.this, "Please enter your search keyword!", Toast.LENGTH_SHORT).show();
                     return;
                 }

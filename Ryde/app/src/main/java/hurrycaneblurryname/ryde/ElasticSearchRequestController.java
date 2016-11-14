@@ -30,7 +30,7 @@ public class ElasticSearchRequestController {
     /**
      * Task handling getting requests for the Driver with given search parameters from elasticsearch
      *
-     * TODO: handle searching by geolocation (coordinates and landmarks)
+     * TODO: handle searching by current location, takes in keyword as destination
      */
     public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
@@ -69,6 +69,52 @@ public class ElasticSearchRequestController {
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any requests that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return requests;
+        }
+    }
+
+    public static class GetOpenRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+
+        /**
+         * Querying for requests starting at the current geolocation
+         * @param searchParam query parameters.
+         *                          [0] should be current geolocation lat
+         *                          [1] should be current geolocation lon
+         *
+         * @return array of requests that are closest to current geolocation
+         * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
+         *        object.execute("search parameter");
+         */
+        @Override
+        protected ArrayList<Request> doInBackground(String... searchParam) {
+            verifySettings();
+
+            ArrayList<Request> requests = new ArrayList<Request>();
+
+            // TODO filter for own username only!!!!
+            // Default to 500m
+            //{"size" : 10, "query" : { "match" : { "status" : "open" }}, "filter" : {"geo_distance" : { "distance" : "500m", "from" :  { "lat": 53.56838158542664, "lon": -113.4578289091587}}}}
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"status\" : \"open\" }}, \"filter\" : {\"geo_distance\" : { \"distance\" : \"500m\", \"from\" :  { \"lat\": 53.56838158542664, \"lon\": -113.4578289091587}}}}";
+
+            Search search = new Search.Builder(search_string)
+                    .addIndex("f16t08")
+                    .addType("requests")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundTweets);
+                }
+                else {
+                    Log.i("ErrorGetRequest", "The search query failed to find any open requests that matched.");
                 }
             }
             catch (Exception e) {
