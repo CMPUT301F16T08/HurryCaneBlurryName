@@ -16,6 +16,7 @@ import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -27,8 +28,9 @@ import hurrycaneblurryname.ryde.R;
 
 public class MyRideRequestsActivity extends AppCompatActivity {
 
-    //Arrays
+    private User user;
 
+    //Arrays
     private ArrayList<Request> requestList = new ArrayList<Request>();
     private ArrayList<Request> openRequests = new ArrayList<Request>();
     private ArrayList<Request> offers = new ArrayList<Request>();
@@ -101,15 +103,15 @@ public class MyRideRequestsActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-        changeTextStatus();
+
         //Load in datas
-        ElasticSearchRequestController.GetOpenRequestsTask getOpenRequests = new ElasticSearchRequestController.GetOpenRequestsTask();
-        getOpenRequests.execute();
+        user = UserHolder.getInstance().getUser();
+
+        ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
+        getMyRequests.execute(user.getUsername());
         try {
-            openRequests = getOpenRequests.get();
-            if (openRequests.isEmpty()) {
-                Log.i("Empty", "open is empty");
-            }
+            requestList = getMyRequests.get();
+
         } catch (Exception e) {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
@@ -123,6 +125,17 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         fake.setEstimate(50.0);
         openRequests.add(fake);
 
+        for (Request r : requestList ) {
+            String status = r.getStatus();
+            if(status.equals("open")) {
+                openRequests.add(r);
+            } else if (status.equals("accepted")) {
+                offers.add(r);
+            } else if (status.equals("closed")) {
+                closedRequests.add(r);
+            }
+        }
+
         openViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, openRequests);
         openView.setAdapter(openViewAdapter);
 
@@ -132,6 +145,8 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         closedViewAdapter = new ArrayAdapter<Request>(this, R.layout.list_item, closedRequests);
         closedView.setAdapter(closedViewAdapter);
 
+        changeTextStatus();
+
     }
 
     private void changeTextStatus(){
@@ -139,17 +154,17 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         offerText = (TextView)findViewById(R.id.offerText);
         closedText = (TextView)findViewById(R.id.closedText);
 
-        if(openRequests.size()==0)
+        if(openRequests.size()>0)
         {
             openText.setVisibility(View.GONE);
         }
 
-        if (offers.size()==0)
+        if (offers.size()>0)
         {
             offerText.setVisibility(View.GONE);
         }
 
-        if (closedRequests.size()==0)
+        if (closedRequests.size()>0)
         {
             closedText.setVisibility(View.GONE);
         }
