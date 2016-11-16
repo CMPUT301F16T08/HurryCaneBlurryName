@@ -64,7 +64,7 @@ public class EditUserProfile extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // retrive clicked user info
-        user = RequestUserHolder.getInstance().getUser();
+        user = UserHolder.getInstance().getUser();
 
         // display current User info on editText
         emailEditText.setText(user.getEmail(), TextView.BufferType.EDITABLE);
