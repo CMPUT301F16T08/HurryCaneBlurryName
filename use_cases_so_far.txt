@@ -1,0 +1,44 @@
+Working:
+	Request:
+		US 01.01.01(request rides between two locations)
+		US 01.02.01(current requests I have open)
+		US 01.05.01(phone or email the driver who accepted a request)
+		US 01.04.01(cancel requests)
+	User:
+		US 03.01.01(user setup)
+		US 03.02.01(edit user profile)
+		US 03.03.01(show contact info)
+		
+	Status:
+		US 02.01.01(status of a request that I am involved in)
+
+	Location:
+		US 10.01.01(specify a start and end geo locations on a map for a request)
+		US 10.02.01(view start and end geo locations on a map for a request)
+
+Need to fix:
+	(need to ask Stephen)
+	US 04.01.01(browse and search for open requests by geo-location)
+	US 04.02.01(browse and search for open requests by keyword)
+
+Unknown:
+	US 01.06.01(an estimate of a fair fare)
+		
+	
+NO impossible to finish before Part 4 DUE:
+	Request:
+		US 01.03.01(if my request is accepted)
+		US 01.07.01(confirm the completion)
+		US 01.08.01(confirm a driver's acceptance)
+
+	Accepting:
+		US 05.01.01(accept a request I agree with and accept that offered payment upon completion)
+		US 05.02.01(view a list of things I have accepted that are pending, each request with its description, and locations.)
+		US 05.03.01(see if my acceptance was accepted.)
+		US 05.04.01(notified if my ride offer was accepted.)
+
+	Offline behavior:
+		US 08.01.01(see requests that I already accepted while offline.)
+		US 08.02.01(see requests that I have made while offline.)
+		US 08.03.01(make requests that will be sent once I get connectivity again.)
+		US 08.04.01(accept requests that will be sent once I get connectivity again.)
