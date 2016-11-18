@@ -43,7 +43,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -675,7 +674,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent editProfile = new Intent(this, EditUserProfile.class);
             startActivity(editProfile);
         } else if (id == R.id.nav_ride_requests) {
-            Intent rideRequests = new Intent(this, MyRideRequestsActivity.class);
+            Intent rideRequests = new Intent(this, MyRideRequestsRemake.class);
             startActivity(rideRequests);
         } else if (id == R.id.nav_search) {
             Intent search = new Intent(this, SearchRequestsActivity.class);

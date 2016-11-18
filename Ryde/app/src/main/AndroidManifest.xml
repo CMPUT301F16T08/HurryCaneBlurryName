@@ -48,7 +48,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".View.MyRideRequestsActivity" />
-        <activity android:name=".View.SearchRequestsActivity"></activity>
+        <activity android:name=".View.SearchRequestsActivity" />
+        <activity android:name=".View.MyRideRequestsRemake"></activity>
     </application>
 
 </manifest>

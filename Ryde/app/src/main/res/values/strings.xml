@@ -56,6 +56,8 @@
     <string name="title_activity_driver_main">DriverMainActivity</string>
     <string name="new_request">Create New Request</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_my_ride_request_remake">MyRideRequestRemake</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>
