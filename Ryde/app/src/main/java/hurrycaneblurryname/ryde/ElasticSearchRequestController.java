@@ -228,7 +228,7 @@ public class ElasticSearchRequestController {
             for (Request request: requests) {
                 Index index = new Index.Builder(request)
                         .index("f16t08")
-                        .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -241,7 +241,7 @@ public class ElasticSearchRequestController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ErrorAddRequest", "Failed to add a request to elastic search!");
+                    Log.i("AddRequestException", "Failed to add a request to elastic search!");
                     e.printStackTrace();
                 }
             }
