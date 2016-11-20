@@ -12,7 +12,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Created by pocrn_000 on 11/19/2016.
+ * Deserializes an ArrayList of Commands from Json
+ * Source: http://stackoverflow.com/questions/19588020/gson-serialize-a-list-of-polymorphic-objects
+ * Date Accessed: 11/20/2016
+ * Author:giampaolo
  */
 
 public class CommandDeserializer implements JsonDeserializer<ArrayList<Command>> {
