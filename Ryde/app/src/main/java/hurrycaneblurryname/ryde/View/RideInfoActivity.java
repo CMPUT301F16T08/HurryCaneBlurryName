@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class RideInfoActivity extends AppCompatActivity {
     private TextView statusTextView;
     private TextView feeTextView;
     private TextView driverClickTextView;
+    private TextView driversClickTextView;
 
     private Button completeButton;      //TODO
     private Button cancelButton;
@@ -58,6 +60,7 @@ public class RideInfoActivity extends AppCompatActivity {
         feeTextView = (TextView)findViewById(R.id.estTexts);
 
         driverClickTextView = (TextView)findViewById(R.id.driverClickText);
+        driversClickTextView = (TextView)findViewById(R.id.driversClickText);
 
         cancelButton = (Button)findViewById(R.id.cancelButton);
         request = RequestHolder.getInstance().getRequest();
@@ -70,6 +73,13 @@ public class RideInfoActivity extends AppCompatActivity {
                 }
                 RequestUserHolder.getInstance().setUser(request.getDriver());
                 Intent intent = new Intent(RideInfoActivity.this, ProfileInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        driversClickTextView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(RideInfoActivity.this, AvailableDriversActivity.class);
                 startActivity(intent);
             }
         });
@@ -89,12 +99,28 @@ public class RideInfoActivity extends AppCompatActivity {
         setTextViewContent(request);
     }
 
+    // Back Navigation Handle
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setTextViewContent(Request request){
         descTextView.setText(request.getDescription());
         riderTextView.setText(request.getRider().getUsername());
         if (!request.getDriver().getUsername().equals(""))
         {
             driverTextView.setText(request.getDriver().getUsername());
+            driversClickTextView.setVisibility(View.GONE);
+        }
+        else{
+            driverClickTextView.setVisibility(View.GONE);
         }
         fromTextView.setText(Arrays.toString(request.getFrom()));
         toTextView.setText(Arrays.toString(request.getTo()));
@@ -120,6 +146,7 @@ public class RideInfoActivity extends AppCompatActivity {
                 // delete from server
                 ElasticSearchRequestController.DeleteRequestsTask deleteRequestTask = new ElasticSearchRequestController.DeleteRequestsTask();
                 deleteRequestTask.execute(request);
+                Toast.makeText(RideInfoActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 finish();
             }
 

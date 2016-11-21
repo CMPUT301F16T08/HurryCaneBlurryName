@@ -7,22 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".View.RideInfoActivity">
+    tools:context=".View.RideInfoFromSearch">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <!-- MapView inside, show location markup -->
-        <LinearLayout
-            android:id="@+id/rideInfoLayout"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <!-- MapView inside -->
-
-        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -62,41 +52,11 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
 
-            <!-- driver info -->
-            <TextView android:id="@+id/driverTextView"
+            <TextView android:id="@+id/riderClickText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Driver"
-                android:layout_marginTop="20dp"
-                android:textSize="24sp"
-                android:layout_below="@id/riderUsernameText"/>
-
-            <TextView android:id="@+id/driverUsernameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/driverTextView"
-                android:text="@string/unavailable"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="20dp"/>
-
-            <TextView android:id="@+id/driverClickText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/driverUsernameText"
-                android:text="@string/driverClick"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="20dp"
-                android:textColor="#ff0000ff"
-                android:onClick="onClick"
-                android:clickable="true"/>
-
-            <TextView android:id="@+id/driversClickText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/driverClickText"
-                android:text="@string/driversClick"
+                android:layout_below="@id/riderUsernameText"
+                android:text="@string/riderClick"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"
@@ -109,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
-                android:layout_below="@id/driversClickText"
+                android:layout_below="@id/riderClickText"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"/>
 
@@ -181,22 +141,14 @@
             <Button
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="@string/completeRequest"
-                android:id="@+id/confirmButton"
+                android:text="@string/interestRequest"
+                android:id="@+id/interestButton"
                 android:layout_below="@id/estTexts"
                 android:layout_marginTop="20dp"
                 android:layout_centerInParent="true"/>
 
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="@string/cancelRequest"
-                android:id="@+id/cancelButton"
-                android:layout_below="@id/confirmButton"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"/>
-
         </RelativeLayout>
 
     </RelativeLayout>
+
 </ScrollView>

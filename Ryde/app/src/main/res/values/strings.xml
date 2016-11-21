@@ -27,6 +27,9 @@
     <string name="closed_request_list">Closed Request List</string>
     <string name="no_closed">No closed requests.</string>
 
+    <!-- available_drivers -->
+    <string name="no_drivers">No available drivers.</string>
+
     <!-- profile_info -->
     <string name="call">Call</string>
     <string name="Email">Email</string>
@@ -41,8 +44,10 @@
     <string name="est">Fee Estimate: </string>
     <string name="riderClick">Check to see Rider Profile</string>
     <string name="driverClick">Check to see Driver Profile</string>
+    <string name="driversClick">Check to see available Drivers</string>
     <string name="completeRequest">Complete Request</string>
     <string name="cancelRequest">Cancel Request</string>
+    <string name="interestRequest">Interested</string>
 
     <!-- search_requests -->
     <string name="searchRequest">Search Request&#8230;</string>
