@@ -129,17 +129,17 @@ public class MyRideRequestsActivity extends AppCompatActivity {
         fakeuser.setPhone("1111111");
 
         Request fake1 = new Request(user);
-        fake1.setEstimate(50.0);
+        fake1.setEstimate("");
         fake1.setId("dummy1");
 
         Request fake2 = new Request(user);
-        fake2.setEstimate(30.0);
+        fake2.setEstimate("");
         fake2.setDriver(fakeuser);
         fake2.setStatus("accepted");
         fake2.setId("dummy2");
 
         Request fake3 = new Request(user);
-        fake3.setEstimate(70.0);
+        fake3.setEstimate("");
         fake3.setDriver(fakeuser);
         fake3.setStatus("closed");
         fake3.setId("dummy3");

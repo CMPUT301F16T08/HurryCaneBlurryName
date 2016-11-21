@@ -20,9 +20,10 @@ public class Request {
     private LatLng to;
     private User rider;
     private User driver;
-    private Double estimate;
+    private String estimate;
     private String status;
     private String description;
+    private int distance;
 
     /**
      * Instantiates a new Request.
@@ -32,9 +33,10 @@ public class Request {
         this.status = "open";
         this.description = "";
         this.driver = new User("");
-        this.estimate = 0.0;
+        this.estimate = "Free";
         this.from = new LatLng(0.0, 0.0);
         this.to = new LatLng(0.0, 0.0);
+        this.distance = 0;
     }
 
     /**
@@ -52,6 +54,22 @@ public class Request {
         if(false){
             throw new LocationException();
         }
+    }
+    /**
+     * Gets distance by driving.
+     *
+     * @return the from
+     */
+    public int getDistance() {
+        return distance;
+    }
+    /**
+     * Set Distance
+     *
+     * @return the to
+     */
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 
     /**
@@ -116,7 +134,7 @@ public class Request {
      *
      * @param estimate the estimate
      */
-    public void setEstimate(Double estimate) {
+    public void setEstimate(String estimate) {
         this.estimate = estimate;
     }
 
@@ -125,7 +143,7 @@ public class Request {
      *
      * @return the estimate
      */
-    public Double getEstimate() {
+    public String getEstimate() {
         return estimate;
     }
 

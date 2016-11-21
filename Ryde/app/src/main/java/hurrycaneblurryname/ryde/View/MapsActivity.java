@@ -1,6 +1,7 @@
 package hurrycaneblurryname.ryde.View;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -94,6 +95,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     Request sendRequest = null;
+    private static final String API_KEY = "AIzaSyBRQRviRjYMvP-SqsrHNtJmAUtwLQW9jRo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +264,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return url;
     }
-
     /**
      * A method to download json data from url
      */
@@ -298,12 +299,85 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            iStream.close();
-            urlConnection.disconnect();
+            //iStream.close();
+            //urlConnection.disconnect();
         }
         return data;
     }
+    /**
+     * A method to download json data from url
+     */
+    /*
+    private String downloadDistUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
 
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            Log.d("downloadUrl", data.toString());
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            //iStream.close();
+            //urlConnection.disconnect();
+        }
+        return data;
+    }
+    */
+        /*
+    // Fetches data from url passed
+    private class FetchdistUrl extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+                Log.d("Background Task data", data.toString());
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            //ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            //parserTask.execute(result);
+
+        }
+    }
+    */
     // Fetches data from url passed
     private class FetchUrl extends AsyncTask<String, Void, String> {
 
@@ -349,7 +423,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask",jsonData[0].toString());
+                //sendRequest.setEstimate(jsonData[0]);
+                Log.d("ParserTask",jsonData[0]);
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
 
@@ -357,7 +432,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 routes = parser.parse(jObject);
                 Log.d("ParserTask","Executing routes");
                 Log.d("ParserTask",routes.toString());
-
+                //String distance = jObject.legs.distance.text.getString("distance");
+                //sendRequest.setEstimate(distance);
+                //int distance = jObject.getJSONArray("distance").getJSONObject(0).getInt("distance");
             } catch (Exception e) {
                 Log.d("ParserTask",e.toString());
                 e.printStackTrace();
@@ -385,6 +462,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
+
                     LatLng position = new LatLng(lat, lng);
 
                     points.add(position);
@@ -615,6 +693,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         sendRequest = new Request(user);
 
         try {
+            //distance info
+
+            //GoogleMatrixRequest GoogleRequest = new GoogleMatrixRequest(Activity.this);
+            LatLng Origin = MarkerPoints.get(0);
+            LatLng Dest = MarkerPoints.get(1);
+            GoogleMatrixRequest GoogleRequest = new GoogleMatrixRequest(MapsActivity.this, Origin, Dest);
+            GoogleRequest.execute();
+            sendRequest.setEstimate(GoogleRequest.getResult());
+            //Log.i("matrix input",  MarkerPoints.get(0).toString() + " " + MarkerPoints.get(1).toString());
             sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
             Log.i("RequestLatLng", sendRequest.getFrom().toString() + " " + sendRequest.getTo().toString());
         } catch (LocationException e) {
