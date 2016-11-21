@@ -17,6 +17,10 @@ public class MyRideRequestsRemake extends AppCompatActivity {
         setContentView(R.layout.my_ride_requests_remake);
 
         setTitle("My Ride Requests");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Opened"));

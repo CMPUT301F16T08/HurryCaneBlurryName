@@ -7,11 +7,12 @@
     android:id="@+id/my_ride_requests_layout"
     tools:context=".View.MyRideRequestsRemake">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_2"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
+        android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
@@ -22,11 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:background="?attr/colorPrimary"
+        android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <android.support.v4.view.ViewPager
-        android:layout_marginTop="8dp"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -25,12 +25,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.SignupActivity" />
-        <activity android:name=".View.EditUserProfile" />
-        <activity android:name=".View.ProfileInfoActivity" />
-        <activity android:name=".View.RideInfoActivity" />
+        <activity android:name=".View.SignupActivity"
+            android:parentActivityName=".View.LoginScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.LoginScreenActivity" />
+        </activity>
+        <activity android:name=".View.EditUserProfile"
+            android:parentActivityName=".View.MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.MapsActivity" />
+        </activity>
+
+        <activity android:name=".View.ProfileInfoActivity"
+            android:parentActivityName=".View.RideInfoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.RideInfoActivity" />
+        </activity>
+
+        <activity android:name=".View.RideInfoActivity"
+            android:parentActivityName=".View.MyRideRequestsRemake">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.MyRideRequestsRemake" />
+        </activity>
+
         <activity android:name=".View.RiderConfirmDriverActivity" />
+
         <activity android:name=".View.AvailableDriversActivity" />
+
         <activity
             android:name=".View.MapsActivity"
             android:label="@string/title_activity_rider_main"
@@ -47,9 +72,20 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".View.MyRideRequestsActivity" />
-        <activity android:name=".View.SearchRequestsActivity" />
-        <activity android:name=".View.MyRideRequestsRemake"></activity>
+        <activity android:name=".View.SearchRequestsActivity"
+            android:parentActivityName=".View.MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.MapsActivity" />
+        </activity>
+
+        <activity android:name=".View.MyRideRequestsRemake"
+            android:parentActivityName=".View.MapsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.MapsActivity" />
+        </activity>
     </application>
 
 </manifest>

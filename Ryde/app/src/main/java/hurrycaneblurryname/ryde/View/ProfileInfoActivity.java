@@ -34,6 +34,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_info);
         setTitle("Profile Detail");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         userTextView = (TextView)findViewById(R.id.userTexts);
         emailTextView = (TextView)findViewById(R.id.emailTexts);

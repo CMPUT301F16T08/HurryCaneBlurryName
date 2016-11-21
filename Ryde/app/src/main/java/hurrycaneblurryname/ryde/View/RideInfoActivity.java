@@ -44,6 +44,8 @@ public class RideInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_info);
         setTitle("Ride Detail");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // set up connection to TextView
         descTextView = (TextView)findViewById(R.id.descTexts);
