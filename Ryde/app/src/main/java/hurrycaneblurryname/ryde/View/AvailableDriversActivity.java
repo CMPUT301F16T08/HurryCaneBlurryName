@@ -53,7 +53,7 @@ public class AvailableDriversActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RequestUserHolder.getInstance().setUser(drivers.get(position));
-                Intent intent = new Intent(AvailableDriversActivity.this, ProfileInfoActivity.class);
+                Intent intent = new Intent(AvailableDriversActivity.this, RiderConfirmDriverActivity.class);
                 startActivity(intent);
             }
         });

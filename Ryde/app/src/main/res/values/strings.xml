@@ -64,5 +64,7 @@
     <string name="title_activity_my_ride_request_remake">MyRideRequestRemake</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <!-- rider_confirm_driver -->
+    <string name="confirm">Confirm Driver</string>
 
 </resources>
