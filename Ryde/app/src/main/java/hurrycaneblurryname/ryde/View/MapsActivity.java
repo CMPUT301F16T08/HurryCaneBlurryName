@@ -58,6 +58,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -616,7 +617,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         try {
             sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
-            Log.i("RequestLatLng", sendRequest.getFrom().toString() + " " + sendRequest.getTo().toString());
+            Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
         } catch (LocationException e) {
             e.printStackTrace();
         }
@@ -733,8 +734,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Confirm Request");
         alertDialogBuilder.setMessage(
-                "\nFrom: "+sendRequest.getFrom().toString()+
-                        "\nTo: "+sendRequest.getTo().toString() +
+                "\nFrom: "+Arrays.toString(sendRequest.getFrom())+
+                        "\nTo: "+Arrays.toString(sendRequest.getTo()) +
                         "\n\nDescription: "+sendRequest.getDescription() +
                         "\nEstimate: " + sendRequest.getEstimate());
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {

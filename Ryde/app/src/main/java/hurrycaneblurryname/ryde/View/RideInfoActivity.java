@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 
 import org.w3c.dom.Text;
+import java.util.Arrays;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
@@ -95,8 +96,8 @@ public class RideInfoActivity extends AppCompatActivity {
         {
             driverTextView.setText(request.getDriver().getUsername());
         }
-        fromTextView.setText(request.getFrom().toString());
-        toTextView.setText(request.getTo().toString());
+        fromTextView.setText(Arrays.toString(request.getFrom()));
+        toTextView.setText(Arrays.toString(request.getTo()));
         statusTextView.setText(request.getStatus());
         feeTextView.setText(request.getEstimate().toString());
 
