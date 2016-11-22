@@ -3,6 +3,7 @@ package hurrycaneblurryname.ryde;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -17,34 +18,36 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Loads and saves data from an arraylist and file.
+ * Loads and saves commands from an arraylist and file.
  */
-public class FileManager <t>{
+public class CommandFileManager<Command>{
 
     protected Context context;
 
-    FileManager(Context context){
+    CommandFileManager(Context context){
         this.context = context;
     }
 
-    protected ArrayList<t> loadFromFile(String FILENAME){
+    protected ArrayList<Command> loadFromFile(String FILENAME){
 
-        ArrayList<t> list = new ArrayList<t>();
+        ArrayList<Command> list = new ArrayList<Command>();
 
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
-            Gson gson = new Gson();
+            GsonBuilder gb = new GsonBuilder();
+            gb.registerTypeAdapter(list.getClass(), new CommandDeserializer());
+            Gson gson = gb.create();
 
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
-            Type listType = new TypeToken<ArrayList<t>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<Command>>(){}.getType();
 
             list = gson.fromJson(in,listType);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            list = new ArrayList<t>();
+            list = new ArrayList<Command>();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
@@ -53,13 +56,16 @@ public class FileManager <t>{
         return list;
     }
 
-    protected void saveInFile(ArrayList<t> list, String FILENAME) {
+    protected void saveInFile(ArrayList<Command> list, String FILENAME) {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, 0);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
-            Gson gson = new Gson();
+            GsonBuilder gb = new GsonBuilder();
+            gb.registerTypeAdapter(list.getClass(), new CommandSerializer());
+            Gson gson = gb.create();
+
             gson.toJson(list, out);
             out.flush();
 

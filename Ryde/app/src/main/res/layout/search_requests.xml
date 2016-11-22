@@ -10,6 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".View.SearchRequestsActivity">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,20 +19,27 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal"
         android:weightSum="1">
+
         <EditText android:id="@+id/SearchEditText"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:hint="@string/searchRequest"
-            android:inputType="text"
-            android:maxLines="1"
-            android:layout_weight="1.02"/>
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:hint="@string/searchRequest"
+        android:inputType="text"
+        android:maxLines="1"
+        android:layout_weight="1.02"/>
 
         <Button
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:id="@+id/searchButton"
-            android:text="@string/enter" />
+            android:text="@string/search" />
     </LinearLayout>
+
+    <Button
+        android:text="@string/searchNearby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchNearbyButton" />
 
     <ListView
         android:id="@+id/SearchResultListView"

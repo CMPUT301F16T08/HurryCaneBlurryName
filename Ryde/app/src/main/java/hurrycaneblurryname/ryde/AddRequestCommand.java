@@ -12,6 +12,7 @@ public class AddRequestCommand extends Command{
 
     public AddRequestCommand(Request request){
         this.request = request;
+        isA = "AddRequestCommand";
     }
 
     @Override

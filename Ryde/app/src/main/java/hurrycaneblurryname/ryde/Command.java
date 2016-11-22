@@ -5,5 +5,6 @@ package hurrycaneblurryname.ryde;
  * @author blaz
  */
 public abstract class Command {
+    protected String isA="Command";
     public abstract void execute();
 }

@@ -1,5 +1,9 @@
 package hurrycaneblurryname.ryde.Model;
 
+import android.util.Log;
+
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+
 /**
  * Singleton class to temporary hold login user
  * Author: Chen
@@ -18,5 +22,6 @@ public class UserHolder {
 
     private static final UserHolder holder = new UserHolder();
     public static UserHolder getInstance() {return holder;}
+
 
 }

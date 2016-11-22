@@ -24,32 +24,28 @@ import hurrycaneblurryname.ryde.View.RideInfoActivity;
 /**
  * Created by Zone on 2016/11/17.
  */
-public class TabFragment2 extends Fragment {
+public class TabFragment2 extends TabFragment {
 
     private User user;
-    //Arrays
-    private ArrayList<Request> requestList = new ArrayList<Request>();
-    private ArrayList<Request> offers = new ArrayList<Request>();
     //ListViews
     private ListView offerView;
     //Adapters
     private ArrayAdapter<Request> offerViewAdapter;
-    // Status TextView
-    private TextView offerText;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
-        offerText = (TextView) view.findViewById(R.id.offerText);
+        filteredText = (TextView) view.findViewById(R.id.offerText);
         offerView = (ListView) view.findViewById(R.id.offerView);
-        offerViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, offers);
+        offerViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
         offerView.setAdapter(offerViewAdapter);
         offerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Get request to show and start RideInfo
-                Request requestToPass = offers.get(position);
+                Request requestToPass = filteredRequests.get(position);
                 RequestHolder.getInstance().setRequest(requestToPass);
                 Intent info = new Intent(getActivity(), RideInfoActivity.class);
                 startActivity(info);
@@ -63,37 +59,38 @@ public class TabFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestList.clear();
-        offers.clear();
         user = UserHolder.getInstance().getUser();
+        requestList= new ArrayList<>(user.getRequestList());
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
+        ArrayList newList;
         try {
-            requestList = getMyRequests.get();
+            newList = getMyRequests.get();
+
+            if (newList != null) {
+                Log.i("newListGet", "Got a new List!!");
+                requestList.clear();
+                requestList.addAll(newList);
+                user.setRequestList(requestList);
+
+                ElasticSearchRequestController.UpdateUserTask updateUserTask =  new ElasticSearchRequestController.UpdateUserTask();
+                updateUserTask.execute(user);
+
+
+            } else {
+                Log.i("NullListError", "Got a null list from ES");
+            }
 
         } catch (Exception e) {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
-
-        factorLists();
-        changeTextStatus();
+        factorLists("accepted");
         offerViewAdapter.notifyDataSetChanged();
+        changeTextStatus();
+
     }
 
-    private void factorLists() {
-        for (Request r : requestList) {
-            String status = r.getStatus();
-            if (status.equals("accepted")) {
-                offers.add(r);
-            }
-        }
-    }
 
-    private void changeTextStatus() {
-        if (offers.size()>0)
-        {
-            offerText.setVisibility(View.GONE);
-        }
-    }
+
 }
