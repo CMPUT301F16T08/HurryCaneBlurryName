@@ -166,5 +166,10 @@ public class User {
     public void setRequestList(ArrayList<Request> requestList) {
         this.requests = requestList;
     }
+
+    @Override
+    public String toString() {
+        return username;
+    }
 }
 

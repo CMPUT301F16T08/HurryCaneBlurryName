@@ -65,7 +65,7 @@ public class AvailableDriversActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         drivers.clear();
-        drivers = RequestHolder.getInstance().getRequest().getOffers();
+        drivers.addAll(RequestHolder.getInstance().getRequest().getOffers());
         changeDriversStatus();
         driversViewAdapter.notifyDataSetChanged();
     }
