@@ -247,7 +247,7 @@ public class ElasticSearchRequestController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ErrorAddRequest", "Failed to add a request to elastic search!");
+                    Log.i("AddRequestException", "Failed to add a request to elastic search!");
                     e.printStackTrace();
                 }
             }
