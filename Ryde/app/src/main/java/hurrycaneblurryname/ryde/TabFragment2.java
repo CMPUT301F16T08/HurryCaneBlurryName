@@ -29,7 +29,6 @@ public class TabFragment2 extends TabFragment {
     private User user;
     //Arrays
     private ArrayList<Request> requestList = new ArrayList<Request>();
-    private ArrayList<Request> offers = new ArrayList<Request>();
     //ListViews
     private ListView offerView;
     //Adapters
@@ -42,13 +41,13 @@ public class TabFragment2 extends TabFragment {
 
         filteredText = (TextView) view.findViewById(R.id.offerText);
         offerView = (ListView) view.findViewById(R.id.offerView);
-        offerViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, offers);
+        offerViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
         offerView.setAdapter(offerViewAdapter);
         offerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Get request to show and start RideInfo
-                Request requestToPass = offers.get(position);
+                Request requestToPass = filteredRequests.get(position);
                 RequestHolder.getInstance().setRequest(requestToPass);
                 Intent info = new Intent(getActivity(), RideInfoActivity.class);
                 startActivity(info);
@@ -66,7 +65,7 @@ public class TabFragment2 extends TabFragment {
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
-        ArrayList newList;
+        ArrayList newList = new ArrayList<>();
         try {
             newList = getMyRequests.get();
 

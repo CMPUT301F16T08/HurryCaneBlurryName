@@ -59,6 +59,7 @@ public class TabFragment3 extends TabFragment {
     public void onResume() {
         super.onResume();
         user = UserHolder.getInstance().getUser();
+        requestList = new ArrayList<>(user.getRequestList());
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
@@ -66,20 +67,23 @@ public class TabFragment3 extends TabFragment {
         try {
             newList = getMyRequests.get();
 
-
             if (newList != null) {
+                Log.i("newListGet", "Got a new List!!");
                 requestList.clear();
                 requestList.addAll(newList);
+                user.setRequestList(requestList);
 
-                factorLists("closed");
-                closedViewAdapter.notifyDataSetChanged();
-                changeTextStatus();
+
+            } else {
+                Log.i("NullListError", "Got a null list from ES");
             }
 
         } catch (Exception e) {
-            Log.i("ErrorGetRequest", "Failed to get closed requests");
+            Log.i("ErrorGetRequest", "Failed to get open requests");
         }
-
+        factorLists("closed");
+        closedViewAdapter.notifyDataSetChanged();
+        changeTextStatus();
     }
 
 

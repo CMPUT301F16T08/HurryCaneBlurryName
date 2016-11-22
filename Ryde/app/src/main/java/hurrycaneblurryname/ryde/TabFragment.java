@@ -18,7 +18,7 @@ public class TabFragment extends Fragment {
 
     protected ArrayList<Request> filteredRequests = new ArrayList<Request>();
     protected TextView filteredText;
-    protected ArrayList<Request> requestList = new ArrayList<Request>();
+    protected ArrayList<Request> requestList;
 
     protected void factorLists(String searchStatus){
         filteredRequests.clear();
@@ -30,6 +30,7 @@ public class TabFragment extends Fragment {
         }
     }
 
+    
     protected void changeTextStatus(){
         if(filteredRequests.size()>0)
         {

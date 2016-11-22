@@ -16,7 +16,7 @@ import io.searchbox.annotations.JestId;
  * Modified by cho8  11/21/2016
  * Version 1.2
  */
-public class Request {
+public class Request{
 
     @JestId
     private String id;

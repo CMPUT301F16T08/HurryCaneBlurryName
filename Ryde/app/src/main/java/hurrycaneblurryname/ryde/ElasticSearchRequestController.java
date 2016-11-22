@@ -71,7 +71,7 @@ public class ElasticSearchRequestController {
                 if (result.isSucceeded()) {
                     List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundTweets);
-                    return requests;
+
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any requests that matched.");
@@ -79,9 +79,61 @@ public class ElasticSearchRequestController {
             }
             catch (Exception e) {
                 Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-            return null;
+                return null;
 
+            }
+            return requests;
+
+        }
+    }
+
+    /**
+     * Get requests associated with rider task.
+     */
+    public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<Request>> {
+
+        /**
+         * Querying for all of a rider's created requests that haven't been opened.
+         * @param searchID existing ID of request
+         *                                     searchParam[0] should be the username
+         * @return array of requests that are closest to current geolocation
+         * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
+         *        object.execute("search parameter");
+         */
+        @Override
+        protected ArrayList<Request> doInBackground(String... searchID) {
+            verifySettings();
+
+            ArrayList<Request> requests = new ArrayList<>();
+
+            // Default to 500m
+            //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"_id\" : \""+ searchID[0] +"\" }}}";
+
+            Log.i("Debug", search_string);
+            Search search = new Search.Builder(search_string)
+                    .addIndex("f16t08")
+                    .addType("requests")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    requests = new ArrayList<Request>();
+                    List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundTweets);
+
+
+                }
+                else {
+                    Log.i("ErrorGetRequest", "The search query failed to find request that matched ID.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return requests;
         }
     }
 
@@ -159,8 +211,7 @@ public class ElasticSearchRequestController {
                 try {
                     DocumentResult result = client.execute(new Update.Builder(r)
                             .index("f16t08")
-                            .type("requests")  //TODO after geolocation conflict sorted out, change to requests
-                            .id("1")
+                            .type("requests")
                             .build());
                     if (result.isSucceeded()) {
                         //TODO find out what documentResult holds
@@ -378,10 +429,13 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (User user: users) {
-                Index index = new Index.Builder(user).index("f16t08").type("users").build();
 
                 try {
-                    DocumentResult result = client.execute(index);
+                    DocumentResult result = client.execute(new Update.Builder(user)
+                            .index("f16t08")
+                            .type("users")
+                            .id(user.getId())
+                            .build());
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
                         Log.i("Debug", "Successful upgrade user profile");

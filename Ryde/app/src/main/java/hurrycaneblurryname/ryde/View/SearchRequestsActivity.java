@@ -91,15 +91,14 @@ public class SearchRequestsActivity extends AppCompatActivity {
     public void searchRequests(String... searchParam) {
         ElasticSearchRequestController.GetOpenRequestsTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsTask();
         getRequestsTask.execute(searchParam);
-        ArrayList<Request> temp = new ArrayList<>();
 
         try {
-            temp = getRequestsTask.get();
+            searchResult = getRequestsTask.get();
 
-            if (temp.isEmpty()) {
+            if (searchResult.isEmpty()) {
                 Toast.makeText(SearchRequestsActivity.this, "No results!", Toast.LENGTH_SHORT).show();
             } else {
-                searchResult = temp;
+                searchResult = searchResult;
                 searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
                 searchView.setAdapter(searchViewAdapter);
             }

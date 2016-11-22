@@ -39,6 +39,7 @@ public class TabFragment1 extends TabFragment {
         openView = (ListView) view.findViewById(R.id.openView);
         openViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
         openView.setAdapter(openViewAdapter);
+
         openView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -58,6 +59,7 @@ public class TabFragment1 extends TabFragment {
     public void onResume() {
         super.onResume();
         user = UserHolder.getInstance().getUser();
+        requestList= new ArrayList<>(user.getRequestList());
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
@@ -69,16 +71,22 @@ public class TabFragment1 extends TabFragment {
                 Log.i("newListGet", "Got a new List!!");
                 requestList.clear();
                 requestList.addAll(newList);
+                user.setRequestList(requestList);
 
-                factorLists("open");
-                openViewAdapter.notifyDataSetChanged();
-                changeTextStatus();
+                ElasticSearchRequestController.UpdateUserTask updateUserTask =  new ElasticSearchRequestController.UpdateUserTask();
+                updateUserTask.execute(user);
+
+
+            } else {
+                Log.i("NullListError", "Got a null list from ES");
             }
 
         } catch (Exception e) {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
-
+        factorLists("open");
+        openViewAdapter.notifyDataSetChanged();
+        changeTextStatus();
     }
 
 }

@@ -1,5 +1,7 @@
 package hurrycaneblurryname.ryde.Model;
 
+import java.util.ArrayList;
+
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestList;
 import io.searchbox.annotations.JestId;
@@ -19,7 +21,7 @@ public class User {
     private String email;
     private String role;
     private String cardNumber;
-    protected RequestList requests;
+    protected ArrayList<Request> requests;
 
     /**
      * Instantiates a new User.
@@ -27,7 +29,7 @@ public class User {
      * @param username the username
      */
     public User(String username){
-        requests = new RequestList();
+        requests = new ArrayList<>();
         this.username = username;
     }
 
@@ -56,7 +58,7 @@ public class User {
      * @param request the request
      */
     public void addRequest(Request request) {
-        requests.addRequest(request);
+        requests.add(request);
     }
 
     /**
@@ -76,7 +78,7 @@ public class User {
      * @return the request
      */
     public Request getRequest(int i) {
-        return requests.getRequest(i);
+        return requests.get(i);
     }
 
     /**
@@ -85,7 +87,7 @@ public class User {
      * @param request the request
      */
     public void removeRequest(Request request) {
-        requests.removeRequest(request);
+        requests.remove(request);
     }
 
     /**
@@ -155,6 +157,14 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public ArrayList<Request> getRequestList() {
+        return requests;
+    }
+
+    public void setRequestList(ArrayList<Request> requestList) {
+        this.requests = requestList;
     }
 }
 
