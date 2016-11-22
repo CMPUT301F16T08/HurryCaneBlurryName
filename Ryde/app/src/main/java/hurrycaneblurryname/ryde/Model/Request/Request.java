@@ -1,6 +1,7 @@
 package hurrycaneblurryname.ryde.Model.Request;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,7 +17,7 @@ import io.searchbox.annotations.JestId;
  * Modified by cho8  11/21/2016
  * Version 1.2
  */
-public class Request{
+public class Request {
 
     @JestId
     private String id;
@@ -234,9 +235,27 @@ public class Request{
         this.offers.add(newOffer);
     }
 
+    public void removeOffer(User offer) {
+        this.offers.remove(offer);
+    }
+
     @Override
     public String toString() {
         return this.description;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        boolean sameSame = false;
+        Log.i("Equals", "comparing");
+
+        if (other != null && other instanceof Request)
+        {
+            sameSame = this.id.equals(((Request) other).getId());
+        }
+
+        return sameSame;
     }
 
 }

@@ -55,6 +55,14 @@ public class RideInfoFromSearch extends AppCompatActivity {
         interestButton = (Button)findViewById(R.id.interestButton);
 
         request = RequestHolder.getInstance().getRequest();
+
+        if (request.getOffers().contains(UserHolder.getInstance().getUser())) {
+            interestButton.setText(R.string.interestCancel);
+        } else {
+            interestButton.setText(R.string.interestRequest);
+        }
+
+
         riderClickTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RequestUserHolder.getInstance().setUser(request.getRider());
@@ -65,20 +73,21 @@ public class RideInfoFromSearch extends AppCompatActivity {
 
         interestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ArrayList<User> drivers = request.getOffers();
-                if (drivers.contains(UserHolder.getInstance().getUser())){
-                    Toast.makeText(RideInfoFromSearch.this, "You are already interested in this request!", Toast.LENGTH_SHORT).show();
-                    return;
+                if (request.getOffers().contains(UserHolder.getInstance().getUser())){
+                    Toast.makeText(RideInfoFromSearch.this, "You are no longer interested in this request.", Toast.LENGTH_SHORT).show();
+                    request.removeOffer(UserHolder.getInstance().getUser());
+                    interestButton.setText(R.string.interestRequest);
+
+                } else {
+                    request.addOffer(UserHolder.getInstance().getUser());
+                    Toast.makeText(RideInfoFromSearch.this, "You're interested in this request!", Toast.LENGTH_SHORT).show();
+                    interestButton.setText(R.string.interestCancel);
+
                 }
-                else{
-                    drivers.add(UserHolder.getInstance().getUser());
-                    request.setOffers(drivers);
-                    // update request elasticsearch query
-                    ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
-                    updateRequestsTask.execute(request);
-                    Toast.makeText(RideInfoFromSearch.this, "Success!", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+
+                ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
+                updateRequestsTask.execute(request);
+                finish();
             }
         });
 

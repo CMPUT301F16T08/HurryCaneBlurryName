@@ -48,6 +48,7 @@
     <string name="completeRequest">Complete Request</string>
     <string name="cancelRequest">Cancel Request</string>
     <string name="interestRequest">Interested</string>
+    <string name="interestCancel">Not Interested</string>
 
     <!-- search_requests -->
     <string name="searchRequest">Search Request&#8230;</string>

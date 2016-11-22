@@ -1,5 +1,7 @@
 package hurrycaneblurryname.ryde.Model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import hurrycaneblurryname.ryde.Model.Request.Request;
@@ -170,6 +172,20 @@ public class User {
     @Override
     public String toString() {
         return username;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        boolean sameSame = false;
+        Log.i("Equals", "comparing");
+
+        if (other != null && other instanceof User)
+        {
+            sameSame = this.id.equals(((User) other).getId());
+        }
+
+        return sameSame;
     }
 }
 
