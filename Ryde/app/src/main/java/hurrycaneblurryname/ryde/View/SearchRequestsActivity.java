@@ -28,8 +28,8 @@ import hurrycaneblurryname.ryde.R;
 
 public class SearchRequestsActivity extends AppCompatActivity {
     private Button searchButton;
-    private Button refreshButton;
-    private EditText SearchEditText;
+    private Button searchNearbyButton;
+    private EditText searchEditText;
 
     private ListView searchView;
     private ArrayAdapter<Request> searchViewAdapter;
@@ -37,14 +37,16 @@ public class SearchRequestsActivity extends AppCompatActivity {
     private ArrayList<Request> searchResult;
     private Location mLastLocation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_requests);
         setTitle("Search");
 
+        searchEditText = (EditText) findViewById(R.id.SearchEditText);
         searchButton = (Button)findViewById(R.id.searchButton);
-        refreshButton = (Button)findViewById(R.id.refreshButton);
+        searchNearbyButton = (Button)findViewById(R.id.searchNearbyButton);
         searchView = (ListView) findViewById(R.id.SearchResultListView);
 
         Intent intent = getIntent();
@@ -54,26 +56,28 @@ public class SearchRequestsActivity extends AppCompatActivity {
         }
 
         searchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String lon = String.valueOf(mLastLocation.getLongitude());
-                String lat= String.valueOf(mLastLocation.getLatitude());
-                searchRequests(lat, lon);
-            }
-        });
+              public void onClick(View v) {
+                  String[] searchText =  searchEditText.getText().toString().split(",");
+                  searchRequests(searchText);
+              }
+         });
 
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
+        searchNearbyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                searchRequests("");
+                if (mLastLocation != null) {
+                    String lon = String.valueOf(mLastLocation.getLongitude());
+                    String lat = String.valueOf(mLastLocation.getLatitude());
+                    searchRequests(lat, lon);
+                } else {
+                    Toast.makeText(SearchRequestsActivity.this, "Current location not found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mLastLocation == null) {
-                    Toast.makeText(SearchRequestsActivity.this, "Current location not found", Toast.LENGTH_SHORT).show();
-                }
+
                 String str = parent.getItemAtPosition(position).toString();
 
             }
