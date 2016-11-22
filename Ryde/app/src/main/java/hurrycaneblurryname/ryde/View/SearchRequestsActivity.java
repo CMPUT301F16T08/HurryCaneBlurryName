@@ -1,7 +1,10 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,12 +28,14 @@ import hurrycaneblurryname.ryde.R;
 
 public class SearchRequestsActivity extends AppCompatActivity {
     private Button searchButton;
+    private Button refreshButton;
     private EditText SearchEditText;
 
     private ListView searchView;
     private ArrayAdapter<Request> searchViewAdapter;
 
     private ArrayList<Request> searchResult;
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,49 +43,68 @@ public class SearchRequestsActivity extends AppCompatActivity {
         setContentView(R.layout.search_requests);
         setTitle("Search");
 
-        SearchEditText = (EditText)findViewById(R.id.SearchEditText);
         searchButton = (Button)findViewById(R.id.searchButton);
+        refreshButton = (Button)findViewById(R.id.refreshButton);
         searchView = (ListView) findViewById(R.id.SearchResultListView);
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            mLastLocation = extras.getParcelable("currLocation");
+        }
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (SearchEditText.getText().length() == 0) {
-                    // TODO Search boxes all say the same thing. Specify what they should be searching!
-                    // Will refactor
-                    // Query for requests that that in current area and the search keyword should be the destination
-                    Toast.makeText(SearchRequestsActivity.this, "Please enter your search keyword!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String[] searchText =  SearchEditText.getText().toString().split(",");
+                String lon = String.valueOf(mLastLocation.getLongitude());
+                String lat= String.valueOf(mLastLocation.getLatitude());
+                searchRequests(lat, lon);
+            }
+        });
 
-                ElasticSearchRequestController.GetRequestsTask getRequestsTask = new ElasticSearchRequestController.GetRequestsTask();
-                getRequestsTask.execute(searchText);
 
-                try {
-                    searchResult = getRequestsTask.get();
-                } catch (Exception e) {
-                    Toast.makeText(SearchRequestsActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-                    searchResult = new ArrayList<Request>();
-                    //Log.i("ErrorGetUser", "Something went wrong when getting user at sign up");
-                    //e.printStackTrace();
-                }
-                if (searchResult.isEmpty())
-                {
-                    Toast.makeText(SearchRequestsActivity.this, "No results!", Toast.LENGTH_SHORT).show();
-                }
-                searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
-                searchView.setAdapter(searchViewAdapter);
-
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                searchRequests("");
             }
         });
 
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Get habit name
+                if (mLastLocation == null) {
+                    Toast.makeText(SearchRequestsActivity.this, "Current location not found", Toast.LENGTH_SHORT).show();
+                }
                 String str = parent.getItemAtPosition(position).toString();
 
             }
         });
+    }
+
+    /**
+     * Execute search for open requests
+     * @param searchParam
+     */
+    public void searchRequests(String... searchParam) {
+        ElasticSearchRequestController.GetOpenRequestsTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsTask();
+        getRequestsTask.execute(searchParam);
+        ArrayList<Request> temp = new ArrayList<>();
+
+        try {
+            temp = getRequestsTask.get();
+
+            if (temp.isEmpty()) {
+                Toast.makeText(SearchRequestsActivity.this, "No results!", Toast.LENGTH_SHORT).show();
+            } else {
+                searchResult = temp;
+                searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
+                searchView.setAdapter(searchViewAdapter);
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(SearchRequestsActivity.this, "Could not communicate with server", Toast.LENGTH_SHORT).show();
+            Log.i("ErrorGetUser", "Something went wrong when looking for requests");
+            //e.printStackTrace();
+        }
+
     }
 }

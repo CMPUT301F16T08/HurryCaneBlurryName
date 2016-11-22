@@ -140,7 +140,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         View header=navigationView.getHeaderView(0);
         TextView riderUsername = (TextView)header.findViewById(R.id.riderUsername);
         TextView riderEmail = (TextView)header.findViewById(R.id.riderEmail);
-         riderUsername.setText(user.getUsername());
+        riderUsername.setText(user.getUsername());
         riderEmail.setText(user.getEmail());
 
     }
@@ -679,6 +679,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(rideRequests);
         } else if (id == R.id.nav_search) {
             Intent search = new Intent(this, SearchRequestsActivity.class);
+            Bundle extras = new Bundle();
+            extras.putParcelable("currLocation", mLastLocation);
+            search.putExtras(extras);
             startActivity(search);
         } else if (id == R.id.nav_pickup) {
 

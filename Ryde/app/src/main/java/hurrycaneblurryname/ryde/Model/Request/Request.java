@@ -12,7 +12,9 @@ import hurrycaneblurryname.ryde.Model.User;
 import io.searchbox.annotations.JestId;
 
 /**
- * Created by pocrn_000 on 10/11/2016.
+ * Created by blaz on 10/11/2016.
+ * Modified by cho8  11/21/2016
+ * Version 1.2
  */
 public class Request {
 
@@ -26,7 +28,6 @@ public class Request {
     private String status;
     private String description;
     private ArrayList<User> offers;
-
 
     /**
      * Instantiates a new Request.
@@ -186,7 +187,7 @@ public class Request {
     /**
      * Get description.
      *
-     * @return description  Gets description.
+     * @return description Gets description.
      */
     public String getDescription() {
         return this.description;
@@ -227,6 +228,10 @@ public class Request {
      */
     public void setOffers(ArrayList<User> offers) {
         this.offers = offers;
+    }
+
+    public void addOffer(User newOffer) {
+        this.offers.add(newOffer);
     }
 
     @Override

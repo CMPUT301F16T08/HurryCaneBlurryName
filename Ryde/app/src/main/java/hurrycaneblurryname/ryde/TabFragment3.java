@@ -23,32 +23,28 @@ import hurrycaneblurryname.ryde.View.RideInfoActivity;
 /**
  * Created by Zone on 2016/11/17.
  */
-public class TabFragment3 extends Fragment {
+public class TabFragment3 extends TabFragment {
 
     private User user;
-    //Arrays
-    private ArrayList<Request> requestList = new ArrayList<Request>();
-    private ArrayList<Request> closedRequests = new ArrayList<Request>();
     //ListViews
     private ListView closedView;
     //Adapters
     private ArrayAdapter<Request> closedViewAdapter;
-    // Status TextView
-    private TextView closedText;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_3, container, false);
 
-        closedText = (TextView) view.findViewById(R.id.closedText);
+        filteredText = (TextView) view.findViewById(R.id.closedText);
         closedView = (ListView) view.findViewById(R.id.closedView);
-        closedViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, closedRequests);
+        closedViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
         closedView.setAdapter(closedViewAdapter);
         closedView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Get request to show and start RideInfo
-                Request requestToPass = closedRequests.get(position);
+                Request requestToPass = filteredRequests.get(position);
                 RequestHolder.getInstance().setRequest(requestToPass);
                 Intent info = new Intent(getActivity(), RideInfoActivity.class);
                 startActivity(info);
@@ -62,37 +58,29 @@ public class TabFragment3 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestList.clear();
-        closedRequests.clear();
         user = UserHolder.getInstance().getUser();
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
+        ArrayList newList;
         try {
-            requestList = getMyRequests.get();
+            newList = getMyRequests.get();
+
+
+            if (newList != null) {
+                requestList.clear();
+                requestList.addAll(newList);
+
+                factorLists("closed");
+                closedViewAdapter.notifyDataSetChanged();
+                changeTextStatus();
+            }
 
         } catch (Exception e) {
-            Log.i("ErrorGetRequest", "Failed to get open requests");
+            Log.i("ErrorGetRequest", "Failed to get closed requests");
         }
 
-        factorLists();
-        changeTextStatus();
-        closedViewAdapter.notifyDataSetChanged();
     }
 
-    private void factorLists() {
-        for (Request r : requestList) {
-            String status = r.getStatus();
-            if (status.equals("closed")) {
-                closedRequests.add(r);
-            }
-        }
-    }
 
-    private void changeTextStatus() {
-        if (closedRequests.size()>0)
-        {
-            closedText.setVisibility(View.GONE);
-        }
-    }
 }

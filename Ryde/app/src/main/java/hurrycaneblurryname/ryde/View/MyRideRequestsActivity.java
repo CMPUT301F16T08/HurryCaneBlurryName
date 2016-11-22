@@ -107,66 +107,30 @@ public class MyRideRequestsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        requestList.clear();
-        openRequests.clear();
-        offers.clear();
-        closedRequests.clear();
-        //TODO deleted requests take a while to be reflected in these lists.
-
-
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
+        ArrayList<Request> newList = new ArrayList<>();
         try {
-            requestList = getMyRequests.get();
+            newList = getMyRequests.get();
 
         } catch (Exception e) {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
 
-        // TODO dummy request need to remove
-        User fakeuser = new User("dummyDriver");
-        fakeuser.setEmail("fake@aaa.com");
-        fakeuser.setPhone("1111111");
+        if (newList != null) {
+            // factor all lists
+            factorLists();
 
-        Request fake1 = new Request(user);
-        fake1.setEstimate(50.0);
-        fake1.setId("dummy1");
+            openViewAdapter.notifyDataSetChanged();
+            offerViewAdapter.notifyDataSetChanged();
+            closedViewAdapter.notifyDataSetChanged();
+            changeTextStatus();
+            ListUtils.setDynamicHeight(openView);
+            ListUtils.setDynamicHeight(closedView);
+            ListUtils.setDynamicHeight(offerView);
+        } else {
 
-        Request fake2 = new Request(user);
-        fake2.setEstimate(30.0);
-        fake2.setDriver(fakeuser);
-        fake2.setStatus("accepted");
-        fake2.setId("dummy2");
-
-        Request fake3 = new Request(user);
-        fake3.setEstimate(70.0);
-        fake3.setDriver(fakeuser);
-        fake3.setStatus("closed");
-        fake3.setId("dummy3");
-
-        try {
-            fake1.setDescription("1.no driver");
-            fake2.setDescription("2.has driver");
-            fake3.setDescription("3.closed");
-        } catch (Exception e) {
-            Log.i("DescripError", "Description too long");
         }
-
-        openRequests.add(fake1);
-        offers.add(fake2);
-        closedRequests.add(fake3);
-
-        // factor all lists
-        factorLists();
-
-        openViewAdapter.notifyDataSetChanged();
-        offerViewAdapter.notifyDataSetChanged();
-        closedViewAdapter.notifyDataSetChanged();
-        changeTextStatus();
-        ListUtils.setDynamicHeight(openView);
-        ListUtils.setDynamicHeight(closedView);
-        ListUtils.setDynamicHeight(offerView);
-
 
     }
 

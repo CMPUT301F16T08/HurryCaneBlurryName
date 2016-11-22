@@ -33,7 +33,7 @@ public class ElasticSearchRequestController {
      *
      * TODO: handle searching by current location, takes in keyword as destination
      */
-    public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class GetOpenRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
          * Querying for requests starting at the at current geolocation within 500m
@@ -53,9 +53,9 @@ public class ElasticSearchRequestController {
             String search_string;
             // search for first 10 requests with geolocation
             // Default to 500m
-            // "{"from": 0, "size":10, "filter" : {"geo_distance" : { "distance" : "500m", "location" :  [ -113.49026, 53.54565 ]}}}";
+            // "{"from": 0, "size":10, "filter" : {"geo_distance" : { "distance" : "10km", "location" :  [ -113.49026, 53.54565 ]}}}";
             if (searchParam.length == 2) {
-                search_string = "{\"from\": 0, \"size\":10, \"filter\" : {\"geo_distance\" : { \"distance\" : \"500m\", \"from\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
+                search_string = "{\"from\": 0, \"size\":10, \"filter\" : {\"geo_distance\" : { \"distance\" : \"10km\", \"from\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
             } else {
                 search_string = "";
             }
@@ -71,6 +71,7 @@ public class ElasticSearchRequestController {
                 if (result.isSucceeded()) {
                     List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundTweets);
+                    return requests;
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any requests that matched.");
@@ -79,11 +80,14 @@ public class ElasticSearchRequestController {
             catch (Exception e) {
                 Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
+            return null;
 
-            return requests;
         }
     }
 
+    /**
+     * Get requests associated with rider task.
+     */
     public static class GetRiderRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
@@ -98,7 +102,7 @@ public class ElasticSearchRequestController {
         protected ArrayList<Request> doInBackground(String... searchParam) {
             verifySettings();
 
-            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<Request> requests;;
 
             // TODO filter for own username only!!!!
             // Default to 500m
@@ -114,8 +118,11 @@ public class ElasticSearchRequestController {
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
+                    requests = new ArrayList<Request>();
                     List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundTweets);
+
+                    return requests;
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any open requests that matched.");
@@ -125,14 +132,15 @@ public class ElasticSearchRequestController {
                 Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
-            return requests;
+            return null;
         }
     }
 
-    /**
-     * Delete a request by its unique ID from ElasticSearch.
-     */
 
+
+    /**
+     * Update a request by its unique ID from ElasticSearch.
+     */
     public static class UpdateRequestsTask extends AsyncTask<Request, Void, Void> {
 
         /**
@@ -169,11 +177,9 @@ public class ElasticSearchRequestController {
         }
     }
 
-
     /**
      * Delete a request by its unique ID from ElasticSearch.
      */
-
     public static class DeleteRequestsTask extends AsyncTask<Request, Void, Void> {
 
         /**
@@ -310,8 +316,6 @@ public class ElasticSearchRequestController {
         }
     }
 
-
-    // FIX!!! username unique check!!!
     /**
      * Is called after a user creates a new account.
      * Add a new user to the elasticsearch database.
@@ -352,8 +356,6 @@ public class ElasticSearchRequestController {
             return null;
         }
     }
-
-
 
     /**
      * Is called after a user updates his profile.

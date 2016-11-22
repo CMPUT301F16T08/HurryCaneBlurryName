@@ -46,7 +46,8 @@
 
     <!-- search_requests -->
     <string name="searchRequest">Search Request&#8230;</string>
-
+    <string name="searchNearby">Search Nearby</string>
+    <string name="refresh">Refresh</string>
     <string name="unavailable">unavailable</string>
     <string name="editTitle">Edit Contact Info:</string>
     <string name="title_activity_rider_main">RiderMainActivity</string>
