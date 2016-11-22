@@ -27,8 +27,6 @@ import hurrycaneblurryname.ryde.View.RideInfoActivity;
 public class TabFragment2 extends TabFragment {
 
     private User user;
-    //Arrays
-    private ArrayList<Request> requestList = new ArrayList<Request>();
     //ListViews
     private ListView offerView;
     //Adapters
@@ -62,27 +60,34 @@ public class TabFragment2 extends TabFragment {
     public void onResume() {
         super.onResume();
         user = UserHolder.getInstance().getUser();
+        requestList= new ArrayList<>(user.getRequestList());
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
-        ArrayList newList = new ArrayList<>();
+        ArrayList newList;
         try {
             newList = getMyRequests.get();
 
-
             if (newList != null) {
+                Log.i("newListGet", "Got a new List!!");
                 requestList.clear();
                 requestList.addAll(newList);
+                user.setRequestList(requestList);
 
-                factorLists("accepted");
-                offerViewAdapter.notifyDataSetChanged();
-                changeTextStatus();
+                ElasticSearchRequestController.UpdateUserTask updateUserTask =  new ElasticSearchRequestController.UpdateUserTask();
+                updateUserTask.execute(user);
+
+
+            } else {
+                Log.i("NullListError", "Got a null list from ES");
             }
 
         } catch (Exception e) {
-            Log.i("ErrorGetRequest", "Failed to get accepted requests");
+            Log.i("ErrorGetRequest", "Failed to get open requests");
         }
-
+        factorLists("accepted");
+        offerViewAdapter.notifyDataSetChanged();
+        changeTextStatus();
 
     }
 

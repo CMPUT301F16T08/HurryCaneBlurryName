@@ -59,7 +59,7 @@ public class TabFragment3 extends TabFragment {
     public void onResume() {
         super.onResume();
         user = UserHolder.getInstance().getUser();
-        requestList = new ArrayList<>(user.getRequestList());
+        requestList= new ArrayList<>(user.getRequestList());
 
         ElasticSearchRequestController.GetRiderRequestsTask getMyRequests = new ElasticSearchRequestController.GetRiderRequestsTask();
         getMyRequests.execute(user.getUsername());
@@ -72,6 +72,9 @@ public class TabFragment3 extends TabFragment {
                 requestList.clear();
                 requestList.addAll(newList);
                 user.setRequestList(requestList);
+
+                ElasticSearchRequestController.UpdateUserTask updateUserTask =  new ElasticSearchRequestController.UpdateUserTask();
+                updateUserTask.execute(user);
 
 
             } else {

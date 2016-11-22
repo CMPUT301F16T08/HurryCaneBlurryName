@@ -30,7 +30,7 @@ public class TabFragment extends Fragment {
         }
     }
 
-    
+
     protected void changeTextStatus(){
         if(filteredRequests.size()>0)
         {
