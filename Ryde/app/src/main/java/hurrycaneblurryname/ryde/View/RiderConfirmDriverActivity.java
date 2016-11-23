@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
@@ -75,6 +77,7 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO
+                confirmDriverAlertDialog();
             }
         });
 
@@ -124,11 +127,14 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                     return;
                 }
                 RequestHolder.getInstance().getRequest().setDriver(user);
+                RequestHolder.getInstance().getRequest().setStatus("accepted");
+                ArrayList<User> updatedOffers = RequestHolder.getInstance().getRequest().getOffers();
+                updatedOffers.remove(user);
+                RequestHolder.getInstance().getRequest().setOffers(updatedOffers);
                 // TODO
                 // Update request using elasticsearch query
                 ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
                 updateRequestsTask.execute(RequestHolder.getInstance().getRequest());
-
 
                 Toast.makeText(RiderConfirmDriverActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 finish();

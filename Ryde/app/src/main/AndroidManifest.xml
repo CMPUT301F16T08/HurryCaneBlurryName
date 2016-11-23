@@ -46,7 +46,8 @@
         <activity android:name=".View.RiderConfirmDriverActivity" />
 
         <activity
-            android:name=".View.AvailableDriversActivity">
+            android:name=".View.AvailableDriversActivity"
+            android:noHistory="true" android:excludeFromRecents="true">
         </activity>
 
         <activity
