@@ -62,6 +62,7 @@ public class RideInfoActivity extends AppCompatActivity {
         driverClickTextView = (TextView)findViewById(R.id.driverClickText);
         driversClickTextView = (TextView)findViewById(R.id.driversClickText);
 
+        completeButton = (Button)findViewById(R.id.completeButton);
         cancelButton = (Button)findViewById(R.id.cancelButton);
         request = RequestHolder.getInstance().getRequest();
         driverClickTextView.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +127,12 @@ public class RideInfoActivity extends AppCompatActivity {
         toTextView.setText(Arrays.toString(request.getTo()));
         statusTextView.setText(request.getStatus());
         feeTextView.setText(request.getEstimate().toString());
+
+        if(request.getStatus().equals("open"))
+        {
+            completeButton.setVisibility(View.GONE);
+        }
+
 
     }
 
