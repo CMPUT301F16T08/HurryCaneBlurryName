@@ -27,6 +27,9 @@
     <string name="closed_request_list">Closed Request List</string>
     <string name="no_closed">No closed requests.</string>
 
+    <!-- available_drivers -->
+    <string name="no_drivers">No available drivers.</string>
+
     <!-- profile_info -->
     <string name="call">Call</string>
     <string name="Email">Email</string>
@@ -41,12 +44,16 @@
     <string name="est">Fee Estimate: </string>
     <string name="riderClick">Check to see Rider Profile</string>
     <string name="driverClick">Check to see Driver Profile</string>
+    <string name="driversClick">Check to see available Drivers</string>
     <string name="completeRequest">Complete Request</string>
     <string name="cancelRequest">Cancel Request</string>
+    <string name="interestRequest">Interested</string>
+    <string name="interestCancel">Not Interested</string>
 
     <!-- search_requests -->
     <string name="searchRequest">Search Request&#8230;</string>
-
+    <string name="searchNearby">Search Nearby</string>
+    <string name="refresh">Refresh</string>
     <string name="unavailable">unavailable</string>
     <string name="editTitle">Edit Contact Info:</string>
     <string name="title_activity_rider_main">RiderMainActivity</string>
@@ -59,5 +66,7 @@
     <string name="title_activity_my_ride_request_remake">MyRideRequestRemake</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <!-- rider_confirm_driver -->
+    <string name="confirm">Confirm Driver</string>
 
 </resources>

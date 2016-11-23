@@ -9,8 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".View.AvailableDriversActivity">
 
+    <TextView
+        android:id="@+id/driversText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:text="@string/no_drivers"
+        android:layout_centerInParent="true"/>
+
     <ListView
-        android:id="@+id/driversListView"
+        android:id="@+id/driversView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true" />

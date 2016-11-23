@@ -33,7 +33,7 @@ public class ElasticSearchRequestController {
      *
      * TODO: handle searching by current location, takes in keyword as destination
      */
-    public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class GetOpenRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
          * Querying for requests starting at the at current geolocation within 500m
@@ -53,9 +53,9 @@ public class ElasticSearchRequestController {
             String search_string;
             // search for first 10 requests with geolocation
             // Default to 500m
-            // "{"from": 0, "size":10, "filter" : {"geo_distance" : { "distance" : "500m", "location" :  [ -113.49026, 53.54565 ]}}}";
+            // "{"from": 0, "size":10, "filter" : {"geo_distance" : { "distance" : "10km", "location" :  [ -113.49026, 53.54565 ]}}}";
             if (searchParam.length == 2) {
-                search_string = "{\"from\": 0, \"size\":10, \"filter\" : {\"geo_distance\" : { \"distance\" : \"500m\", \"from\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
+                search_string = "{\"from\": 0, \"size\":10, \"filter\" : {\"geo_distance\" : { \"distance\" : \"10km\", \"from\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
             } else {
                 search_string = "";
             }
@@ -63,7 +63,7 @@ public class ElasticSearchRequestController {
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests2")   //TODO after geolocation conflict sorted out, change to requests
+                    .addType("requests")   //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
@@ -71,9 +71,62 @@ public class ElasticSearchRequestController {
                 if (result.isSucceeded()) {
                     List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundTweets);
+
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any requests that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return null;
+
+            }
+            return requests;
+
+        }
+    }
+
+    /**
+     * Get requests associated with rider task.
+     */
+    public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<Request>> {
+
+        /**
+         * Querying for all of a rider's created requests that haven't been opened.
+         * @param searchID existing ID of request
+         *                                     searchParam[0] should be the username
+         * @return array of requests that are closest to current geolocation
+         * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
+         *        object.execute("search parameter");
+         */
+        @Override
+        protected ArrayList<Request> doInBackground(String... searchID) {
+            verifySettings();
+
+            ArrayList<Request> requests = new ArrayList<>();
+
+            // Default to 500m
+            //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"_id\" : \""+ searchID[0] +"\" }}}";
+
+            Log.i("Debug", search_string);
+            Search search = new Search.Builder(search_string)
+                    .addIndex("f16t08")
+                    .addType("requests")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    requests = new ArrayList<Request>();
+                    List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundTweets);
+
+
+                }
+                else {
+                    Log.i("ErrorGetRequest", "The search query failed to find request that matched ID.");
                 }
             }
             catch (Exception e) {
@@ -84,6 +137,59 @@ public class ElasticSearchRequestController {
         }
     }
 
+
+    /**
+     * Get requests associated with rider task.
+     */
+    public static class GetDriverRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+
+        /**
+         * Querying for all of a rider's created requests that haven't been opened.
+         * @param searchParam query parameters.
+         *                                     searchParam[0] should be the username
+         * @return array of requests that are closest to current geolocation
+         * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
+         *        object.execute("search parameter");
+         */
+        @Override
+        protected ArrayList<Request> doInBackground(String... searchParam) {
+            verifySettings();
+
+            ArrayList<Request> requests;;
+
+            //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"driver.username\" : \""+ searchParam[0] +"\" }}}";
+
+            Log.i("Debug", search_string);
+            Search search = new Search.Builder(search_string)
+                    .addIndex("f16t08")
+                    .addType("requests")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    requests = new ArrayList<Request>();
+                    List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundTweets);
+
+                    return requests;
+                }
+                else {
+                    Log.i("ErrorGetRequest", "The search query failed to find any open requests that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Get requests associated with rider task.
+     */
     public static class GetRiderRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
@@ -98,24 +204,25 @@ public class ElasticSearchRequestController {
         protected ArrayList<Request> doInBackground(String... searchParam) {
             verifySettings();
 
-            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<Request> requests;;
 
-            // TODO filter for own username only!!!!
-            // Default to 500m
             //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
             String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"rider.username\" : \""+ searchParam[0] +"\" }}}";
 
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests2") //TODO after geolocation conflict sorted out, change to requests
+                    .addType("requests") //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
+                    requests = new ArrayList<Request>();
                     List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
                     requests.addAll(foundTweets);
+
+                    return requests;
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find any open requests that matched.");
@@ -125,14 +232,15 @@ public class ElasticSearchRequestController {
                 Log.i("ErrorGetRequest", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
-            return requests;
+            return null;
         }
     }
 
-    /**
-     * Delete a request by its unique ID from ElasticSearch.
-     */
 
+
+    /**
+     * Update a request by its unique ID from ElasticSearch.
+     */
     public static class UpdateRequestsTask extends AsyncTask<Request, Void, Void> {
 
         /**
@@ -147,13 +255,10 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (Request r : requests) {
+                Index index = new Index.Builder(r).index("f16t08").type("requests").id(r.getId()).build();
 
                 try {
-                    DocumentResult result = client.execute(new Update.Builder(r)
-                            .index("f16t08")
-                            .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
-                            .id("1")
-                            .build());
+                    DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         //TODO find out what documentResult holds
                         Log.i("UpdatedRequest", "Updated request with ID " + r.getId());
@@ -169,11 +274,9 @@ public class ElasticSearchRequestController {
         }
     }
 
-
     /**
      * Delete a request by its unique ID from ElasticSearch.
      */
-
     public static class DeleteRequestsTask extends AsyncTask<Request, Void, Void> {
 
         /**
@@ -190,7 +293,7 @@ public class ElasticSearchRequestController {
             for (Request r : requests) {
                 Delete delete = new Delete.Builder(r.getId())
                         .index("f16t08")
-                        .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -228,7 +331,7 @@ public class ElasticSearchRequestController {
             for (Request request: requests) {
                 Index index = new Index.Builder(request)
                         .index("f16t08")
-                        .type("requests2")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -241,7 +344,7 @@ public class ElasticSearchRequestController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ErrorAddRequest", "Failed to add a request to elastic search!");
+                    Log.i("AddRequestException", "Failed to add a request to elastic search!");
                     e.printStackTrace();
                 }
             }
@@ -310,8 +413,6 @@ public class ElasticSearchRequestController {
         }
     }
 
-
-    // FIX!!! username unique check!!!
     /**
      * Is called after a user creates a new account.
      * Add a new user to the elasticsearch database.
@@ -353,8 +454,6 @@ public class ElasticSearchRequestController {
         }
     }
 
-
-
     /**
      * Is called after a user updates his profile.
      * Update user's profile
@@ -376,10 +475,11 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (User user: users) {
-                Index index = new Index.Builder(user).index("f16t08").type("users").build();
+                Index index = new Index.Builder(user).index("f16t08").type("users").id(user.getId()).build();
 
                 try {
                     DocumentResult result = client.execute(index);
+
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
                         Log.i("Debug", "Successful upgrade user profile");

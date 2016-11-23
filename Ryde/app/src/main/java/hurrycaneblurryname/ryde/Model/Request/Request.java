@@ -1,8 +1,11 @@
 package hurrycaneblurryname.ryde.Model.Request;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 import hurrycaneblurryname.ryde.DescriptionTooLongException;
 import hurrycaneblurryname.ryde.LocationException;
@@ -10,22 +13,27 @@ import hurrycaneblurryname.ryde.Model.User;
 import io.searchbox.annotations.JestId;
 
 /**
- * Created by pocrn_000 on 10/11/2016.
+ * Created by blaz on 10/11/2016.
+ * Modified by cho8  11/21/2016
+ * Version 1.2
  */
 public class Request {
 
     @JestId
     private String id;
-    private LatLng from;
-    private LatLng to;
+    private double[] from;
+    private double[] to;
     private User rider;
     private User driver;
     private Double estimate;
     private String status;
     private String description;
+    private ArrayList<User> offers;
 
     /**
      * Instantiates a new Request.
+     *
+     * @param rider the rider
      */
     public Request(User rider){
         this.rider = rider;
@@ -33,20 +41,23 @@ public class Request {
         this.description = "";
         this.driver = new User("");
         this.estimate = 0.0;
-        this.from = new LatLng(0.0, 0.0);
-        this.to = new LatLng(0.0, 0.0);
+        this.from = new double[] {0.0, 0.0};
+        this.to = new double[] {0.0, 0.0};
+        this.offers = new ArrayList<User>();
     }
 
     /**
-     * Sets locations.
+     * Sets locations from LatLng objects used in map activity.
      *
-     * @param from the from
-     * @param to   the to
-     * @throws LocationException the location exception
+     * @param from LatLng object
+     * @param to   LatLng object
+     * @throws LocationException when invalid location
      */
     public void setLocations(LatLng from, LatLng to) throws LocationException{
-        this.from = from;
-        this.to = to;
+        this.from[0] = from.longitude;
+        this.from[1] = from.latitude;
+        this.to[0] = to.longitude;
+        this.to[1] = to.latitude;
 
         //TODO Determine when to throw location exception
         if(false){
@@ -54,12 +65,13 @@ public class Request {
         }
     }
 
+
     /**
      * Gets from.
      *
      * @return the from
      */
-    public LatLng getFrom() {
+    public double[] getFrom() {
         return from;
     }
 
@@ -68,7 +80,7 @@ public class Request {
      *
      * @return the to
      */
-    public LatLng getTo() {
+    public double[] getTo() {
         return to;
     }
 
@@ -176,10 +188,7 @@ public class Request {
     /**
      * Get description.
      *
-     * @return description
-     * Gets description.
-     *
-     * @return the description
+     * @return description Gets description.
      */
     public String getDescription() {
         return this.description;
@@ -187,6 +196,7 @@ public class Request {
 
     /**
      * Gets Jest/ElasticSearch id. Do not print this to the app.
+     *
      * @return the id
      */
     public String getId() {
@@ -196,15 +206,56 @@ public class Request {
     /**
      * Sets Jest/ElasticSearch id. String Id should be what is returned by the JestClient result.
      * Do not set this to anything else
+     *
      * @param id the JestId
      */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets list of drivers who have issued a ride offer for this request
+     *
+     * @return the offers
+     */
+    public ArrayList<User> getOffers() {
+        return offers;
+    }
+
+    /**
+     * Set list of drivers who have issued a ride offer for this request
+     *
+     * @param offers the offers
+     */
+    public void setOffers(ArrayList<User> offers) {
+        this.offers = offers;
+    }
+
+    public void addOffer(User newOffer) {
+        this.offers.add(newOffer);
+    }
+
+    public void removeOffer(User offer) {
+        this.offers.remove(offer);
+    }
+
     @Override
     public String toString() {
         return this.description;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        boolean sameSame = false;
+        Log.i("Equals", "comparing");
+
+        if (other != null && other instanceof Request)
+        {
+            sameSame = this.id.equals(((Request) other).getId());
+        }
+
+        return sameSame;
     }
 
 }

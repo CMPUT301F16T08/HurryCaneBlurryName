@@ -3,6 +3,7 @@ package hurrycaneblurryname.ryde.View;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,8 @@ public class EditUserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_user_profile);
         setTitle(R.string.editTitle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
@@ -70,5 +73,17 @@ public class EditUserProfile extends AppCompatActivity {
         emailEditText.setText(user.getEmail(), TextView.BufferType.EDITABLE);
         phoneEditText.setText(user.getPhone(), TextView.BufferType.EDITABLE);
 
+    }
+
+    // Back Navigation Handle
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

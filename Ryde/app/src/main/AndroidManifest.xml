@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,12 +26,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.SignupActivity" />
-        <activity android:name=".View.EditUserProfile" />
-        <activity android:name=".View.ProfileInfoActivity" />
-        <activity android:name=".View.RideInfoActivity" />
+
+        <activity
+            android:name=".View.SignupActivity">
+        </activity>
+
+        <activity
+            android:name=".View.EditUserProfile">
+        </activity>
+
+        <activity
+            android:name=".View.ProfileInfoActivity">
+        </activity>
+
+        <activity
+            android:name=".View.RideInfoActivity">
+        </activity>
+
         <activity android:name=".View.RiderConfirmDriverActivity" />
-        <activity android:name=".View.AvailableDriversActivity" />
+
+        <activity
+            android:name=".View.AvailableDriversActivity">
+        </activity>
+
         <activity
             android:name=".View.MapsActivity"
             android:label="@string/title_activity_rider_main"
@@ -47,9 +65,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".View.MyRideRequestsActivity" />
-        <activity android:name=".View.SearchRequestsActivity" />
-        <activity android:name=".View.MyRideRequestsRemake"></activity>
+        <activity
+            android:name=".View.SearchRequestsActivity">
+        </activity>
+
+        <activity
+            android:name=".View.MyRideRequestsRemake"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity android:name=".View.RideInfoFromSearch">
+        </activity>
     </application>
 
 </manifest>

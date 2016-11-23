@@ -58,6 +58,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -139,7 +140,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         View header=navigationView.getHeaderView(0);
         TextView riderUsername = (TextView)header.findViewById(R.id.riderUsername);
         TextView riderEmail = (TextView)header.findViewById(R.id.riderEmail);
-         riderUsername.setText(user.getUsername());
+        riderUsername.setText(user.getUsername());
         riderEmail.setText(user.getEmail());
 
     }
@@ -355,6 +356,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
+                System.out.println("Distance Sum : " + parser.getDistance(jObject));
+
                 Log.d("ParserTask","Executing routes");
                 Log.d("ParserTask",routes.toString());
 
@@ -616,7 +619,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         try {
             sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
-            Log.i("RequestLatLng", sendRequest.getFrom().toString() + " " + sendRequest.getTo().toString());
+            Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
         } catch (LocationException e) {
             e.printStackTrace();
         }
@@ -678,6 +681,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(rideRequests);
         } else if (id == R.id.nav_search) {
             Intent search = new Intent(this, SearchRequestsActivity.class);
+            Bundle extras = new Bundle();
+            extras.putParcelable("currLocation", mLastLocation);
+            search.putExtras(extras);
             startActivity(search);
         } else if (id == R.id.nav_pickup) {
 
@@ -733,8 +739,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Confirm Request");
         alertDialogBuilder.setMessage(
-                "\nFrom: "+sendRequest.getFrom().toString()+
-                        "\nTo: "+sendRequest.getTo().toString() +
+                "\nFrom: "+Arrays.toString(sendRequest.getFrom())+
+                        "\nTo: "+Arrays.toString(sendRequest.getTo()) +
                         "\n\nDescription: "+sendRequest.getDescription() +
                         "\nEstimate: " + sendRequest.getEstimate());
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
