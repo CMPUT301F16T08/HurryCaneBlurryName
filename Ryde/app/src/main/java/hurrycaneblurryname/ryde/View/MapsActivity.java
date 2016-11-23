@@ -545,12 +545,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String location = location_tf.getText().toString();
         List<Address> addressList = null;
 
-        if(location != null || !location.equals("")){
+
+        if(location != null || !location.isEmpty()){
             Geocoder geocoder = new Geocoder(this);
             try {
                 addressList = geocoder.getFromLocationName(location , 1);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+
+            if (addressList.isEmpty()) {
+                return;
             }
 
             //Place Marker
