@@ -56,8 +56,8 @@ public class TabFragment3 extends TabFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         user = UserHolder.getInstance().getUser();
         requestList= new ArrayList<>(user.getRequestList());
 
