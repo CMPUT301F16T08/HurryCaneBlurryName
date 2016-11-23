@@ -356,6 +356,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
+                System.out.println("Distance Sum : " + parser.getDistance(jObject));
+
                 Log.d("ParserTask","Executing routes");
                 Log.d("ParserTask",routes.toString());
 
