@@ -86,6 +86,8 @@ public class SignupActivity extends AppCompatActivity {
 
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
+        p.setMargins(0, 75, 0, 0);
+        p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
 
         // Check which radio button was clicked
@@ -95,7 +97,7 @@ public class SignupActivity extends AppCompatActivity {
                     isDriver=1;
 
                     p.addRule(RelativeLayout.BELOW, R.id.vehicleEditText);
-                    p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
                     findViewById(R.id.signUpGroup).setLayoutParams(p);
 
                     findViewById(R.id.vehicleTextView).setVisibility(View.VISIBLE);
@@ -106,7 +108,7 @@ public class SignupActivity extends AppCompatActivity {
                     isDriver=0;
 
                     p.addRule(RelativeLayout.BELOW, R.id.radioGroup);
-                    p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
                     findViewById(R.id.signUpGroup).setLayoutParams(p);
 
                     findViewById(R.id.vehicleTextView).setVisibility(View.INVISIBLE);
@@ -137,8 +139,8 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
         textlength = vehicleEditText.getText().length();
-        if (textlength == 0) {
-            Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
+        if (textlength == 0 && isDriver == 1) {
+            Toast.makeText(SignupActivity.this, "Vehicle description cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -179,7 +181,9 @@ public class SignupActivity extends AppCompatActivity {
             // push to server
             ElasticSearchRequestController.AddUserTask addUserTask = new ElasticSearchRequestController.AddUserTask();
             addUserTask.execute(newUser);
+            Toast.makeText(SignupActivity.this, "Account created", Toast.LENGTH_SHORT).show();
             finish();
+
 
         } else {
             Toast.makeText(SignupActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.User;
@@ -48,9 +49,15 @@ public class AddDriverInfo extends AppCompatActivity {
 
         finishButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                if (vehicleEditText.getText().toString().isEmpty()) {
+                    Toast.makeText(AddDriverInfo.this, "Please enter your vehicle description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 user.setVehicle(vehicleEditText.getText().toString());
                 user.setRole("driver");
                 UserHolder.getInstance().setUser(user);
+
 
                 // elastic request to update user profile
                 ElasticSearchRequestController.UpdateUserTask updateUserTask = new ElasticSearchRequestController.UpdateUserTask();

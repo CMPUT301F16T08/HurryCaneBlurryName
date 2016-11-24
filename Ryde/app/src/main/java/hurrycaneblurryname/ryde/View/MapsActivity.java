@@ -150,6 +150,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        user = UserHolder.getInstance().getUser();
+        toggleDriverMenu(user);
+    }
+
     /**
      * Enables driver related menu, such as search for requests and accepted requests
      */
