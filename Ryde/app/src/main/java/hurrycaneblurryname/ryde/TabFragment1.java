@@ -34,7 +34,6 @@ public class TabFragment1 extends TabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
-
         filteredText = (TextView) view.findViewById(R.id.openText);
         openView = (ListView) view.findViewById(R.id.openView);
         openViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);

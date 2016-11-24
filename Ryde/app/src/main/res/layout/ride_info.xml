@@ -182,7 +182,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="@string/completeRequest"
-                android:id="@+id/confirmButton"
+                android:id="@+id/completeButton"
                 android:layout_below="@id/estTexts"
                 android:layout_marginTop="20dp"
                 android:layout_centerInParent="true"/>
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cancelRequest"
                 android:id="@+id/cancelButton"
-                android:layout_below="@id/confirmButton"
+                android:layout_below="@id/completeButton"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"/>
 
