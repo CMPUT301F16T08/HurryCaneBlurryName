@@ -1,6 +1,8 @@
 package hurrycaneblurryname.ryde.View;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,15 +16,26 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
+
+import static android.R.attr.checked;
 
 /**
  * The type Search Requests activity.
@@ -33,6 +46,11 @@ import hurrycaneblurryname.ryde.R;
 public class SearchRequestsActivity extends AppCompatActivity {
     private Button searchButton;
     private Button searchNearbyButton;
+
+    private RadioGroup searchGroup;
+    private RadioButton locationRadio;
+    private RadioButton geoRadio;
+    private RadioButton keywordRadio;
     private EditText searchEditText;
 
     private ListView searchView;
@@ -50,9 +68,14 @@ public class SearchRequestsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        searchResult = new ArrayList<>();
+
         searchEditText = (EditText) findViewById(R.id.SearchEditText);
         searchButton = (Button)findViewById(R.id.searchButton);
         searchNearbyButton = (Button)findViewById(R.id.searchNearbyButton);
+
+        searchGroup = (RadioGroup)findViewById(R.id.searchGroup);
+
         searchView = (ListView) findViewById(R.id.SearchResultListView);
 
         Intent intent = getIntent();
@@ -63,13 +86,33 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
         searchButton.setOnClickListener(new View.OnClickListener() {
               public void onClick(View v) {
+
+                  int selectedId = searchGroup.getCheckedRadioButtonId();
+
+                  searchResult.clear();
                   String[] searchText =  searchEditText.getText().toString().split(",");
-                  searchRequests(searchText);
+
+                  switch(selectedId) {
+                      case (R.id.radio_location):
+//                          Toast.makeText(SearchRequestsActivity.this, "Search by location", Toast.LENGTH_SHORT).show();
+                          searchByLocation(searchText);
+                          break;
+                      case R.id.radio_keyword:
+//                          Toast.makeText(SearchRequestsActivity.this, "Search by keyword", Toast.LENGTH_SHORT).show();
+                          searchByKeyword(searchText);
+                          break;
+                      case R.id.radio_geo:
+//                          Toast.makeText(SearchRequestsActivity.this, "Search by geo", Toast.LENGTH_SHORT).show();
+                          searchByGeo(searchText);
+                          break;
+
+                  }
               }
          });
 
         searchNearbyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                searchResult.clear();
                 if (mLastLocation != null) {
                     String lon = String.valueOf(mLastLocation.getLongitude());
                     String lat = String.valueOf(mLastLocation.getLatitude());
@@ -107,20 +150,53 @@ public class SearchRequestsActivity extends AppCompatActivity {
      * Execute search for open requests
      * @param searchParam
      */
-    public void searchRequests(String... searchParam) {
-        ElasticSearchRequestController.GetOpenRequestsTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsTask();
+    private void searchRequests(String... searchParam) {
+
+        String[] searchText =  searchEditText.getText().toString().split(",");
+    }
+
+    /**
+     * Wrapper that helps to find requests based on searchParam.
+     *
+     * @param searchParam can contain [lon, lat] or can contain description
+     */
+    private void searchByGeo(String... searchParam) {
+        ElasticSearchRequestController.GetOpenRequestsGeoTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsGeoTask();
         getRequestsTask.execute(searchParam);
-
+        ArrayList<Request> newResults;
         try {
-            searchResult = getRequestsTask.get();
+            newResults = getRequestsTask.get();
 
-            if (searchResult.isEmpty()) {
+            if (newResults.isEmpty()) {
                 Toast.makeText(SearchRequestsActivity.this, "No results!", Toast.LENGTH_SHORT).show();
-            } else {
-                searchResult = searchResult;
-                searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
-                searchView.setAdapter(searchViewAdapter);
             }
+            searchResult = newResults;
+            searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
+            searchView.setAdapter(searchViewAdapter);
+
+
+        } catch (Exception e) {
+
+            Toast.makeText(SearchRequestsActivity.this, "Could not communicate with server", Toast.LENGTH_SHORT).show();
+            Log.i("ErrorGetUser", "Something went wrong when looking for requests");
+            //e.printStackTrace();
+        }
+    }
+
+    private void searchByKeyword(String... searchParam) {
+        ElasticSearchRequestController.GetOpenRequestsDescTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsDescTask();
+        getRequestsTask.execute(searchParam);
+        ArrayList<Request> newResults;
+        try {
+            newResults = getRequestsTask.get();
+
+            if (newResults.isEmpty()) {
+                Toast.makeText(SearchRequestsActivity.this, "No results!", Toast.LENGTH_SHORT).show();
+            }
+            searchResult = newResults;
+            searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
+            searchView.setAdapter(searchViewAdapter);
+
 
         } catch (Exception e) {
             Toast.makeText(SearchRequestsActivity.this, "Could not communicate with server", Toast.LENGTH_SHORT).show();
@@ -128,4 +204,42 @@ public class SearchRequestsActivity extends AppCompatActivity {
             //e.printStackTrace();
         }
     }
+
+    /**
+     * Search google maps location services (addresses, landmarks, etc.)
+     * @param searchParam search string
+     */
+    private void searchByLocation(String... searchParam) {
+        String location = searchEditText.getText().toString();
+        List<Address> addressList = null;
+        String[] search = new String[2];
+
+        if(location == null || location.isEmpty()){
+            Toast.makeText(SearchRequestsActivity.this, "No results!", Toast.LENGTH_SHORT).show();
+        } else {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location , 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList.isEmpty()) {
+                return;
+            }
+
+            //Place Marker
+            Address address = addressList.get(0);
+            LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
+
+            search[0] = String.valueOf(address.getLongitude());
+            search[1] = String.valueOf(address.getLatitude());
+
+            searchByGeo(search);
+        }
+
+
+    }
+
+
 }

@@ -33,15 +33,15 @@ public class ElasticSearchRequestController {
      *
      * TODO: handle searching by current location, takes in keyword as destination
      */
-    public static class GetOpenRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class GetOpenRequestsGeoTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Querying for requests starting at the at current geolocation within 500m
+         * Querying for requests by geolocation
          * @param searchParam query parameters.
          *                          [0] should be current geolocation lat
          *                          [1] should be current geolocation lon
          *
-         * @return array of requests that are closest to current geolocation
+         * @return array of requests
          * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
          *        object.execute("search parameter");
          */
@@ -59,6 +59,7 @@ public class ElasticSearchRequestController {
             } else {
                 search_string = "";
             }
+
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
@@ -90,27 +91,30 @@ public class ElasticSearchRequestController {
     /**
      * Get requests associated with rider task.
      */
-    public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class GetOpenRequestsDescTask extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Querying for all of a rider's created requests that haven't been opened.
-         * @param searchID existing ID of request
-         *                                     searchParam[0] should be the username
+         * Querying for open requests by keyword in description
+         * @param searchParam search paramater. searchParam[0] should be keyword in description
          * @return array of requests that are closest to current geolocation
          * @usage Declare and initialize a ElasticSearchRequestController.GetRequestsTask object
          *        object.execute("search parameter");
          */
         @Override
-        protected ArrayList<Request> doInBackground(String... searchID) {
+        protected ArrayList<Request> doInBackground(String... searchParam) {
             verifySettings();
 
             ArrayList<Request> requests = new ArrayList<>();
 
-            // Default to 500m
-            //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
-            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"_id\" : \""+ searchID[0] +"\" }}}";
-
+            String search_string;
+            if (searchParam[0].isEmpty() ) {
+                return requests;
+            } else {
+                search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"description\" : \""+ searchParam[0] +"\" }}}";
+            }
             Log.i("Debug", search_string);
+
+
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
                     .addType("requests")

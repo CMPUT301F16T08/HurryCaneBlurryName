@@ -11,7 +11,6 @@
     tools:context=".View.SearchRequestsActivity">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +32,41 @@
             android:layout_width="wrap_content"
             android:id="@+id/searchButton"
             android:text="@string/search" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="357dp"
+        android:layout_height="41dp">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:checkedButton="@+id/radio_location"
+            android:id="@+id/searchGroup">
+
+            <RadioButton
+                android:text="by location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_location"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:text="by keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_keyword"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:text="by geolocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_geo"
+                android:layout_weight="1" />
+        </RadioGroup>
     </LinearLayout>
 
     <Button
