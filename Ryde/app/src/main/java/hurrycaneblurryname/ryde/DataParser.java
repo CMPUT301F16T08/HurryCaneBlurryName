@@ -60,6 +60,38 @@ public class DataParser {
         return routes;
     }
 
+    public Integer getDistance(JSONObject jObject){
+
+        JSONArray jRoutes;
+        JSONArray jLegs;
+        JSONObject jDistance;
+        Integer distance = 0;
+
+        try {
+
+            jRoutes = jObject.getJSONArray("routes");
+
+            /** Traversing all routes */
+            for(int i=0;i<jRoutes.length();i++){
+                jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
+                List path = new ArrayList<>();
+
+                /** Traversing all legs */
+                for(int j=0;j<jLegs.length();j++){
+                    jDistance = ( (JSONObject)jLegs.get(j)).getJSONObject("distance");
+                    distance += (Integer)jDistance.get("value");
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (Exception e){
+        }
+
+        return distance;
+
+    }
+
 
     /**
      * Method to decode polyline points
