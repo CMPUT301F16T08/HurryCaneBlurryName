@@ -96,6 +96,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest mLocationRequest;
     Request sendRequest = null;
 
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+    NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,18 +127,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
         // retrieve login user info
         user = UserHolder.getInstance().getUser();
+        toggleDriverMenu(user);
 
         // set username and email
         View header=navigationView.getHeaderView(0);
@@ -143,6 +148,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         riderUsername.setText(user.getUsername());
         riderEmail.setText(user.getEmail());
 
+    }
+
+    /**
+     * Enables driver related menu, such as search for requests and accepted requests
+     */
+    private void toggleDriverMenu(User user) {
+        Menu nav_Menu = navigationView.getMenu();
+        if (user.getRole().equals("rider")) {
+            nav_Menu.findItem(R.id.nav_search).setEnabled(false);
+            nav_Menu.findItem(R.id.nav_pickup).setEnabled(false);
+            nav_Menu.findItem(R.id.nav_driversignup).setEnabled(true);
+
+        } else {
+            nav_Menu.findItem(R.id.nav_search).setEnabled(true);
+            nav_Menu.findItem(R.id.nav_pickup).setEnabled(true);
+            nav_Menu.findItem(R.id.nav_driversignup).setEnabled(false);
+            nav_Menu.findItem(R.id.nav_driversignup).setVisible(false);
+        }
     }
 
     /**
@@ -652,6 +675,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -696,6 +720,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(search);
         } else if (id == R.id.nav_pickup) {
 
+        } else if (id == R.id.nav_driversignup) {
+            Intent driverSignup = new Intent(this, AddDriverInfo.class);
+            startActivity(driverSignup);
         } else if (id == R.id.nav_logout) {
             UserHolder.getInstance().setUser(new User(null));
             finish();

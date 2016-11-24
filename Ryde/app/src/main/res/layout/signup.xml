@@ -100,7 +100,23 @@
                 android:onClick="onRadioButtonClicked"/>
         </RadioGroup>
 
-        <LinearLayout
+        <TextView android:id="@+id/vehicleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enterVehicle"
+            android:layout_below="@+id/radioGroup"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+        <EditText android:id="@+id/vehicleEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vehicleTextView"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+        <LinearLayout android:id="@+id/signUpGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/radioGroup"

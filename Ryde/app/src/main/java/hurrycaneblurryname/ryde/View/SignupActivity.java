@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -33,6 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText emailEditText;
     private EditText phoneEditText;
+    private EditText vehicleEditText;
     private Button signupButton;
     private Button cancelButton;
 
@@ -53,6 +56,7 @@ public class SignupActivity extends AppCompatActivity {
         passwordEditText = (EditText)findViewById(R.id.passwordEditText);
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+        vehicleEditText = (EditText) findViewById(R.id.vehicleEditText);
         signupButton = (Button)findViewById(R.id.signupButton);
         cancelButton = (Button)findViewById(R.id.cancelButton);
 
@@ -75,15 +79,38 @@ public class SignupActivity extends AppCompatActivity {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
+        // Set layout programmatically. Move the layout to be attached to certain layout
+        // http://stackoverflow.com/questions/3277196/can-i-set-androidlayout-below-at-runtime-programmatically
+        // Accessed November 24, 2016
+        // Author: Qberticus
+
+        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
         // Check which radio button was clicked
         switch(view.getId()) {
             case R.id.radio_yes:
                 if (checked)
                     isDriver=1;
+
+                    p.addRule(RelativeLayout.BELOW, R.id.vehicleEditText);
+                    p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    findViewById(R.id.signUpGroup).setLayoutParams(p);
+
+                    findViewById(R.id.vehicleTextView).setVisibility(View.VISIBLE);
+                    vehicleEditText.setVisibility(View.VISIBLE);
                     break;
             case R.id.radio_no:
                 if (checked)
                     isDriver=0;
+
+                    p.addRule(RelativeLayout.BELOW, R.id.radioGroup);
+                    p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    findViewById(R.id.signUpGroup).setLayoutParams(p);
+
+                    findViewById(R.id.vehicleTextView).setVisibility(View.INVISIBLE);
+                    vehicleEditText.setVisibility(View.INVISIBLE);
                     break;
         }
     }
@@ -105,6 +132,11 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
         textlength = emailEditText.getText().length();
+        if (textlength == 0) {
+            Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        textlength = vehicleEditText.getText().length();
         if (textlength == 0) {
             Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
@@ -134,6 +166,7 @@ public class SignupActivity extends AppCompatActivity {
 
             if (isDriver == 1){
                 newUser.setRole("driver");
+                newUser.setVehicle(vehicleEditText.getText().toString());
             }
             else if(isDriver == 0){
                 newUser.setRole("rider");

@@ -24,6 +24,7 @@ public class User {
     private String role;
     private String cardNumber;
     protected ArrayList<Request> requests;
+    private String vehicle;
 
     /**
      * Instantiates a new User.
@@ -186,6 +187,14 @@ public class User {
         }
 
         return sameSame;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getVehicle() {
+        return vehicle;
     }
 }
 
