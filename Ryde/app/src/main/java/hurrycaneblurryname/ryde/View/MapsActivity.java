@@ -96,7 +96,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     Request sendRequest = null;
-    
+
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;

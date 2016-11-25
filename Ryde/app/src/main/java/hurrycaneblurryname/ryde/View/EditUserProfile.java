@@ -41,7 +41,7 @@ public class EditUserProfile extends AppCompatActivity {
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
 
-        //vehicle buttons
+        //vehicle fields
         MakeEditText = (EditText)findViewById(R.id.vehicleMake);
         ModelEditText = (EditText)findViewById(R.id.vehicleModel);
         YearEditText = (EditText)findViewById(R.id.vehicleYear);
