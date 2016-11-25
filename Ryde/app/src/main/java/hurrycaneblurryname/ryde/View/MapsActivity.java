@@ -39,12 +39,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -93,14 +95,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     ArrayList<LatLng> MarkerPoints;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
-    Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
+    GoogleMap.OnMapClickListener mapClick;
     Request sendRequest = null;
 
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,62 +211,72 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         hideConfirmButton();
 
         // Setting onclick event listener for the map
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        mMap.setOnMapClickListener(mapClick = new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng point) {
 
                 // Already two locations
-                if (MarkerPoints.size() > 1) {
+                if (MarkerPoints.size() >= 2) {
                     MarkerPoints.clear();
                     mMap.clear();
                     hideConfirmButton();
                 }
+                else {
+                    // Adding new item to the ArrayList
+                    MarkerPoints.add(point);
 
-                // Adding new item to the ArrayList
-                MarkerPoints.add(point);
+                    // Creating MarkerOptions
+                    MarkerOptions options = new MarkerOptions();
 
-                // Creating MarkerOptions
-                MarkerOptions options = new MarkerOptions();
+                    // Setting the position of the marker
+                    options.position(point);
 
-                // Setting the position of the marker
-                options.position(point);
+                    /**
+                     * For the start location, the color of marker is GREEN and
+                     * for the end location, the color of marker is RED.
+                     */
+                    if (MarkerPoints.size() == 1) {
+                        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        options.title("Start Location");
+                        // Add new marker to the Google Map Android API V2
+                    } else if (MarkerPoints.size() == 2) {
+                        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                        options.title("End Location");
+                    }
 
-                /**
-                 * For the start location, the color of marker is GREEN and
-                 * for the end location, the color of marker is RED.
-                 */
-                if (MarkerPoints.size() == 1) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    options.title("Start Location");
-                } else if (MarkerPoints.size() == 2) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    options.title("End Location");
+                    // Add new marker to the Google Map Android API V2
+                    mMap.addMarker(options);
+
+                    // Checks, whether start and end locations are captured
+                    if (MarkerPoints.size() >= 2) {
+                        LatLng origin = MarkerPoints.get(0);
+                        LatLng dest = MarkerPoints.get(1);
+
+                        // Getting URL to the Google Directions API
+                        String url = getUrl(origin, dest);
+                        Log.d("onMapClick", url.toString());
+                        FetchUrl FetchUrl = new FetchUrl();
+
+                        // Start downloading json data from Google Directions API
+                        FetchUrl.execute(url);
+
+                        //move map camera to show both points
+                        //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
+                        //Date Accessed : 11/24/2016
+                        //Author: andr
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        for (LatLng latlng : MarkerPoints) {
+                            builder.include(latlng);
+                        }
+                        LatLngBounds bounds = builder.build();
+                        int padding = 150; // offset from edges of the map in pixels
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                        mMap.animateCamera(cu);
+
+                        showConfirmButton();
+                    }
                 }
-
-
-                // Add new marker to the Google Map Android API V2
-                mMap.addMarker(options);
-
-                // Checks, whether start and end locations are captured
-                if (MarkerPoints.size() >= 2) {
-                    LatLng origin = MarkerPoints.get(0);
-                    LatLng dest = MarkerPoints.get(1);
-
-                    // Getting URL to the Google Directions API
-                    String url = getUrl(origin, dest);
-                    Log.d("onMapClick", url.toString());
-                    FetchUrl FetchUrl = new FetchUrl();
-
-                    // Start downloading json data from Google Directions API
-                    FetchUrl.execute(url);
-                    //move map camera
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-                    showConfirmButton();
-                }
-
             }
         });
 
@@ -484,26 +495,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onLocationChanged(Location location) {
 
         mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-
-        //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
 
-        //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
     }
 
@@ -599,18 +594,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return;
             }
 
-            //Place Marker
+            //Get position
             Address address = addressList.get(0);
             LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latlng);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-            mMap.addMarker(markerOptions);
-            //move map camera
+
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         }
     }
+
 
     private void showConfirmButton(){
 
@@ -672,6 +664,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // set description dialog
         setDescriptionAlertDialog();
+
     }
 
     @Override
@@ -680,7 +673,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            MarkerPoints.clear();
+            mMap.clear();
+            hideConfirmButton();
         }
     }
 
@@ -762,7 +757,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 // TODO Auto-generated catch block
-
             }
         });
         alertDialogBuilder.setNegativeButton("Confirm",new DialogInterface.OnClickListener() {
@@ -775,13 +769,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     e.printStackTrace();
                 }
                 setEstimateAlertDialog();
-                //requestConfirmAlertDialog();
 
             }
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
     }
 
     private void setEstimateAlertDialog(){
@@ -820,6 +812,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertDialog.show();
     }
 
+
     private void requestConfirmAlertDialog() {
         // dialog show detail of habit when selected
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -828,7 +821,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 "\nFrom: "+Arrays.toString(sendRequest.getFrom())+
                         "\nTo: "+Arrays.toString(sendRequest.getTo()) +
                         "\n\nDescription: "+sendRequest.getDescription() +
-                        "\nEstimate: " + sendRequest.getEstimate() + "$");
+                        "\nEstimate: " + "$" + sendRequest.getEstimate());
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
