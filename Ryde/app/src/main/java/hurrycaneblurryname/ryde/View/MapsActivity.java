@@ -806,7 +806,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 requestConfirmAlertDialog();
 
-                }
+            }
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
