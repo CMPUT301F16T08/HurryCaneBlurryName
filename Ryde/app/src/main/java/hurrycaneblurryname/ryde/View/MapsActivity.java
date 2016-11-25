@@ -71,6 +71,7 @@ import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
+import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -155,6 +156,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         user = UserHolder.getInstance().getUser();
         toggleDriverMenu(user);
+
+
+        if (NotificationManager.getUpdate().isEmpty()) {
+            Toast.makeText(this, "No notifications!!", Toast.LENGTH_SHORT);
+        }
     }
 
     /**

@@ -486,14 +486,14 @@ public class ElasticSearchRequestController {
 
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
-                        Log.i("Debug", "Successful upgrade user profile");
+                        Log.i("Debug", "Successful update user profile");
                     }
                     else {
-                        Log.i("ErrorUpgradeUser", "Elastic search was not able to upgrade user profile.");
+                        Log.i("ErrorUpdateUser", "Elastic search was not able to update user profile.");
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ErrorUpgradeUser", "Failed to upgrade a user to elastic search!");
+                    Log.i("ErrorUpdateUser", "Could not communicate with elastic search.");
                     e.printStackTrace();
                 }
             }
@@ -501,6 +501,94 @@ public class ElasticSearchRequestController {
             return null;
         }
     }
+
+
+    public static class AddNotifTask extends AsyncTask<Notification, Void, Void> {
+
+        /**
+         * Update a new notification to elasticsearch
+         * @param notifs Notification to send to server
+         * @return null
+         * @usage Declare and initialize a ElasticSearchRequestController.AddNotifTask object
+         *        object.execute(userObject);
+         */
+
+        // TODO look into updating stuff on elasticsearch
+        @Override
+        protected Void doInBackground(Notification... notifs) {
+            verifySettings();
+
+            for (Notification n : notifs) {
+                Index index = new Index.Builder(n).index("f16t08").type("notifs").build();
+
+                try {
+                    DocumentResult result = client.execute(index);
+
+                    if (result.isSucceeded()) {
+                        Log.i("Debug", "Notification sent");
+                    }
+                    else {
+                        Log.i("ErrorAddNotification","Could not send notification");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("ErrorNotification", "Failed to communicate with ElasticSearch");
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public static class GetMyNotifsTask extends AsyncTask<User, Void, ArrayList<Notification>> {
+
+        /**
+         * Search and get notifications targetted at a user
+         * @param user the notification is targetted at
+         * @return Single User object
+         * @usage Declare and initialize a ElasticSearchRequestController.GetUsersTask object
+         *        object.execute("search parameter");
+         */
+        @Override
+        protected ArrayList<Notification> doInBackground(User... user) {
+            verifySettings();
+
+            ArrayList<Notification> notifs = new ArrayList<Notification>();
+
+            // "{ "query": {"term": {"toUser": "search_parameters[0]"}}}";
+
+            String search_string = String.format(
+                    "{\n" + "    \"query\": {\n" +
+                            "       \"term\" : { \"toUser\" : \"%s\" }\n" +
+                            "    }\n" +
+                            "}", user[0].getUsername());
+
+            // assume that search_parameters[0] is the only search term we are interested in using
+            Search search = new Search.Builder(search_string)
+                    .addIndex("f16t08")
+                    .addType("notifs")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<Notification> foundNotifs = result.getSourceAsObjectList(Notification.class);
+                    notifs.addAll(foundNotifs);
+                }
+                else {
+                    Log.i("ErrorGetNotif", "The search query failed to find any notifs that matched.");
+                }
+
+            } catch (Exception e) {
+                Log.i("ErrorGetUNotif", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                e.printStackTrace();
+            }
+
+            return notifs;
+        }
+    }
+
 
     private static void verifySettings() {
         // if the client hasn't been initialized then we should make it!

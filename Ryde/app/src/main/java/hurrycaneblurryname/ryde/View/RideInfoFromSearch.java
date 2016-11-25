@@ -19,6 +19,7 @@ import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
+import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 
 public class RideInfoFromSearch extends AppCompatActivity {
@@ -87,6 +88,8 @@ public class RideInfoFromSearch extends AppCompatActivity {
 
                 ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
                 updateRequestsTask.execute(request);
+
+                NotificationManager.sendAcceptNotification(request.getRider());
                 finish();
             }
         });
