@@ -91,6 +91,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private User user;
+    public Double distance;
     ArrayList<LatLng> MarkerPoints;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
@@ -399,7 +400,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Starts parsing data
                 routes = parser.parse(jObject);
                 System.out.println("Distance Sum : " + parser.getDistance(jObject));
-
+                Double x = parser.getDistance(jObject)/1000.0;
+                System.out.println(x);
+                distance = x+4.0;
+                //sendRequest.setEstimate(x);
                 Log.d("ParserTask","Executing routes");
                 Log.d("ParserTask",routes.toString());
 
@@ -648,7 +652,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestConfirm(View view){
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
-
+        sendRequest.setEstimate(distance);
         try {
             sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
             Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
@@ -764,13 +768,50 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } catch (DescriptionTooLongException e) {
                     e.printStackTrace();
                 }
-                requestConfirmAlertDialog();
+                setEstimateAlertDialog();
 
             }
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    private void setEstimateAlertDialog(){
+        //text dialog to input an optional string description for the ride request
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(" Your offer for this ride.");
+
+        final EditText input = new EditText(this);
+        // Specify the type of input expected
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        alertDialogBuilder.setView(input);
+
+        alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO Auto-generated catch block
+                //requestConfirmAlertDialog();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Confirm",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO Shorten input text if too long
+                try {
+                    double x = Double.valueOf(input.getText().toString());
+                    sendRequest.setEstimate(x);
+                } catch (NumberFormatException e) {
+                    //this throws on empty inputs but works as intended
+                    e.printStackTrace();
+                }
+                requestConfirmAlertDialog();
+
+                }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
 
     private void requestConfirmAlertDialog() {
         // dialog show detail of habit when selected
@@ -780,7 +821,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 "\nFrom: "+Arrays.toString(sendRequest.getFrom())+
                         "\nTo: "+Arrays.toString(sendRequest.getTo()) +
                         "\n\nDescription: "+sendRequest.getDescription() +
-                        "\nEstimate: " + sendRequest.getEstimate());
+                        "\nEstimate: " + "$" + sendRequest.getEstimate());
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
