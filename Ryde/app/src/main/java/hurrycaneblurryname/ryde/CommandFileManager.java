@@ -37,13 +37,17 @@ public class CommandFileManager<Command>{
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             GsonBuilder gb = new GsonBuilder();
-            gb.registerTypeAdapter(list.getClass(), new CommandDeserializer());
+            gb.registerTypeAdapter(new TypeToken<ArrayList<Command>>(){}.getType(), new CommandDeserializer());
             Gson gson = gb.create();
 
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Command>>(){}.getType();
 
             list = gson.fromJson(in,listType);
+
+            if(list == null){
+                list = new ArrayList<Command>();
+            }
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -63,7 +67,7 @@ public class CommandFileManager<Command>{
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             GsonBuilder gb = new GsonBuilder();
-            gb.registerTypeAdapter(list.getClass(), new CommandSerializer());
+            gb.registerTypeAdapter(new TypeToken<ArrayList<Command>>(){}.getType(), new CommandSerializer());
             Gson gson = gb.create();
 
             gson.toJson(list, out);

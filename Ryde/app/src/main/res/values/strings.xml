@@ -2,12 +2,12 @@
     <!-- login and signup -->
     <string name="app_name">Ryde</string>
     <string name="Login">Login</string>
-    <string name="User">User:</string>
+    <string name="User">Username:</string>
     <string name="Password">Password:</string>
     <string name="email">Email:</string>
     <string name="phone">Phone Number:</string>
-    <string name="driver">Sign up as a driver</string>
-    <string name="createNew">Create an new account</string>
+    <string name="driver">Do you also want to sign up as a driver?</string>
+    <string name="createNew">Create a new account</string>
     <string name="signup">Sign Up</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -15,6 +15,8 @@
     <string name="request">Confirm Request</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="addDriverInfo">Add driver info:</string>
+    <string name="enterVehicle">Enter your vehicle description.</string>
 
     <!-- activity_maps -->
     <string name="search">Search</string>
