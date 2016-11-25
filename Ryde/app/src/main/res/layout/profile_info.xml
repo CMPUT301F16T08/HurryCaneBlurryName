@@ -10,31 +10,38 @@
     tools:context=".View.ProfileInfoActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <!-- username -->
+
+            <!-- email -->
+            <TextView android:id="@+id/userTexts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unavailable"
+                android:textSize="18sp"
+                android:layout_marginTop="14dp"
+                android:layout_below="@+id/userTextView"
+                android:layout_alignLeft="@+id/emailTexts"
+                android:layout_alignStart="@+id/emailTexts" />
+
             <TextView android:id="@+id/userTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/User"
-                android:layout_marginTop="10dp"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
-            <TextView android:id="@+id/userTexts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/userTextView"
-                android:text="@string/unavailable"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="20dp"/>
-
-            <!-- email -->
             <TextView android:id="@+id/emailTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,13 +78,34 @@
                 android:layout_marginLeft="20dp"/>
 
             <!-- buttons -->
+
+            <TextView
+                android:text="Car Info (Year/Make/Model):"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneTexts"
+                android:layout_marginTop="15dp"
+                android:id="@+id/carInfo" />
+
+            <TextView
+                android:text="@string/unavailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/carInfo"
+                android:layout_alignLeft="@+id/phoneTexts"
+                android:layout_alignStart="@+id/phoneTexts"
+                android:layout_marginTop="29dp"
+                android:id="@+id/Info"
+                android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/phoneTexts"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:layout_centerInParent="true">
+                android:layout_marginTop="85dp"
+                android:layout_below="@+id/phoneTexts"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
