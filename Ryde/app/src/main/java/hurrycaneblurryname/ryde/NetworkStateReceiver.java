@@ -3,14 +3,14 @@ package hurrycaneblurryname.ryde;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
 
 /**
- * Created by pocrn_000 on 11/25/2016.
+ * Network Listener to Run in the background for any activity.
+ * Clears the offline queue of commands if connected to internet.
+ * @author blaz
+ * @date 11/25/2016.
  * Source: http://stackoverflow.com/questions/25678216/android-internet-connectivity-change-listener
- * Date: 11/25/2016
+ * Date Accessed: 11/25/2016
  * Author: Cjames
  */
 public class NetworkStateReceiver extends BroadcastReceiver {

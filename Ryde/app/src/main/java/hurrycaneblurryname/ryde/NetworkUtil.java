@@ -5,9 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by pocrn_000 on 11/25/2016.
+ * Class to check what type of connection we have. WiFi,mobile, or none.
+ * @author blaz
+ * @date 11/25/2016.
  * Source: http://stackoverflow.com/questions/25678216/android-internet-connectivity-change-listener
- * Date: 11/25/2016
+ * Date Accessed: 11/25/2016
  * Author: Cjames
  */
 public class NetworkUtil {
@@ -17,6 +19,12 @@ public class NetworkUtil {
     public static int TYPE_NOT_CONNECTED = 0;
     public static final int NETWORK_STATUS_NOT_CONNECTED=0,NETWORK_STAUS_WIFI=1,NETWORK_STATUS_MOBILE=2;
 
+    /**
+     * Gets connectivity status.
+     *
+     * @param context the context
+     * @return the connectivity status
+     */
     public static int getConnectivityStatus(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -31,6 +39,12 @@ public class NetworkUtil {
         return TYPE_NOT_CONNECTED;
     }
 
+    /**
+     * Gets connectivity status string.
+     *
+     * @param context the context
+     * @return the connectivity status string
+     */
     public static int getConnectivityStatusString(Context context) {
         int conn = NetworkUtil.getConnectivityStatus(context);
         int status = 0;
