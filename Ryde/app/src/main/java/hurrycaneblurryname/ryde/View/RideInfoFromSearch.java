@@ -79,17 +79,21 @@ public class RideInfoFromSearch extends AppCompatActivity {
                     request.removeOffer(UserHolder.getInstance().getUser());
                     interestButton.setText(R.string.interestRequest);
 
+
+
                 } else {
                     request.addOffer(UserHolder.getInstance().getUser());
                     Toast.makeText(RideInfoFromSearch.this, "You're interested in this request!", Toast.LENGTH_SHORT).show();
                     interestButton.setText(R.string.interestCancel);
+
+                    NotificationManager.sendAcceptNotification(request.getRider());
 
                 }
 
                 ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
                 updateRequestsTask.execute(request);
 
-                NotificationManager.sendAcceptNotification(request.getRider());
+
                 finish();
             }
         });

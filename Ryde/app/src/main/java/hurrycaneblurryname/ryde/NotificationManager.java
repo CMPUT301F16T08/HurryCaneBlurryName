@@ -13,8 +13,10 @@ import hurrycaneblurryname.ryde.Model.UserHolder;
 
 public class NotificationManager {
 
+
     public static final void sendAcceptNotification(User toUser) {
-        Notification n =  new Notification(toUser.getUsername(), "A driver is interested in your request!");
+
+        Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(),"A driver is interested in your request!");
         n.setToUser(toUser);
 
         ElasticSearchRequestController.AddNotifTask addNotifTask = new ElasticSearchRequestController.AddNotifTask();
@@ -22,21 +24,37 @@ public class NotificationManager {
     }
 
     public void sendConfirmNotification(User toUser) {
-        Notification n =  new Notification(toUser.getUsername(), "A rider has accepted your interest!");
+        Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(), "A rider has accepted your interest!");
         n.setToUser(toUser);
     }
 
-    public static final ArrayList<Notification> getUpdate() {
+    public static ArrayList<String> updateNotifs() {
 
         ElasticSearchRequestController.GetMyNotifsTask getNotifTask = new ElasticSearchRequestController.GetMyNotifsTask();
-        getNotifTask.execute(UserHolder.getInstance().getUser());
-        ArrayList<Notification> notifs = new ArrayList<>();
+        getNotifTask.execute(UserHolder.getInstance().getUser().getUsername());
+        ArrayList<Notification> notifsArray = new ArrayList<>();
         try {
-            notifs= getNotifTask.get();
+            notifsArray = getNotifTask.get();
         } catch (Exception e) {
             Log.i("ErrorNotif", "Getting error in notification manager");
         }
 
-        return notifs;
+        ArrayList<String> notifStrings = new ArrayList<>();
+        for (Notification n : notifsArray) {
+            notifStrings.add(n.getMessage());
+        }
+
+        // Once notifs received, don't care about it
+        // Delete from ElasticSearch
+
+        ElasticSearchRequestController.DeleteNotifsTask deleteNotifTask = new ElasticSearchRequestController.DeleteNotifsTask();
+        deleteNotifTask.execute(notifsArray.toArray(new Notification[notifsArray.size()]));
+
+        return notifStrings;
+    }
+
+    public static void dismissNotification (Notification n) {
+
+
     }
 }

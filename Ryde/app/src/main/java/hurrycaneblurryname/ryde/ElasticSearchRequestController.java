@@ -399,6 +399,7 @@ public class ElasticSearchRequestController {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                    SearchResult.Hit<User, Void> blah = result.getFirstHit(User.class);
                     users.addAll(foundUsers);
                 }
                 else {
@@ -510,7 +511,7 @@ public class ElasticSearchRequestController {
          * @param notifs Notification to send to server
          * @return null
          * @usage Declare and initialize a ElasticSearchRequestController.AddNotifTask object
-         *        object.execute(userObject);
+         *        object.execute(notifObject);
          */
 
         // TODO look into updating stuff on elasticsearch
@@ -525,6 +526,7 @@ public class ElasticSearchRequestController {
                     DocumentResult result = client.execute(index);
 
                     if (result.isSucceeded()) {
+                        n.setId(result.getId());
                         Log.i("Debug", "Notification sent");
                     }
                     else {
@@ -541,7 +543,7 @@ public class ElasticSearchRequestController {
         }
     }
 
-    public static class GetMyNotifsTask extends AsyncTask<User, Void, ArrayList<Notification>> {
+    public static class GetMyNotifsTask extends AsyncTask<String, Void, ArrayList<Notification>> {
 
         /**
          * Search and get notifications targetted at a user
@@ -551,18 +553,15 @@ public class ElasticSearchRequestController {
          *        object.execute("search parameter");
          */
         @Override
-        protected ArrayList<Notification> doInBackground(User... user) {
+        protected ArrayList<Notification> doInBackground(String... user) {
             verifySettings();
 
             ArrayList<Notification> notifs = new ArrayList<Notification>();
 
             // "{ "query": {"term": {"toUser": "search_parameters[0]"}}}";
 
-            String search_string = String.format(
-                    "{\n" + "    \"query\": {\n" +
-                            "       \"term\" : { \"toUser\" : \"%s\" }\n" +
-                            "    }\n" +
-                            "}", user[0].getUsername());
+            String search_string = "{ \"query\": {\"term\": {\"toUser\": \""+user[0]+"\"}}}";
+            Log.i("Debug", search_string);
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
@@ -575,6 +574,7 @@ public class ElasticSearchRequestController {
                 if (result.isSucceeded()) {
                     List<Notification> foundNotifs = result.getSourceAsObjectList(Notification.class);
                     notifs.addAll(foundNotifs);
+                    Log.i("Debug", notifs.get(0).getMessage());
                 }
                 else {
                     Log.i("ErrorGetNotif", "The search query failed to find any notifs that matched.");
@@ -586,6 +586,45 @@ public class ElasticSearchRequestController {
             }
 
             return notifs;
+        }
+    }
+
+    /**
+     * Delete notification(s) task
+     */
+    public static class DeleteNotifsTask extends AsyncTask<Notification, Void, Void> {
+
+        /**
+         * Delete the the notification from ElasticSearch, usually after notification is viewed
+         *
+         * @param notifs request objects to be removed from elasticsearch
+         * @return null
+         * @usage Declare and initialize a ElasticSearchRequestController.DeleteNotifssTask object
+         * object.execute(Notification[]);
+         */
+        @Override
+        protected Void doInBackground(Notification... notifs) {
+            verifySettings();
+
+            for (Notification n : notifs) {
+                Delete delete = new Delete.Builder(n.getId())
+                        .index("f16t08")
+                        .type("notifs")
+                        .build();
+
+                try {
+                    DocumentResult result = client.execute(delete);
+                    if (result.isSucceeded()) {
+                        Log.i("Notif", "Notification " + n.getId() + " deleted.");
+                    } else {
+                        Log.i("ErrorDeleteNotif", "could not delete notif with ID " + n.getId());
+                    }
+                } catch (Exception e) {
+                    Log.i("ErrorDeleteNotif", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
+            }
+
+            return null;
         }
     }
 
