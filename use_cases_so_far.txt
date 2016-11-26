@@ -8,11 +8,13 @@ Working:
 		US 04.05.01 (addresses)	As a driver, I should be able to search by address or nearby an address.
 		US 01.06.01(an estimate of a fair fare)
 		US 01.09.01 (car details) As a rider, I should see a description of the driver's vehicle.
-		US 03.04.01 (car details) As a driver, in my profile I can provide details about the vehicle I drive.
+		US 01.07.01(confirm the completion)
+		US 01.08.01(confirm a driver's acceptance)
 	User:
 		US 03.01.01(user setup)
 		US 03.02.01(edit user profile)
 		US 03.03.01(show contact info)
+		US 03.04.01 (car details) As a driver, in my profile I can provide details about the vehicle I drive.
 		
 	Status:
 		US 02.01.01(status of a request that I am involved in)
@@ -38,8 +40,6 @@ in Progress:
 		
 	Request:
 
-		US 01.07.01(confirm the completion)
-		US 01.08.01(confirm a driver's acceptance)
 		
 	Accepting:
 		US 05.01.01(accept a request I agree with and accept that offered payment upon completion)
