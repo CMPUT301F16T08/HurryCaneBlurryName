@@ -66,7 +66,7 @@ public class EditUserProfile extends AppCompatActivity {
                 user.setEmail(emailEditText.getText().toString());
                 user.setPhone(phoneEditText.getText().toString());
                 user.setVehicleMake(MakeEditText.getText().toString());
-                user.setVehicleModel( ModelEditText.getText().toString());
+                user.setVehicleModel(ModelEditText.getText().toString());
                 user.setVehicleYear(Integer.valueOf(YearEditText.getText().toString()));
                 UserHolder.getInstance().setUser(user);
                 // TO-DO

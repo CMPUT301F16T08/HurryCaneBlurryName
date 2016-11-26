@@ -180,9 +180,9 @@ public class SignupActivity extends AppCompatActivity {
             if (isDriver == 1){
                 newUser.setRole("driver");
                 //newUser.setVehicle(vehicleEditText.getText().toString());
-                newUser.setVehicleMake(YearEditText.getText().toString());
+                newUser.setVehicleYear(Integer.parseInt(YearEditText.getText().toString()));
                 newUser.setVehicleMake(MakeEditText.getText().toString());
-                newUser.setVehicleMake(ModelEditText.getText().toString());
+                newUser.setVehicleModel(ModelEditText.getText().toString());
             }
             else if(isDriver == 0){
                 newUser.setRole("rider");
