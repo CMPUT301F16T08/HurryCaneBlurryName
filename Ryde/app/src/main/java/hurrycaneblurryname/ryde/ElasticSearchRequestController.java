@@ -64,7 +64,7 @@ public class ElasticSearchRequestController {
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests")   //TODO after geolocation conflict sorted out, change to requests
+                    .addType("crequests")   //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
@@ -117,7 +117,7 @@ public class ElasticSearchRequestController {
 
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests")
+                    .addType("crequests")
                     .build();
 
             try {
@@ -167,7 +167,7 @@ public class ElasticSearchRequestController {
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests")
+                    .addType("crequests")
                     .build();
 
             try {
@@ -216,7 +216,7 @@ public class ElasticSearchRequestController {
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("requests") //TODO after geolocation conflict sorted out, change to requests
+                    .addType("crequests") //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
@@ -259,7 +259,7 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (Request r : requests) {
-                Index index = new Index.Builder(r).index("f16t08").type("requests").id(r.getId()).build();
+                Index index = new Index.Builder(r).index("f16t08").type("crequests").id(r.getId()).build();
 
                 try {
                     DocumentResult result = client.execute(index);
@@ -297,7 +297,7 @@ public class ElasticSearchRequestController {
             for (Request r : requests) {
                 Delete delete = new Delete.Builder(r.getId())
                         .index("f16t08")
-                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("crequests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -335,7 +335,7 @@ public class ElasticSearchRequestController {
             for (Request request: requests) {
                 Index index = new Index.Builder(request)
                         .index("f16t08")
-                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("crequests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -399,6 +399,7 @@ public class ElasticSearchRequestController {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                    SearchResult.Hit<User, Void> blah = result.getFirstHit(User.class);
                     users.addAll(foundUsers);
                 }
                 else {
@@ -486,14 +487,14 @@ public class ElasticSearchRequestController {
 
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
-                        Log.i("Debug", "Successful upgrade user profile");
+                        Log.i("Debug", "Successful update user profile");
                     }
                     else {
-                        Log.i("ErrorUpgradeUser", "Elastic search was not able to upgrade user profile.");
+                        Log.i("ErrorUpdateUser", "Elastic search was not able to update user profile.");
                     }
                 }
                 catch (Exception e) {
-                    Log.i("ErrorUpgradeUser", "Failed to upgrade a user to elastic search!");
+                    Log.i("ErrorUpdateUser", "Could not communicate with elastic search.");
                     e.printStackTrace();
                 }
             }
@@ -501,6 +502,132 @@ public class ElasticSearchRequestController {
             return null;
         }
     }
+
+
+    public static class AddNotifTask extends AsyncTask<Notification, Void, Void> {
+
+        /**
+         * Update a new notification to elasticsearch
+         * @param notifs Notification to send to server
+         * @return null
+         * @usage Declare and initialize a ElasticSearchRequestController.AddNotifTask object
+         *        object.execute(notifObject);
+         */
+
+        // TODO look into updating stuff on elasticsearch
+        @Override
+        protected Void doInBackground(Notification... notifs) {
+            verifySettings();
+
+            for (Notification n : notifs) {
+                Index index = new Index.Builder(n).index("f16t08").type("notifs").build();
+
+                try {
+                    DocumentResult result = client.execute(index);
+
+                    if (result.isSucceeded()) {
+                        n.setId(result.getId());
+                        Log.i("Debug", "Notification sent");
+                    }
+                    else {
+                        Log.i("ErrorAddNotification","Could not send notification");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("ErrorNotification", "Failed to communicate with ElasticSearch");
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public static class GetMyNotifsTask extends AsyncTask<String, Void, ArrayList<Notification>> {
+
+        /**
+         * Search and get notifications targetted at a user
+         * @param user the notification is targetted at
+         * @return Single User object
+         * @usage Declare and initialize a ElasticSearchRequestController.GetUsersTask object
+         *        object.execute("search parameter");
+         */
+        @Override
+        protected ArrayList<Notification> doInBackground(String... user) {
+            verifySettings();
+
+            ArrayList<Notification> notifs = new ArrayList<Notification>();
+
+            // "{ "query": {"term": {"toUser": "search_parameters[0]"}}}";
+
+            String search_string = "{ \"query\": {\"term\": {\"toUser\": \""+user[0]+"\"}}}";
+            Log.i("Debug", search_string);
+
+            // assume that search_parameters[0] is the only search term we are interested in using
+            Search search = new Search.Builder(search_string)
+                    .addIndex("f16t08")
+                    .addType("notifs")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<Notification> foundNotifs = result.getSourceAsObjectList(Notification.class);
+                    notifs.addAll(foundNotifs);
+                    Log.i("Debug", notifs.get(0).getMessage());
+                }
+                else {
+                    Log.i("ErrorGetNotif", "The search query failed to find any notifs that matched.");
+                }
+
+            } catch (Exception e) {
+                Log.i("ErrorGetUNotif", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                e.printStackTrace();
+            }
+
+            return notifs;
+        }
+    }
+
+    /**
+     * Delete notification(s) task
+     */
+    public static class DeleteNotifsTask extends AsyncTask<Notification, Void, Void> {
+
+        /**
+         * Delete the the notification from ElasticSearch, usually after notification is viewed
+         *
+         * @param notifs request objects to be removed from elasticsearch
+         * @return null
+         * @usage Declare and initialize a ElasticSearchRequestController.DeleteNotifssTask object
+         * object.execute(Notification[]);
+         */
+        @Override
+        protected Void doInBackground(Notification... notifs) {
+            verifySettings();
+
+            for (Notification n : notifs) {
+                Delete delete = new Delete.Builder(n.getId())
+                        .index("f16t08")
+                        .type("notifs")
+                        .build();
+
+                try {
+                    DocumentResult result = client.execute(delete);
+                    if (result.isSucceeded()) {
+                        Log.i("Notif", "Notification " + n.getId() + " deleted.");
+                    } else {
+                        Log.i("ErrorDeleteNotif", "could not delete notif with ID " + n.getId());
+                    }
+                } catch (Exception e) {
+                    Log.i("ErrorDeleteNotif", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
+            }
+
+            return null;
+        }
+    }
+
 
     private static void verifySettings() {
         // if the client hasn't been initialized then we should make it!

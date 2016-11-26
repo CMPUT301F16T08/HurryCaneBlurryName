@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
@@ -73,6 +74,8 @@ import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
+import hurrycaneblurryname.ryde.Notification;
+import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -102,6 +105,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
+
+    private int notif_number = 0;
+    private TextView notifText = null;
+    private ArrayList<String> notificationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +165,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         user = UserHolder.getInstance().getUser();
         toggleDriverMenu(user);
+
+        notificationList = NotificationManager.updateNotifs();
+        notif_number = notificationList.size();
     }
 
     /**
@@ -673,12 +683,75 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    // Notifications in action bar
+    // http://stackoverflow.com/questions/17696486/actionbar-notification-count-icon-badge-like-google-has
+    // Accessed November 25, 2016
+    // Posts by: squirrel, AndrewS, pang
+    // http://www.devexchanges.info/2015/05/building-actionbar-notifications-count.html
+    // Accessed November 25, 2016
+    // Post by Hong Thai
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        final View menu_notif = menu.findItem(R.id.menu_hotlist).getActionView();
+        notifText = (TextView) menu_notif.findViewById(R.id.notiflist_hot);
+        updateNotifCount(notif_number);
+
+        menu_notif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(MapsActivity.this, menu_notif);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.menu_popup, popup.getMenu());
+
+                populateNotifItems(popup);
+                popup.show();
+            }
+        });
+        
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void populateNotifItems(final PopupMenu popup) {
+        if (notificationList.size() > 0) {
+            for (String s : notificationList) {
+                popup.getMenu().add(s);
+            }
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    notificationList.remove(item.getTitle()); //remove notification after clicked (read)
+                    updateNotifCount(notificationList.size());
+                    popup.dismiss();
+
+                    return true;
+                }
+            });
+        }
+    }
+
+
+    private void updateNotifCount(final int new_notif_number) {
+        notif_number = new_notif_number;
+        if (notifText == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (new_notif_number == 0)
+                    notifText.setVisibility(View.INVISIBLE);
+                else {
+                    notifText.setVisibility(View.VISIBLE);
+                    notifText.setText(Integer.toString(new_notif_number));
+                }
+            }
+        });
     }
 
     @Override
@@ -688,14 +761,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if (id == R.id.new_request)
-        {
-            return true;
-        }
+        // TODO implement going to offers screen
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//        else if (id == R.id.new_request)
+//        {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -719,7 +793,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             search.putExtras(extras);
             startActivity(search);
         } else if (id == R.id.nav_pickup) {
-
+            Intent pickups = new Intent(this, MyPickupActivity.class);
+            startActivity(pickups);
         } else if (id == R.id.nav_driversignup) {
             Intent driverSignup = new Intent(this, AddDriverInfo.class);
             startActivity(driverSignup);

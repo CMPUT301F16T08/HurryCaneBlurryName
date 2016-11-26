@@ -1,7 +1,6 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.View;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,33 +13,35 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
-import hurrycaneblurryname.ryde.View.RideInfoActivity;
+import hurrycaneblurryname.ryde.R;
+import hurrycaneblurryname.ryde.TabFragment;
 
 /**
  * Created by Zone on 2016/11/17.
  */
-public class TabFragment3 extends TabFragment {
+public class RiderTabFragment2 extends TabFragment {
 
     private User user;
     //ListViews
-    private ListView closedView;
+    private ListView offerView;
     //Adapters
-    private ArrayAdapter<Request> closedViewAdapter;
+    private ArrayAdapter<Request> offerViewAdapter;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab_fragment_3, container, false);
+        View view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
-        filteredText = (TextView) view.findViewById(R.id.closedText);
-        closedView = (ListView) view.findViewById(R.id.closedView);
-        closedViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
-        closedView.setAdapter(closedViewAdapter);
-        closedView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        filteredText = (TextView) view.findViewById(R.id.offerText);
+        offerView = (ListView) view.findViewById(R.id.offerView);
+        offerViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
+        offerView.setAdapter(offerViewAdapter);
+        offerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Get request to show and start RideInfo
@@ -84,10 +85,12 @@ public class TabFragment3 extends TabFragment {
         } catch (Exception e) {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
-        factorLists("closed");
-        closedViewAdapter.notifyDataSetChanged();
+        factorLists("accepted");
+        offerViewAdapter.notifyDataSetChanged();
         changeTextStatus();
+
     }
+
 
 
 }
