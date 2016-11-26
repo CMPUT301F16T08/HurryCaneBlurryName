@@ -244,6 +244,27 @@ public class Request {
         return this.description;
     }
 
+    /**
+     * compare requests for testing requests.
+     *
+     * @param other the other request
+     */
+    public int compareTo(Request other) {
+        boolean x = (driver == other.getDriver());
+        int i = 0;
+        if (x){i = 1;}
+        if (i != 0) return i;
+
+        x = estimate == other.getEstimate();
+        if (x){i = 1;}
+        if (i != 0) return i;
+
+        x = id == other.getId();
+        if (x){i = 1;}
+
+        return i;
+    }
+
     @Override
     public boolean equals(Object other)
     {

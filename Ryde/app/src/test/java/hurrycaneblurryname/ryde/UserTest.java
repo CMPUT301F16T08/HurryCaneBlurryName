@@ -29,7 +29,6 @@ public class UserTest extends TestCase{
         User user = new User("");
         Request request = new Request(user);
         user.addRequest(request);
-
         assertTrue("Request Was Not Added to User Request List!" , user.hasRequest(request));
     }
 
@@ -119,5 +118,16 @@ public class UserTest extends TestCase{
         user.setEmail("exampleemail@ualberta.ca");
 
         assertTrue("Email Not Set!" , user.getEmail().equals("exampleemail@ualberta.ca"));
+    }
+
+    public void testVehicle(){
+        User user = new User("");
+        user.setVehicleYear(1995);
+        user.setVehicleMake("Dodge");
+        user.setVehicleModel("Dakota");
+
+        assertEquals(1995 , user.getVehicleYear());
+        assertEquals("Dodge" , user.getVehicleMake());
+        assertEquals("Dakota" , user.getVehicleModel());
     }
 }
