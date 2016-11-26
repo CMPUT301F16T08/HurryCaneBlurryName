@@ -29,17 +29,40 @@ Author: Codepath
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="@string/search"
-                    android:id="@+id/text_map_search"
+                    android:hint="@string/search2"
+                    android:id="@+id/text_map_search_start"
                     android:layout_weight="1.02" />
 
                 <Button
                     android:text="@string/enter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button_map_search"
-                    android:onClick="onSearch" />
+                    android:id="@+id/button_map_search_start"
+                    android:onClick="onSearchStart" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/search3"
+                android:id="@+id/text_map_search_end"
+                android:layout_weight="1.02" />
+
+            <Button
+                android:text="@string/enter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_map_search_end"
+                android:onClick="onSearchEnd" />
         </LinearLayout>
 
         <RelativeLayout
