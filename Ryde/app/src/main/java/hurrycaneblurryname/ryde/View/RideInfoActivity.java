@@ -91,6 +91,12 @@ public class RideInfoActivity extends AppCompatActivity {
             }
         });
 
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                completeAlertDialog();
+            }
+        });
+
     }
 
     protected void onStart() {
@@ -126,11 +132,18 @@ public class RideInfoActivity extends AppCompatActivity {
         fromTextView.setText(Arrays.toString(request.getFrom()));
         toTextView.setText(Arrays.toString(request.getTo()));
         statusTextView.setText(request.getStatus());
-        feeTextView.setText(request.getEstimate().toString());
+        feeTextView.setText("$"+request.getEstimate().toString());
 
         if(request.getStatus().equals("open"))
         {
             completeButton.setVisibility(View.GONE);
+        }
+
+        if (request.getStatus().equals("closed")) {
+            completeButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
+            TextView feeText = (TextView)findViewById(R.id.estTextView);
+            feeText.setText("Fee:");
         }
 
 
@@ -155,6 +168,37 @@ public class RideInfoActivity extends AppCompatActivity {
                 deleteRequestTask.execute(request);
                 Toast.makeText(RideInfoActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 finish();
+            }
+
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void completeAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Complete a request");
+        alertDialogBuilder.setMessage("Fee: " + request.getEstimate().toString()+"\nMark request as Complete?");
+        alertDialogBuilder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO Auto-generated catch block
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Yes",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (RequestHolder.getInstance().getRequest().getDriverComplete()) {
+                    // Update request using elasticsearch query
+                    RequestHolder.getInstance().getRequest().setRiderComplete();
+                    RequestHolder.getInstance().getRequest().setStatus("closed");
+                    ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
+                    updateRequestsTask.execute(RequestHolder.getInstance().getRequest());
+                    Toast.makeText(RideInfoActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(RideInfoActivity.this, "Please wait for Driver to complete!", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });

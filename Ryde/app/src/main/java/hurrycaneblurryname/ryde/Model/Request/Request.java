@@ -29,6 +29,8 @@ public class Request {
     private String status;
     private String description;
     private ArrayList<User> offers;
+    private Boolean DriverComplete;
+    private Boolean RiderComplete;
 
     /**
      * Instantiates a new Request.
@@ -44,6 +46,8 @@ public class Request {
         this.from = new double[] {0.0, 0.0};
         this.to = new double[] {0.0, 0.0};
         this.offers = new ArrayList<User>();
+        this.DriverComplete = false;
+        this.RiderComplete = false;
     }
 
     /**
@@ -237,6 +241,40 @@ public class Request {
 
     public void removeOffer(User offer) {
         this.offers.remove(offer);
+    }
+
+    /**
+     * Gets Driver Complete.
+     *
+     * @return the DriverComplete
+     */
+    public Boolean getDriverComplete() {
+        return DriverComplete;
+    }
+
+    /**
+     * Gets Rider Complete.
+     *
+     * @return the RiderComplete
+     */
+    public Boolean getRiderComplete() {
+        return RiderComplete;
+    }
+
+    /**
+     * Sets Driver Complete.
+     *
+     */
+    public void setDriverComplete() {
+        this.DriverComplete = true;
+    }
+
+    /**
+     * Sets Rider Complete.
+     *
+     */
+    public void setRiderComplete() {
+        this.RiderComplete = true;
     }
 
     @Override
