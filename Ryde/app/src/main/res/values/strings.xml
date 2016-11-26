@@ -35,6 +35,10 @@
     <!-- profile_info -->
     <string name="call">Call</string>
     <string name="Email">Email</string>
+    <string name="vehicleInfo">Vehicle Info:</string>
+    <string name="year">Year</string>
+    <string name="make">Make</string>
+    <string name="model">Model</string>
 
     <!-- ride_info -->
     <string name="desc">Description:</string>
@@ -58,7 +62,7 @@
     <string name="searchNearby">Search Nearby</string>
     <string name="refresh">Refresh</string>
     <string name="unavailable">unavailable</string>
-    <string name="editTitle">Edit Contact Info:</string>
+    <string name="editTitle">Edit Contact Info</string>
     <string name="title_activity_rider_main">RiderMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

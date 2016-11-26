@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
@@ -25,6 +26,7 @@ public class EditUserProfile extends AppCompatActivity {
     private EditText MakeEditText;
     private EditText ModelEditText;
     private EditText YearEditText;
+    private RelativeLayout vehicleInfo;
     private Button finishButton;
     private Button cancelButton;
 
@@ -45,6 +47,7 @@ public class EditUserProfile extends AppCompatActivity {
         MakeEditText = (EditText)findViewById(R.id.vehicleMake);
         ModelEditText = (EditText)findViewById(R.id.vehicleModel);
         YearEditText = (EditText)findViewById(R.id.vehicleYear);
+        vehicleInfo = (RelativeLayout)findViewById(R.id.vehicleInfoPanel);
 
         // get old info
         //MakeEditText.setText( user.getVehicleModel() );
@@ -93,6 +96,9 @@ public class EditUserProfile extends AppCompatActivity {
         MakeEditText.setText( user.getVehicleMake(), TextView.BufferType.EDITABLE );
         ModelEditText.setText( user.getVehicleModel(), TextView.BufferType.EDITABLE );
         YearEditText.setText( Integer.valueOf(user.getVehicleYear()).toString(), TextView.BufferType.EDITABLE );
+        if (user.getRole().equals("rider")){
+            vehicleInfo.setVisibility(View.GONE);
+        }
 
     }
 

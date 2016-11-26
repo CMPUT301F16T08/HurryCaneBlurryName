@@ -74,6 +74,8 @@ public class RideInfoFromSearch extends AppCompatActivity {
             public void onClick(View v) {
                 RequestUserHolder.getInstance().setUser(request.getRider());
                 Intent intent = new Intent(RideInfoFromSearch.this, ProfileInfoActivity.class);
+                String showVehicle = "n";
+                intent.putExtra("SHOW_VEHICLE", showVehicle);
                 startActivity(intent);
             }
         });
