@@ -80,6 +80,7 @@ import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
+import hurrycaneblurryname.ryde.NetworkUtil;
 import hurrycaneblurryname.ryde.Notification;
 import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
@@ -324,10 +325,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Getting URL to the Google Directions API
         String url = getUrl(origin, dest);
         Log.d("onMapClick", url.toString());
-        FetchUrl FetchUrl = new FetchUrl();
 
-        // Start downloading json data from Google Directions API
-        FetchUrl.execute(url);
+        if(NetworkUtil.getConnectivityStatusString(MapsActivity.this) != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            FetchUrl FetchUrl = new FetchUrl();
+            // Start downloading json data from Google Directions API
+            FetchUrl.execute(url);
+        }
 
         //move map camera to show both points
         //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
