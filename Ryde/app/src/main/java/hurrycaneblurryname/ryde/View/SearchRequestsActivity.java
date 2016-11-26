@@ -7,40 +7,37 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
-import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.R;
 
-import static android.R.attr.checked;
-
 /**
- * The type Search Requests activity.
- * Author: Chen
+ * Search for Open requests
+ * Author: Chen, Cho
  * Storyboard by: Blaz
+ * Version: 2
  */
 
 public class SearchRequestsActivity extends AppCompatActivity {
@@ -48,10 +45,9 @@ public class SearchRequestsActivity extends AppCompatActivity {
     private Button searchNearbyButton;
 
     private RadioGroup searchGroup;
-    private RadioButton locationRadio;
-    private RadioButton geoRadio;
-    private RadioButton keywordRadio;
     private EditText searchEditText;
+    private EditText searchEditText2;
+    private LinearLayout searchBar2;
 
     private ListView searchView;
     private ArrayAdapter<Request> searchViewAdapter;
@@ -68,13 +64,15 @@ public class SearchRequestsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        searchBar2 = (LinearLayout) findViewById(R.id.searchRequestBar2);
         searchResult = new ArrayList<>();
 
         searchEditText = (EditText) findViewById(R.id.SearchEditText);
+        searchEditText2 = (EditText) findViewById(R.id.SearchEditText2);
         searchButton = (Button)findViewById(R.id.searchButton);
         searchNearbyButton = (Button)findViewById(R.id.searchNearbyButton);
 
-        searchGroup = (RadioGroup)findViewById(R.id.searchGroup);
+        searchGroup = (RadioGroup)findViewById(R.id.searchRadioGroup);
 
         searchView = (ListView) findViewById(R.id.SearchResultListView);
 
@@ -84,25 +82,30 @@ public class SearchRequestsActivity extends AppCompatActivity {
             mLastLocation = extras.getParcelable("currLocation");
         }
 
+
+
         searchButton.setOnClickListener(new View.OnClickListener() {
               public void onClick(View v) {
 
                   int selectedId = searchGroup.getCheckedRadioButtonId();
 
                   searchResult.clear();
-                  String[] searchText =  searchEditText.getText().toString().split(",");
+
+                  String[] searchText = new String[2];
 
                   switch(selectedId) {
                       case (R.id.radio_location):
-//                          Toast.makeText(SearchRequestsActivity.this, "Search by location", Toast.LENGTH_SHORT).show();
+                          searchText[0] = searchEditText.getText().toString();
                           searchByLocation(searchText);
                           break;
                       case R.id.radio_keyword:
-//                          Toast.makeText(SearchRequestsActivity.this, "Search by keyword", Toast.LENGTH_SHORT).show();
+
+                          searchText[0] = searchEditText.getText().toString();
                           searchByKeyword(searchText);
                           break;
                       case R.id.radio_geo:
-//                          Toast.makeText(SearchRequestsActivity.this, "Search by geo", Toast.LENGTH_SHORT).show();
+                          searchText[0] = searchEditText.getText().toString();
+                          searchText[1] = searchEditText2.getText().toString();
                           searchByGeo(searchText);
                           break;
 
@@ -135,6 +138,57 @@ public class SearchRequestsActivity extends AppCompatActivity {
         });
     }
 
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Set layout programmatically. Move the layout to be attached relatively to another
+        // http://stackoverflow.com/questions/3277196/can-i-set-androidlayout-below-at-runtime-programmatically
+        // Accessed November 24, 2016
+        // Author: Qberticus
+
+        searchEditText.getText().clear();
+        searchResult.clear();
+
+        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_location:
+                if (checked) {
+                    p.addRule(RelativeLayout.BELOW, R.id.searchRequestBar);
+                    findViewById(R.id.searchRadioGroup).setLayoutParams(p);
+
+                    searchBar2.setVisibility(View.INVISIBLE);
+                    searchEditText.setHint(R.string.searchLocation);
+                }
+                break;
+            case R.id.radio_keyword:
+                if (checked) {
+                    p.addRule(RelativeLayout.BELOW, R.id.searchRequestBar);
+                    findViewById(R.id.searchRadioGroup).setLayoutParams(p);
+
+                    searchBar2.setVisibility(View.INVISIBLE);
+                    searchEditText.setHint(R.string.searchKeyword);
+                }
+                break;
+            case R.id.radio_geo:
+                if (checked) {
+                    p.addRule(RelativeLayout.BELOW, R.id.searchRequestBar2);
+                    findViewById(R.id.searchRadioGroup).setLayoutParams(p);
+
+                    searchBar2.setVisibility(View.VISIBLE);
+                    searchEditText.setHint(R.string.search2);
+                    searchEditText2.setHint(R.string.search3);
+                }
+                break;
+
+        }
+    }
+
     // Back Navigation Handle
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -161,6 +215,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
      * @param searchParam can contain [lon, lat] or can contain description
      */
     private void searchByGeo(String... searchParam) {
+        Log.i("SEARCH", Arrays.toString(searchParam));
         ElasticSearchRequestController.GetOpenRequestsGeoTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsGeoTask();
         getRequestsTask.execute(searchParam);
         ArrayList<Request> newResults;
@@ -232,9 +287,9 @@ public class SearchRequestsActivity extends AppCompatActivity {
             Address address = addressList.get(0);
             LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
 
-            search[0] = String.valueOf(address.getLongitude());
-            search[1] = String.valueOf(address.getLatitude());
 
+            search[1] = String.valueOf(address.getLongitude());
+            search[0] = String.valueOf(address.getLatitude());
             searchByGeo(search);
         }
 

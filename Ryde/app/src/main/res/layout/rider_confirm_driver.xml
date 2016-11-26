@@ -29,13 +29,37 @@
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="20dp"/>
+        <!-- car infos -->
+        <RelativeLayout
+            android:id="@+id/carInfoPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userTexts">
+            <TextView
+                android:text="Car Info:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textSize="24sp"
+                android:id="@+id/carInfo" />
+
+            <TextView
+                android:text="@string/unavailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/carInfo"
+                android:id="@+id/Info"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"/>
+        </RelativeLayout>
 
         <!-- email -->
         <TextView android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:layout_below="@id/userTexts"
+            android:layout_below="@id/carInfoPanel"
             android:layout_marginTop="20dp"
             android:textSize="24sp"/>
 
@@ -65,6 +89,7 @@
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="20dp"/>
+
 
         <!-- buttons -->
         <LinearLayout

@@ -62,6 +62,8 @@
 
     <!-- search_requests -->
     <string name="searchRequest">Search Request&#8230;</string>
+    <string name="searchLocation">Search by address</string>
+    <string name="searchKeyword">Search by description</string>
     <string name="searchNearby">Search Nearby</string>
     <string name="refresh">Refresh</string>
     <string name="unavailable">unavailable</string>
@@ -78,5 +80,6 @@
 
     <!-- rider_confirm_driver -->
     <string name="confirm">Confirm Driver</string>
+
 
 </resources>

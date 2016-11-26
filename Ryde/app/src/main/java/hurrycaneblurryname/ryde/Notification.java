@@ -15,15 +15,17 @@ public class Notification {
     String message;
     String toUser;
     String fromUser;
+    String requestString;
 
     /**
      * Instantiates a new Notification.
      *
      * @param fromUser the user
      */
-    public Notification(String fromUser, String message) {
+    public Notification(String fromUser, String requestString) {
         this.fromUser = fromUser;
-        this.message = message;
+        this.requestString = requestString;
+        this.message = "";
     }
 
     public void setToUser(User user) {
@@ -32,6 +34,16 @@ public class Notification {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void compileMessage(String s) {
+        if (s.equals("accept")) {
+            this.message = fromUser + " is interested:\n" + requestString;
+
+        } else if (s.equals("confirm")) {
+            this.message = fromUser + " confirmed your offer:\n" + requestString;
+        }
+
     }
 
     public String getMessage() { return this.message; }

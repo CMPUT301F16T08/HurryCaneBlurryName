@@ -115,7 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private int notif_number = 0;
     private TextView notifText = null;
-    private ArrayList<String> notificationList;
+    private ArrayList<Notification> notificationList;
 
     Marker startMarker;
     Marker endMarker;
@@ -179,10 +179,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onResume() {
         super.onResume();
         user = UserHolder.getInstance().getUser();
+
+        // Enable driver menu
         toggleDriverMenu(user);
 
+        // Notifications
         notificationList = NotificationManager.updateNotifs();
         notif_number = notificationList.size();
+        updateNotifCount(notif_number);
+        if (notif_number > 0) {
+            Toast.makeText(this, "You have new notifications", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -843,16 +850,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void populateNotifItems(final PopupMenu popup) {
         if (notificationList.size() > 0) {
-            for (String s : notificationList) {
-                popup.getMenu().add(s);
+            for (Notification n : notificationList) {
+                MenuItem i = popup.getMenu().add(n.getMessage());
             }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
 
+                    for (Notification n : notificationList) {
+                        if (n.getMessage().equals(item.getTitle())) {
+                            NotificationManager.dismissNotification(n); // Remove notification from server
+                        }
+                    }
                     notificationList.remove(item.getTitle()); //remove notification after clicked (read)
                     updateNotifCount(notificationList.size());
+
+                    Intent offerIntent = new Intent(MapsActivity.this, MyRideRequestsRemake.class);
+                    offerIntent.putExtra("tabpage", 0);
+
+                    startActivity(offerIntent);
                     popup.dismiss();
 
                     return true;
