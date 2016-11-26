@@ -6,6 +6,9 @@ Working:
 		US 01.04.01(cancel requests)
 		US 04.02.01(browse and search for open requests by keyword)
 		US 04.05.01 (addresses)	As a driver, I should be able to search by address or nearby an address.
+		US 01.06.01(an estimate of a fair fare)
+		US 01.09.01 (car details) As a rider, I should see a description of the driver's vehicle.
+		US 03.04.01 (car details) As a driver, in my profile I can provide details about the vehicle I drive.
 	User:
 		US 03.01.01(user setup)
 		US 03.02.01(edit user profile)
@@ -20,8 +23,6 @@ Working:
 		US 04.01.01(browse and search for open requests by geo-location)	
 
 Nolan:
-	US 01.06.01(an estimate of a fair fare)
-	US 04.03.01 (price search) As a driver, I should be able filter request searches by price per KM and price.
 	Demo video
 
 Christina:
@@ -30,25 +31,21 @@ Christina:
 	
 	
 in Progress:
-
+		
 	New:
-		US 1.09.01 (car details) As a rider, I should see a description of the driver's vehicle.
-		US 03.04.01 (car details) As a driver, in my profile I can provide details about the vehicle I drive.
 		US 04.03.01 (price search) As a driver, I should be able filter request searches by price per KM and price.
 		US 04.04.01 (addresses) As a driver, I should be able to see the addresses of the requests.
 		
-
 	Request:
 
 		US 01.07.01(confirm the completion)
 		US 01.08.01(confirm a driver's acceptance)
-
+		
 	Accepting:
 		US 05.01.01(accept a request I agree with and accept that offered payment upon completion)
 		US 05.02.01(view a list of things I have accepted that are pending, each request with its description, and locations.)
 		US 05.03.01(see if my acceptance was accepted.)
 		
-
 	Offline behavior:
 		US 08.01.01(see requests that I already accepted while offline.)
 		US 08.02.01(see requests that I have made while offline.)
