@@ -60,9 +60,10 @@ public class DriverTabFragment1 extends TabFragment {
         super.onResume();
         user = UserHolder.getInstance().getUser();
         requestList= new ArrayList<>(user.getRequestList());
+        ArrayList<Request> interestRequest = new ArrayList<>();
 
-        ElasticSearchRequestController.GetDriverRequestsTask getMyRequests = new ElasticSearchRequestController.GetDriverRequestsTask();
-        getMyRequests.execute(user.getUsername());
+        ElasticSearchRequestController.GetOpenRequestsGeoTask getMyRequests = new ElasticSearchRequestController.GetOpenRequestsGeoTask();
+        getMyRequests.execute();
         ArrayList newList;
         try {
             newList = getMyRequests.get();
@@ -71,6 +72,19 @@ public class DriverTabFragment1 extends TabFragment {
                 Log.i("newListGet", "Got a new List!!");
                 requestList.clear();
                 requestList.addAll(newList);
+
+
+                for (Request r: requestList){
+                    for (User u: r.getOffers()){
+                        if (u.getUsername().equals(user.getUsername()))
+                        {
+                            interestRequest.add(r);
+                            break;
+                        }
+                    }
+                }
+                requestList.clear();
+                requestList.addAll(interestRequest);
                 user.setRequestList(requestList);
 
                 ElasticSearchRequestController.UpdateUserTask updateUserTask =  new ElasticSearchRequestController.UpdateUserTask();

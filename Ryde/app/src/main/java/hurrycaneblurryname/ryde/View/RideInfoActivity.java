@@ -74,6 +74,8 @@ public class RideInfoActivity extends AppCompatActivity {
                 }
                 RequestUserHolder.getInstance().setUser(request.getDriver());
                 Intent intent = new Intent(RideInfoActivity.this, ProfileInfoActivity.class);
+                String showVehicle = "y";
+                intent.putExtra("SHOW_VEHICLE", showVehicle);
                 startActivity(intent);
             }
         });

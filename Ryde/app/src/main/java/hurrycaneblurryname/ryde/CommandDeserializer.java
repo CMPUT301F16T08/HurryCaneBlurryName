@@ -25,7 +25,7 @@ public class CommandDeserializer implements JsonDeserializer<ArrayList<Command>>
     static {
         map.put("Command", Command.class);
         map.put("AddRequestCommand", AddRequestCommand.class);
-        //TODO Second Command Type
+        map.put("UpdateRequestCommand", UpdateRequestCommand.class);
     }
 
     @Override

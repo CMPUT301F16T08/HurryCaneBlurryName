@@ -20,12 +20,15 @@
 
     <!-- activity_maps -->
     <string name="search">Search</string>
+    <string name="search2">Start Location</string>
+    <string name="search3">End Location</string>
+
 
     <!-- my_ride_requests -->
     <string name="open_list_request">Open Request List</string>
     <string name="no_open">No open requests.</string>
-    <string name="offer">Offer</string>
-    <string name="no_offer">No offers.</string>
+    <string name="offer">Ongoings</string>
+    <string name="no_offer">No ongoing requests.</string>
     <string name="closed_request_list">Closed Request List</string>
     <string name="no_closed">No closed requests.</string>
 
@@ -35,6 +38,10 @@
     <!-- profile_info -->
     <string name="call">Call</string>
     <string name="Email">Email</string>
+    <string name="vehicleInfo">Vehicle Info:</string>
+    <string name="year">Year</string>
+    <string name="make">Make</string>
+    <string name="model">Model</string>
 
     <!-- ride_info -->
     <string name="desc">Description:</string>
@@ -58,7 +65,7 @@
     <string name="searchNearby">Search Nearby</string>
     <string name="refresh">Refresh</string>
     <string name="unavailable">unavailable</string>
-    <string name="editTitle">Edit Contact Info:</string>
+    <string name="editTitle">Edit Contact Info</string>
     <string name="title_activity_rider_main">RiderMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

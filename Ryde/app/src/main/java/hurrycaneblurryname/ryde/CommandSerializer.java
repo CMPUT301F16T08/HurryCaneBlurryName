@@ -23,7 +23,7 @@ public class CommandSerializer implements JsonSerializer<ArrayList<Command>> {
     static {
         map.put("Command", Command.class);
         map.put("AddRequestCommand", AddRequestCommand.class);
-        //TODO Second Command Type
+        map.put("UpdateRequestCommand", UpdateRequestCommand.class);
     }
 
     @Override

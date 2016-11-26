@@ -35,9 +35,13 @@ public class SignupActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText emailEditText;
     private EditText phoneEditText;
-    private EditText vehicleEditText;
+    private EditText MakeEditText;
+    private EditText ModelEditText;
+    private EditText YearEditText;
     private Button signupButton;
     private Button cancelButton;
+
+    private RelativeLayout vehicleInfoPanel;
 
     private User newUser;
     int isDriver;
@@ -56,9 +60,13 @@ public class SignupActivity extends AppCompatActivity {
         passwordEditText = (EditText)findViewById(R.id.passwordEditText);
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
-        vehicleEditText = (EditText) findViewById(R.id.vehicleEditText);
         signupButton = (Button)findViewById(R.id.signupButton);
         cancelButton = (Button)findViewById(R.id.cancelButton);
+
+        vehicleInfoPanel = (RelativeLayout)findViewById(R.id.vehicleInfoPanel);
+        MakeEditText = (EditText)findViewById(R.id.vehicleMake);
+        ModelEditText = (EditText)findViewById(R.id.vehicleModel);
+        YearEditText = (EditText)findViewById(R.id.vehicleYear);
 
         isDriver = -1;
 
@@ -86,7 +94,6 @@ public class SignupActivity extends AppCompatActivity {
 
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        p.setMargins(0, 75, 0, 0);
         p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
 
@@ -96,23 +103,18 @@ public class SignupActivity extends AppCompatActivity {
                 if (checked)
                     isDriver=1;
 
-                    p.addRule(RelativeLayout.BELOW, R.id.vehicleEditText);
+                    p.addRule(RelativeLayout.BELOW, R.id.vehicleInfoPanel);
 
                     findViewById(R.id.signUpGroup).setLayoutParams(p);
-
-                    findViewById(R.id.vehicleTextView).setVisibility(View.VISIBLE);
-                    vehicleEditText.setVisibility(View.VISIBLE);
+                    vehicleInfoPanel.setVisibility(View.VISIBLE);
                     break;
             case R.id.radio_no:
                 if (checked)
                     isDriver=0;
-
                     p.addRule(RelativeLayout.BELOW, R.id.radioGroup);
-
                     findViewById(R.id.signUpGroup).setLayoutParams(p);
 
-                    findViewById(R.id.vehicleTextView).setVisibility(View.INVISIBLE);
-                    vehicleEditText.setVisibility(View.INVISIBLE);
+                    vehicleInfoPanel.setVisibility(View.GONE);
                     break;
         }
     }
@@ -138,10 +140,19 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(SignupActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
-        textlength = vehicleEditText.getText().length();
-        if (textlength == 0 && isDriver == 1) {
-            Toast.makeText(SignupActivity.this, "Vehicle description cannot be empty!", Toast.LENGTH_SHORT).show();
-            return;
+        if (isDriver == 1) {
+            if (YearEditText.getText().length() == 0) {
+                Toast.makeText(SignupActivity.this, "Year cannot be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (MakeEditText.getText().length() == 0) {
+                Toast.makeText(SignupActivity.this, "Make cannot be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (ModelEditText.getText().length() == 0) {
+                Toast.makeText(SignupActivity.this, "Model cannot be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         //check if username exists already
@@ -169,6 +180,9 @@ public class SignupActivity extends AppCompatActivity {
             if (isDriver == 1){
                 newUser.setRole("driver");
                 //newUser.setVehicle(vehicleEditText.getText().toString());
+                newUser.setVehicleYear(Integer.parseInt(YearEditText.getText().toString()));
+                newUser.setVehicleMake(MakeEditText.getText().toString());
+                newUser.setVehicleModel(ModelEditText.getText().toString());
             }
             else if(isDriver == 0){
                 newUser.setRole("rider");

@@ -30,6 +30,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -99,7 +101,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private User user;
     public Double distance;
-    ArrayList<LatLng> MarkerPoints;
+    LatLng MarkerPoints[];
+    boolean pointSet[];
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -114,6 +117,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView notifText = null;
     private ArrayList<String> notificationList;
 
+    Marker startMarker;
+    Marker endMarker;
+    Polyline routeLine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +130,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             checkLocationPermission();
         }
         // Initializing
-        MarkerPoints = new ArrayList<>();
+        MarkerPoints = new LatLng[2];
+        pointSet = new boolean[]{false,false};
+        startMarker = null;
+        endMarker = null;
+        routeLine = null;
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -225,6 +236,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         hideConfirmButton();
 
+        //Move default GPS button location
+        //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
+        //Date Accessed: 11/10/2016
+        //Author: Sahil Jain
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
+                findFragmentById(R.id.map);
+        View mapView = mapFragment.getView();
+
+        if (mapView != null &&
+                mapView.findViewById(1) != null) {
+
+            //Get view
+            View view = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    view.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(2, 0, 40, 40);
+
+        }
+
         // Setting onclick event listener for the map
         mMap.setOnMapClickListener(mapClick = new GoogleMap.OnMapClickListener() {
 
@@ -232,14 +266,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapClick(LatLng point) {
 
                 // Already two locations
-                if (MarkerPoints.size() >= 2) {
-                    MarkerPoints.clear();
+                if (pointSet[0] && pointSet[1]) {
+                    pointSet[0] = false;
+                    pointSet[1] = false;
                     mMap.clear();
                     hideConfirmButton();
                 }
                 else {
-                    // Adding new item to the ArrayList
-                    MarkerPoints.add(point);
 
                     // Creating MarkerOptions
                     MarkerOptions options = new MarkerOptions();
@@ -247,54 +280,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     // Setting the position of the marker
                     options.position(point);
 
-                    /**
-                     * For the start location, the color of marker is GREEN and
-                     * for the end location, the color of marker is RED.
-                     */
-                    if (MarkerPoints.size() == 1) {
+                    // Adding new item to the Array
+                    if(!pointSet[0]){
+                        MarkerPoints[0] = point;
+                        pointSet[0] = true;
+                        //For the start location, the color of marker is GREEN
                         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                         options.title("Start Location");
                         // Add new marker to the Google Map Android API V2
-                    } else if (MarkerPoints.size() == 2) {
+                        startMarker = mMap.addMarker(options);
+                    }
+                    else{
+                        MarkerPoints[1] = point;
+                        pointSet[1] = true;
+                        //for the end location, the color of marker is RED
                         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         options.title("End Location");
+                        // Add new marker to the Google Map Android API V2
+                        endMarker = mMap.addMarker(options);
                     }
 
-                    // Add new marker to the Google Map Android API V2
-                    mMap.addMarker(options);
-
                     // Checks, whether start and end locations are captured
-                    if (MarkerPoints.size() >= 2) {
-                        LatLng origin = MarkerPoints.get(0);
-                        LatLng dest = MarkerPoints.get(1);
-
-                        // Getting URL to the Google Directions API
-                        String url = getUrl(origin, dest);
-                        Log.d("onMapClick", url.toString());
-                        FetchUrl FetchUrl = new FetchUrl();
-
-                        // Start downloading json data from Google Directions API
-                        FetchUrl.execute(url);
-
-                        //move map camera to show both points
-                        //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
-                        //Date Accessed : 11/24/2016
-                        //Author: andr
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        for (LatLng latlng : MarkerPoints) {
-                            builder.include(latlng);
-                        }
-                        LatLngBounds bounds = builder.build();
-                        int padding = 150; // offset from edges of the map in pixels
-                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-                        mMap.animateCamera(cu);
-
-                        showConfirmButton();
+                    if (pointSet[0] && pointSet[1]) {
+                        setRoute();
                     }
                 }
             }
         });
 
+    }
+
+    private void setRoute(){
+        LatLng origin = MarkerPoints[0];
+        LatLng dest = MarkerPoints[1];
+
+        // Getting URL to the Google Directions API
+        String url = getUrl(origin, dest);
+        Log.d("onMapClick", url.toString());
+        FetchUrl FetchUrl = new FetchUrl();
+
+        // Start downloading json data from Google Directions API
+        FetchUrl.execute(url);
+
+        //move map camera to show both points
+        //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
+        //Date Accessed : 11/24/2016
+        //Author: andr
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng latlng : MarkerPoints) {
+            builder.include(latlng);
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 150; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
+
+        showConfirmButton();
     }
 
     private String getUrl(LatLng origin, LatLng dest) {
@@ -425,6 +466,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 Log.d("ParserTask",e.toString());
                 e.printStackTrace();
+                distance = 4.0;
             }
             return routes;
         }
@@ -466,7 +508,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Drawing polyline in the Google Map for the i-th route
                 if (lineOptions != null) {
-                    mMap.addPolyline(lineOptions);
+                    routeLine = mMap.addPolyline(lineOptions);
                 } else {
                     Log.d("onPostExecute", "without Polylines drawn");
                 }
@@ -591,8 +633,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Source: https://www.youtube.com/watch?v=dr0zEmuDuIk
     //Date accessed: 11/10/2016
     //Author: TechAcademy
-    public void onSearch(View view){
-        EditText location_tf = (EditText)findViewById(R.id.text_map_search);
+    public void onSearchStart(View view){
+        // Hide Keyboard
+        View keyboard = this.getCurrentFocus();
+        if (keyboard != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboard.getWindowToken(), 0);
+        }
+
+        EditText location_tf = (EditText)findViewById(R.id.text_map_search_start);
         String location = location_tf.getText().toString();
         List<Address> addressList = null;
 
@@ -613,8 +662,100 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Address address = addressList.get(0);
             LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            MarkerPoints[0] = latlng;
+            pointSet[0] = true;
+            if(!pointSet[1]){
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+
+            // Creating MarkerOptions
+            MarkerOptions options = new MarkerOptions();
+
+            // Setting the position of the marker
+            options.position(latlng);
+
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            options.title("Start Location");
+            // Add new marker to the Google Map Android API V2
+            if(startMarker != null){
+                startMarker.remove();
+                startMarker = null;
+            }
+            startMarker = mMap.addMarker(options);
+
+            // Checks, whether start and end locations are captured
+            if (pointSet[0] && pointSet[1]) {
+                if(routeLine != null){
+                    routeLine.remove();
+                    routeLine = null;
+                }
+                setRoute();
+            }
+        }
+    }
+
+    public void onSearchEnd(View view){
+
+        // Hide Keyboard
+        View keyboard = this.getCurrentFocus();
+        if (keyboard != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboard.getWindowToken(), 0);
+        }
+
+        EditText location_tf = (EditText)findViewById(R.id.text_map_search_end);
+        String location = location_tf.getText().toString();
+        List<Address> addressList = null;
+
+
+        if(location != null || !location.isEmpty()){
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location , 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList.isEmpty()) {
+                return;
+            }
+
+            //Get position
+            Address address = addressList.get(0);
+            LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
+
+            MarkerPoints[1] = latlng;
+            pointSet[1] = true;
+            if(!pointSet[0]) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+
+            // Creating MarkerOptions
+            MarkerOptions options = new MarkerOptions();
+
+            // Setting the position of the marker
+            options.position(latlng);
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            options.title("End Location");
+            // Add new marker to the Google Map Android API V2
+            if(endMarker != null){
+                endMarker.remove();
+                endMarker = null;
+            }
+            endMarker = mMap.addMarker(options);
+
+
+
+            // Checks, whether start and end locations are captured
+            if (pointSet[0] && pointSet[1]) {
+                if(routeLine != null){
+                    routeLine.remove();
+                    routeLine = null;
+                }
+                setRoute();
+            }
         }
     }
 
@@ -623,45 +764,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Button requestButton = (Button) findViewById(R.id.button_map_request);
         requestButton.setVisibility(View.VISIBLE);
-
-        //Move map graphical items out of the way
-
-        //GPS Button
-        moveBottomMapButton(2,0,0,40,1000);
+        mMap.setPadding(0,0,0,120);
 
     }
 
     private void hideConfirmButton(){
         Button requestButton = (Button) findViewById(R.id.button_map_request);
         requestButton.setVisibility(View.INVISIBLE);
+        mMap.setPadding(0,0,0,0);
 
-        //GPS Button
-        moveBottomMapButton(2,0,0,40,40);
-    }
-
-    //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
-    //Date Accessed: 11/10/2016
-    //Author: Sahil Jain
-    private void moveBottomMapButton(int id, int left, int top, int right, int bottom){
-        //Move map graphical buttons to specified location
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
-                findFragmentById(R.id.map);
-        View mapView = mapFragment.getView();
-
-        if (mapView != null &&
-                mapView.findViewById(1) != null) {
-
-            //Get view
-            View view = ((View) mapView.findViewById(1).getParent()).findViewById(id);
-            // and next place it, on bottom right (as Google Maps app)
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
-                    view.getLayoutParams();
-            // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(left, top, right, bottom);
-
-        }
     }
 
     public void onRequestConfirm(View view){
@@ -669,7 +780,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         sendRequest = new Request(user);
         sendRequest.setEstimate(distance);
         try {
-            sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
+            sendRequest.setLocations(MarkerPoints[0], MarkerPoints[1]);
             Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
         } catch (LocationException e) {
             e.printStackTrace();
@@ -688,7 +799,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            MarkerPoints.clear();
+            pointSet[0] = false;
+            pointSet[1] = false;
             mMap.clear();
             hideConfirmButton();
         }
