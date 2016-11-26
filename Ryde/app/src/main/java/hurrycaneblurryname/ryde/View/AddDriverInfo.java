@@ -54,7 +54,7 @@ public class AddDriverInfo extends AppCompatActivity {
                     Toast.makeText(AddDriverInfo.this, "Please enter your vehicle description", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                user.setVehicle(vehicleEditText.getText().toString());
+                //user.setVehicle(vehicleEditText.getText().toString());
                 user.setRole("driver");
                 UserHolder.getInstance().setUser(user);
 

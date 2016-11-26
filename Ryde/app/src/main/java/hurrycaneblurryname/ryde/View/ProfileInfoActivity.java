@@ -26,6 +26,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
     private TextView userTextView;
     private TextView emailTextView;
     private TextView phoneTextView;
+    private TextView carInfoTextView;
+
     private Button callButton;
     private Button emailButton;
 
@@ -42,6 +44,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         userTextView = (TextView)findViewById(R.id.userTexts);
         emailTextView = (TextView)findViewById(R.id.emailTexts);
         phoneTextView = (TextView)findViewById(R.id.phoneTexts);
+        carInfoTextView = (TextView)findViewById(R.id.Info);
 
         callButton = (Button)findViewById(R.id.callButton);
         emailButton = (Button)findViewById(R.id.emailButton);
@@ -78,7 +81,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         userTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
         phoneTextView.setText(user.getPhone());
-
+        carInfoTextView.setText(user.getVehicleYear() + user.getVehicleMake() + user.getVehicleModel());
     }
 
     // Back Navigation Handle

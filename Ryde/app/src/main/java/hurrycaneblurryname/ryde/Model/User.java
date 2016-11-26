@@ -24,7 +24,9 @@ public class User {
     private String role;
     private String cardNumber;
     protected ArrayList<Request> requests;
-    private String vehicle;
+    private String vehicleMake;
+    private String vehicleModel;
+    private int vehicleYear;
 
     /**
      * Instantiates a new User.
@@ -170,6 +172,51 @@ public class User {
         this.requests = requestList;
     }
 
+    /**
+     * Gets vehicle year.
+     *
+     * @return the vehicleYear
+     */
+    public int getVehicleYear(){return vehicleYear;}
+    /**
+     * Gets vehicle Model.
+     *
+     * @return the vehicleModel
+     */
+    public String getVehicleModel(){return vehicleModel;}
+    /**
+     * Gets vehicle Make.
+     *
+     * @return the vehicleMake
+     */
+    public String getVehicleMake(){return vehicleMake;}
+
+    /**
+     * Set user Model.
+     *
+     * @param year the year of the vehicle
+     */
+    public void setVehicleYear(int year){
+        this.vehicleYear = year;
+    }
+    /**
+     * Set user Model.
+     *
+     * @param Model the Model of the vehicle
+     */
+    public void setVehicleModel(String Model){
+        this.vehicleModel = Model;
+    }
+    /**
+     * Set user Model.
+     *
+     * @param Make the Make of the vehicle
+     */
+    public void setVehicleMake(String Make){
+        this.vehicleMake = Make;
+    }
+
+
     @Override
     public String toString() {
         return username;
@@ -187,14 +234,6 @@ public class User {
         }
 
         return sameSame;
-    }
-
-    public void setVehicle(String vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public String getVehicle() {
-        return vehicle;
     }
 }
 

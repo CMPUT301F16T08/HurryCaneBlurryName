@@ -7,30 +7,31 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import hurrycaneblurryname.ryde.DriverPagerAdapter;
 import hurrycaneblurryname.ryde.RiderPagerAdapter;
 import hurrycaneblurryname.ryde.R;
 
-public class MyRideRequestsRemake extends AppCompatActivity {
+public class MyPickupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.requests_tab_main);
 
-        setTitle("My Ride Requests");
+        setTitle("My Pickups");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Opened"));
-        tabLayout.addTab(tabLayout.newTab().setText("Offers"));
+        tabLayout.addTab(tabLayout.newTab().setText("Interested"));
+        tabLayout.addTab(tabLayout.newTab().setText("Ongoing"));
         tabLayout.addTab(tabLayout.newTab().setText("Closed"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final RiderPagerAdapter adapter = new RiderPagerAdapter
+        final DriverPagerAdapter adapter = new DriverPagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
