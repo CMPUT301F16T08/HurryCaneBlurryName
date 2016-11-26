@@ -165,6 +165,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         notificationList = NotificationManager.updateNotifs();
         notif_number = notificationList.size();
+
     }
 
     /**
@@ -720,7 +721,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 popup.show();
             }
         });
-        
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
