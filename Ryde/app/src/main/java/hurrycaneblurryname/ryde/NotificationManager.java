@@ -14,21 +14,23 @@ import hurrycaneblurryname.ryde.Model.UserHolder;
 public class NotificationManager {
 
 
-    public static final void sendAcceptNotification(User toUser) {
+    public static final void sendAcceptNotification(User toUser, String requestString) {
 
-        Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(),"A driver is interested in your request!");
+        Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(), requestString);
         n.setToUser(toUser);
+        n.compileMessage("accept");
 
         ElasticSearchRequestController.AddNotifTask addNotifTask = new ElasticSearchRequestController.AddNotifTask();
         addNotifTask.execute(n);
     }
 
-    public void sendConfirmNotification(User toUser) {
-        Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(), "A rider has accepted your interest!");
+    public static final void sendConfirmNotification(User toUser, String requestString) {
+        Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(), requestString);
         n.setToUser(toUser);
+        n.compileMessage("confirm");
     }
 
-    public static ArrayList<String> updateNotifs() {
+    public static ArrayList<Notification> updateNotifs() {
 
         ElasticSearchRequestController.GetMyNotifsTask getNotifTask = new ElasticSearchRequestController.GetMyNotifsTask();
         getNotifTask.execute(UserHolder.getInstance().getUser().getUsername());
@@ -44,17 +46,13 @@ public class NotificationManager {
             notifStrings.add(n.getMessage());
         }
 
-        // Once notifs received, don't care about it
-        // Delete from ElasticSearch
 
-        ElasticSearchRequestController.DeleteNotifsTask deleteNotifTask = new ElasticSearchRequestController.DeleteNotifsTask();
-        deleteNotifTask.execute(notifsArray.toArray(new Notification[notifsArray.size()]));
-
-        return notifStrings;
+        return notifsArray;
     }
 
     public static void dismissNotification (Notification n) {
-
+        ElasticSearchRequestController.DeleteNotifsTask deleteNotifTask = new ElasticSearchRequestController.DeleteNotifsTask();
+        deleteNotifTask.execute(n);
 
     }
 }

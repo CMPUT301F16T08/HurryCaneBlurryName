@@ -34,6 +34,11 @@ public class MyRideRequestsRemake extends AppCompatActivity {
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        // Navigate from notifications click
+        int page = getIntent().getIntExtra("tabpage", 0);
+        viewPager.setCurrentItem(page);
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

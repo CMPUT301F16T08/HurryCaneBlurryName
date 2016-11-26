@@ -26,12 +26,15 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +65,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -111,7 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private int notif_number = 0;
     private TextView notifText = null;
-    private ArrayList<String> notificationList;
+    private ArrayList<Notification> notificationList;
 
     Marker startMarker;
     Marker endMarker;
@@ -175,10 +179,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onResume() {
         super.onResume();
         user = UserHolder.getInstance().getUser();
+
+        // Enable driver menu
         toggleDriverMenu(user);
 
+        // Notifications
         notificationList = NotificationManager.updateNotifs();
         notif_number = notificationList.size();
+        updateNotifCount(notif_number);
+        if (notif_number > 0) {
+            Toast.makeText(this, "You have new notifications", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**
@@ -831,22 +843,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 popup.show();
             }
         });
-        
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
     private void populateNotifItems(final PopupMenu popup) {
         if (notificationList.size() > 0) {
-            for (String s : notificationList) {
-                popup.getMenu().add(s);
+            for (Notification n : notificationList) {
+                MenuItem i = popup.getMenu().add(n.getMessage());
             }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
 
+                    for (Notification n : notificationList) {
+                        if (n.getMessage().equals(item.getTitle())) {
+                            NotificationManager.dismissNotification(n); // Remove notification from server
+                        }
+                    }
                     notificationList.remove(item.getTitle()); //remove notification after clicked (read)
                     updateNotifCount(notificationList.size());
+
+                    Intent offerIntent = new Intent(MapsActivity.this, MyRideRequestsRemake.class);
+                    offerIntent.putExtra("tabpage", 0);
+
+                    startActivity(offerIntent);
                     popup.dismiss();
 
                     return true;
@@ -949,13 +972,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertDialogBuilder.setNegativeButton("Confirm",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                //TODO Shorten input text if too long
-                try {
-                    sendRequest.setDescription(input.getText().toString());
-                } catch (DescriptionTooLongException e) {
-                    e.printStackTrace();
+                if (input.getText().toString().isEmpty()) {
+                    Toast.makeText(MapsActivity.this, "Please provide a description", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    //TODO Shorten input text if too long
+                    try {
+                        sendRequest.setDescription(input.getText().toString());
+                    } catch (DescriptionTooLongException e) {
+                        e.printStackTrace();
+                    }
+                    setEstimateAlertDialog();
+//                requestConfirmAlertDialog();
                 }
-                setEstimateAlertDialog();
 
             }
         });
@@ -966,11 +995,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void setEstimateAlertDialog(){
         //text dialog to input an optional string description for the ride request
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(" Your offer for this ride.");
+        alertDialogBuilder.setTitle("Set fee offer for the trip:");
+        alertDialogBuilder.setMessage(
+                "Estimated fee: $"+ new DecimalFormat("#0.00").format(sendRequest.getEstimate())+ "\n");
 
-        final EditText input = new EditText(this);
+//        final EditText input = new EditText(this);
         // Specify the type of input expected
+        final  EditText input = new EditText(this);
+        input.setHint(new DecimalFormat("#0.00").format(sendRequest.getEstimate()));
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
+//
         alertDialogBuilder.setView(input);
 
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
@@ -1008,7 +1042,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 "\nFrom: "+Arrays.toString(sendRequest.getFrom())+
                         "\nTo: "+Arrays.toString(sendRequest.getTo()) +
                         "\n\nDescription: "+sendRequest.getDescription() +
-                        "\nEstimate: " + "$" + sendRequest.getEstimate());
+                        "\nFee offer: " + "$" + new DecimalFormat("#0.00").format(sendRequest.getEstimate()));
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
