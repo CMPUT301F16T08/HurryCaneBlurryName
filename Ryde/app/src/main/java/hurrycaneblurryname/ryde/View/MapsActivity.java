@@ -210,6 +210,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         hideConfirmButton();
 
+        //Move default GPS button location
+        //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
+        //Date Accessed: 11/10/2016
+        //Author: Sahil Jain
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
+                findFragmentById(R.id.map);
+        View mapView = mapFragment.getView();
+
+        if (mapView != null &&
+                mapView.findViewById(1) != null) {
+
+            //Get view
+            View view = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    view.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(2, 0, 40, 40);
+
+        }
+
         // Setting onclick event listener for the map
         mMap.setOnMapClickListener(mapClick = new GoogleMap.OnMapClickListener() {
 
@@ -609,45 +632,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Button requestButton = (Button) findViewById(R.id.button_map_request);
         requestButton.setVisibility(View.VISIBLE);
-
-        //Move map graphical items out of the way
-
-        //GPS Button
-        moveBottomMapButton(2,0,0,40,1000);
+        mMap.setPadding(0,0,0,120);
 
     }
 
     private void hideConfirmButton(){
         Button requestButton = (Button) findViewById(R.id.button_map_request);
         requestButton.setVisibility(View.INVISIBLE);
+        mMap.setPadding(0,0,0,0);
 
-        //GPS Button
-        moveBottomMapButton(2,0,0,40,40);
-    }
-
-    //Source: http://stackoverflow.com/questions/14489880/change-position-of-google-maps-apis-my-location-button
-    //Date Accessed: 11/10/2016
-    //Author: Sahil Jain
-    private void moveBottomMapButton(int id, int left, int top, int right, int bottom){
-        //Move map graphical buttons to specified location
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().
-                findFragmentById(R.id.map);
-        View mapView = mapFragment.getView();
-
-        if (mapView != null &&
-                mapView.findViewById(1) != null) {
-
-            //Get view
-            View view = ((View) mapView.findViewById(1).getParent()).findViewById(id);
-            // and next place it, on bottom right (as Google Maps app)
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
-                    view.getLayoutParams();
-            // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(left, top, right, bottom);
-
-        }
     }
 
     public void onRequestConfirm(View view){
