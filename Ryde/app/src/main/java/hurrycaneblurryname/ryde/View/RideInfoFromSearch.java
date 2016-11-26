@@ -13,6 +13,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import hurrycaneblurryname.ryde.Command;
+import hurrycaneblurryname.ryde.CommandManager;
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
@@ -20,6 +22,7 @@ import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.R;
+import hurrycaneblurryname.ryde.UpdateRequestCommand;
 
 public class RideInfoFromSearch extends AppCompatActivity {
 
@@ -85,8 +88,9 @@ public class RideInfoFromSearch extends AppCompatActivity {
 
                 }
 
-                ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
-                updateRequestsTask.execute(request);
+                CommandManager commandManager = CommandManager.getInstance();
+                Command command = new UpdateRequestCommand(request);
+                commandManager.invokeCommand(RideInfoFromSearch.this,command);
                 finish();
             }
         });
