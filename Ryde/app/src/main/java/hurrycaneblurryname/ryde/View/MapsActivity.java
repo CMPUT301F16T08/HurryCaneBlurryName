@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -628,6 +629,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Date accessed: 11/10/2016
     //Author: TechAcademy
     public void onSearchStart(View view){
+        // Hide Keyboard
+        View keyboard = this.getCurrentFocus();
+        if (keyboard != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboard.getWindowToken(), 0);
+        }
+
         EditText location_tf = (EditText)findViewById(R.id.text_map_search_start);
         String location = location_tf.getText().toString();
         List<Address> addressList = null;
@@ -683,6 +691,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void onSearchEnd(View view){
+
+        // Hide Keyboard
+        View keyboard = this.getCurrentFocus();
+        if (keyboard != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboard.getWindowToken(), 0);
+        }
+
         EditText location_tf = (EditText)findViewById(R.id.text_map_search_end);
         String location = location_tf.getText().toString();
         List<Address> addressList = null;
