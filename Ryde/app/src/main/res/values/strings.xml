@@ -20,6 +20,9 @@
 
     <!-- activity_maps -->
     <string name="search">Search</string>
+    <string name="search2">Start Location</string>
+    <string name="search3">End Location</string>
+
 
     <!-- my_ride_requests -->
     <string name="open_list_request">Open Request List</string>
