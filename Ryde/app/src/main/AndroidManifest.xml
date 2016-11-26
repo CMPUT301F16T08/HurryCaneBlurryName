@@ -81,6 +81,12 @@
 
         <activity android:name=".View.RideInfoFromSearch">
         </activity>
+
+        <activity
+            android:name=".View.MyPickupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
     </application>
 
 </manifest>

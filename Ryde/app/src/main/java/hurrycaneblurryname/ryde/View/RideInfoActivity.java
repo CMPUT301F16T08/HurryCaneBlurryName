@@ -196,6 +196,7 @@ public class RideInfoActivity extends AppCompatActivity {
                     ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
                     updateRequestsTask.execute(RequestHolder.getInstance().getRequest());
                     Toast.makeText(RideInfoActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     Toast.makeText(RideInfoActivity.this, "Please wait for Driver to complete!", Toast.LENGTH_SHORT).show();
                 }

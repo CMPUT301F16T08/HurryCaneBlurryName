@@ -725,7 +725,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             search.putExtras(extras);
             startActivity(search);
         } else if (id == R.id.nav_pickup) {
-
+            Intent pickups = new Intent(this, MyPickupActivity.class);
+            startActivity(pickups);
         } else if (id == R.id.nav_driversignup) {
             Intent driverSignup = new Intent(this, AddDriverInfo.class);
             startActivity(driverSignup);

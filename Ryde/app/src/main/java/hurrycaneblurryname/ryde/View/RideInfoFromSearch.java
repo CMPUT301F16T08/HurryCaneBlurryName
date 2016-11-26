@@ -145,6 +145,14 @@ public class RideInfoFromSearch extends AppCompatActivity {
         if (!request.getDriverComplete()) {
             awaitText.setVisibility(View.GONE);
         }
+        else {
+            completeButton.setVisibility(View.GONE);
+        }
+        if (request.getStatus().equals("closed")){
+            completeButton.setVisibility(View.GONE);
+            interestButton.setVisibility(View.GONE);
+            awaitText.setVisibility(View.GONE);
+        }
     }
 
     private void completeAlertDialog() {
