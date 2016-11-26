@@ -60,6 +60,7 @@ public class DriverTabFragment1 extends TabFragment {
         super.onResume();
         user = UserHolder.getInstance().getUser();
         requestList= new ArrayList<>(user.getRequestList());
+        ArrayList<Request> interestRequest = new ArrayList<>();
 
         ElasticSearchRequestController.GetOpenRequestsGeoTask getMyRequests = new ElasticSearchRequestController.GetOpenRequestsGeoTask();
         getMyRequests.execute();
@@ -74,12 +75,16 @@ public class DriverTabFragment1 extends TabFragment {
 
 
                 for (Request r: requestList){
-                    if(!r.getOffers().contains(user)){
-                        requestList.remove(r);
+                    for (User u: r.getOffers()){
+                        if (u.getUsername().equals(user.getUsername()))
+                        {
+                            interestRequest.add(r);
+                            break;
+                        }
                     }
                 }
-
-
+                requestList.clear();
+                requestList.addAll(interestRequest);
                 user.setRequestList(requestList);
 
                 ElasticSearchRequestController.UpdateUserTask updateUserTask =  new ElasticSearchRequestController.UpdateUserTask();
