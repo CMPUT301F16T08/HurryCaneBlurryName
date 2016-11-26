@@ -410,6 +410,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 Log.d("ParserTask",e.toString());
                 e.printStackTrace();
+                distance = 4.0;
             }
             return routes;
         }

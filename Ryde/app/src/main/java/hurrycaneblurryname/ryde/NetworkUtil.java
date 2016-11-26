@@ -6,6 +6,9 @@ import android.net.NetworkInfo;
 
 /**
  * Created by pocrn_000 on 11/25/2016.
+ * Source: http://stackoverflow.com/questions/25678216/android-internet-connectivity-change-listener
+ * Date: 11/25/2016
+ * Author: Cjames
  */
 public class NetworkUtil {
 

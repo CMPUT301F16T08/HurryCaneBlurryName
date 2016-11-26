@@ -9,6 +9,9 @@ import android.util.Log;
 
 /**
  * Created by pocrn_000 on 11/25/2016.
+ * Source: http://stackoverflow.com/questions/25678216/android-internet-connectivity-change-listener
+ * Date: 11/25/2016
+ * Author: Cjames
  */
 public class NetworkStateReceiver extends BroadcastReceiver {
     @Override
