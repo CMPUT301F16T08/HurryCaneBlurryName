@@ -1,7 +1,6 @@
-package hurrycaneblurryname.ryde;
+package hurrycaneblurryname.ryde.View;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,16 +13,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import hurrycaneblurryname.ryde.ElasticSearchRequestController;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
-import hurrycaneblurryname.ryde.View.RideInfoActivity;
+import hurrycaneblurryname.ryde.R;
+import hurrycaneblurryname.ryde.TabFragment;
 
 /**
  * Created by Zone on 2016/11/17.
  */
-public class TabFragment1 extends TabFragment {
+public class RiderTabFragment1 extends TabFragment {
 
     private User user;
     //ListViews

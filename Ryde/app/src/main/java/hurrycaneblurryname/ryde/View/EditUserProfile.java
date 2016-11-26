@@ -22,6 +22,9 @@ public class EditUserProfile extends AppCompatActivity {
     private EditText userEditText;
     private EditText emailEditText;
     private EditText phoneEditText;
+    private EditText MakeEditText;
+    private EditText ModelEditText;
+    private EditText YearEditText;
     private Button finishButton;
     private Button cancelButton;
 
@@ -37,6 +40,18 @@ public class EditUserProfile extends AppCompatActivity {
 
         emailEditText = (EditText)findViewById(R.id.emailEditText);
         phoneEditText = (EditText)findViewById(R.id.phoneEditText);
+
+        //vehicle fields
+        MakeEditText = (EditText)findViewById(R.id.vehicleMake);
+        ModelEditText = (EditText)findViewById(R.id.vehicleModel);
+        YearEditText = (EditText)findViewById(R.id.vehicleYear);
+
+        // get old info
+        //MakeEditText.setText( user.getVehicleModel() );
+        //ModelEditText.setText( user.getVehicleModel() );
+        //YearEditText.setText( user.getVehicleModel() );
+
+
         finishButton = (Button)findViewById(R.id.finishButton);
         cancelButton = (Button)findViewById(R.id.cancelButton);
 
@@ -47,6 +62,9 @@ public class EditUserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 user.setEmail(emailEditText.getText().toString());
                 user.setPhone(phoneEditText.getText().toString());
+                user.setVehicleMake(MakeEditText.getText().toString());
+                user.setVehicleModel( ModelEditText.getText().toString());
+                user.setVehicleYear(Integer.valueOf(YearEditText.getText().toString()));
                 UserHolder.getInstance().setUser(user);
                 // TO-DO
                 // elastic request to update user profile
@@ -72,6 +90,9 @@ public class EditUserProfile extends AppCompatActivity {
         // display current User info on editText
         emailEditText.setText(user.getEmail(), TextView.BufferType.EDITABLE);
         phoneEditText.setText(user.getPhone(), TextView.BufferType.EDITABLE);
+        MakeEditText.setText( user.getVehicleMake(), TextView.BufferType.EDITABLE );
+        ModelEditText.setText( user.getVehicleModel(), TextView.BufferType.EDITABLE );
+        YearEditText.setText( Integer.valueOf(user.getVehicleYear()).toString(), TextView.BufferType.EDITABLE );
 
     }
 

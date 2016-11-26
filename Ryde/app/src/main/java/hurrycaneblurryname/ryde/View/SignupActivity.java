@@ -168,7 +168,7 @@ public class SignupActivity extends AppCompatActivity {
 
             if (isDriver == 1){
                 newUser.setRole("driver");
-                newUser.setVehicle(vehicleEditText.getText().toString());
+                //newUser.setVehicle(vehicleEditText.getText().toString());
             }
             else if(isDriver == 0){
                 newUser.setRole("rider");
