@@ -11,8 +11,8 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <TextView android:id="@+id/userTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,26 +100,56 @@
                 android:onClick="onRadioButtonClicked"/>
         </RadioGroup>
 
-        <TextView android:id="@+id/vehicleTextView"
+        <RelativeLayout
+            android:id="@+id/vehicleInfoPanel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enterVehicle"
             android:layout_below="@+id/radioGroup"
             android:layout_marginTop="20dp"
-            android:textSize="20sp"
-            android:visibility="invisible"/>
+            android:visibility="gone">
+            <TextView
+                android:text="@string/vehicleInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vehicleInfo"
+                android:textSize="20sp" />
 
-        <EditText android:id="@+id/vehicleEditText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/vehicleTextView"
-            android:textSize="20sp"
-            android:visibility="invisible"/>
+            <EditText
+                android:layout_width="200px"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:layout_marginTop="5dp"
+                android:id="@+id/vehicleYear"
+                android:layout_below="@+id/vehicleInfo"
+                android:hint="@string/year" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/vehicleMake"
+                android:hint="@string/make"
+                android:layout_below="@+id/vehicleYear"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/vehicleModel"
+                android:hint="@string/model"
+                android:layout_below="@+id/vehicleMake" />
+
+        </RelativeLayout>
 
         <LinearLayout android:id="@+id/signUpGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radioGroup"
+            android:layout_below="@id/vehicleInfoPanel"
             android:layout_centerInParent="true"
             android:layout_marginTop="25dp">
 

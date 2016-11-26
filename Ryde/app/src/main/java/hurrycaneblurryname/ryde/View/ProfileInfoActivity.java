@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
@@ -28,6 +30,9 @@ public class ProfileInfoActivity extends AppCompatActivity {
     private TextView phoneTextView;
     private TextView carInfoTextView;
 
+    private RelativeLayout carInfoPanel;
+    private String show;
+
     private Button callButton;
     private Button emailButton;
 
@@ -45,6 +50,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         emailTextView = (TextView)findViewById(R.id.emailTexts);
         phoneTextView = (TextView)findViewById(R.id.phoneTexts);
         carInfoTextView = (TextView)findViewById(R.id.Info);
+
+        carInfoPanel = (RelativeLayout)findViewById(R.id.carInfoPanel);
 
         callButton = (Button)findViewById(R.id.callButton);
         emailButton = (Button)findViewById(R.id.emailButton);
@@ -70,6 +77,12 @@ public class ProfileInfoActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent= getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras != null) {
+            show = extras.getString("SHOW_VEHICLE");
+        }
+
     }
 
     protected void onStart() {
@@ -81,7 +94,11 @@ public class ProfileInfoActivity extends AppCompatActivity {
         userTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
         phoneTextView.setText(user.getPhone());
-        carInfoTextView.setText(user.getVehicleYear() + user.getVehicleMake() + user.getVehicleModel());
+        if (show.equals("y")) {
+            carInfoTextView.setText(user.getVehicleYear() + "\n" + user.getVehicleMake() + "\n" + user.getVehicleModel());
+        }else {
+            carInfoPanel.setVisibility(View.GONE);
+        }
     }
 
     // Back Navigation Handle

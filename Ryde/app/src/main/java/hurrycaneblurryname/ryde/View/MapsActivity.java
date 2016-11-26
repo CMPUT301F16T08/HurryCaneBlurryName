@@ -22,12 +22,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -49,6 +51,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -73,6 +76,8 @@ import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
+import hurrycaneblurryname.ryde.Notification;
+import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -92,7 +97,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private User user;
     public Double distance;
-    ArrayList<LatLng> MarkerPoints;
+    LatLng MarkerPoints[];
+    boolean pointSet[];
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -103,6 +109,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
 
+    private int notif_number = 0;
+    private TextView notifText = null;
+    private ArrayList<String> notificationList;
+
+    Marker startMarker;
+    Marker endMarker;
+    Polyline routeLine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +126,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             checkLocationPermission();
         }
         // Initializing
-        MarkerPoints = new ArrayList<>();
+        MarkerPoints = new LatLng[2];
+        pointSet = new boolean[]{false,false};
+        startMarker = null;
+        endMarker = null;
+        routeLine = null;
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -158,6 +176,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         user = UserHolder.getInstance().getUser();
         toggleDriverMenu(user);
+
+        notificationList = NotificationManager.updateNotifs();
+        notif_number = notificationList.size();
     }
 
     /**
@@ -240,14 +261,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapClick(LatLng point) {
 
                 // Already two locations
-                if (MarkerPoints.size() >= 2) {
-                    MarkerPoints.clear();
+                if (pointSet[0] && pointSet[1]) {
+                    pointSet[0] = false;
+                    pointSet[1] = false;
                     mMap.clear();
                     hideConfirmButton();
                 }
                 else {
-                    // Adding new item to the ArrayList
-                    MarkerPoints.add(point);
 
                     // Creating MarkerOptions
                     MarkerOptions options = new MarkerOptions();
@@ -255,54 +275,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     // Setting the position of the marker
                     options.position(point);
 
-                    /**
-                     * For the start location, the color of marker is GREEN and
-                     * for the end location, the color of marker is RED.
-                     */
-                    if (MarkerPoints.size() == 1) {
+                    // Adding new item to the Array
+                    if(!pointSet[0]){
+                        MarkerPoints[0] = point;
+                        pointSet[0] = true;
+                        //For the start location, the color of marker is GREEN
                         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                         options.title("Start Location");
                         // Add new marker to the Google Map Android API V2
-                    } else if (MarkerPoints.size() == 2) {
+                        startMarker = mMap.addMarker(options);
+                    }
+                    else{
+                        MarkerPoints[1] = point;
+                        pointSet[1] = true;
+                        //for the end location, the color of marker is RED
                         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         options.title("End Location");
+                        // Add new marker to the Google Map Android API V2
+                        endMarker = mMap.addMarker(options);
                     }
 
-                    // Add new marker to the Google Map Android API V2
-                    mMap.addMarker(options);
-
                     // Checks, whether start and end locations are captured
-                    if (MarkerPoints.size() >= 2) {
-                        LatLng origin = MarkerPoints.get(0);
-                        LatLng dest = MarkerPoints.get(1);
-
-                        // Getting URL to the Google Directions API
-                        String url = getUrl(origin, dest);
-                        Log.d("onMapClick", url.toString());
-                        FetchUrl FetchUrl = new FetchUrl();
-
-                        // Start downloading json data from Google Directions API
-                        FetchUrl.execute(url);
-
-                        //move map camera to show both points
-                        //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
-                        //Date Accessed : 11/24/2016
-                        //Author: andr
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        for (LatLng latlng : MarkerPoints) {
-                            builder.include(latlng);
-                        }
-                        LatLngBounds bounds = builder.build();
-                        int padding = 150; // offset from edges of the map in pixels
-                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-                        mMap.animateCamera(cu);
-
-                        showConfirmButton();
+                    if (pointSet[0] && pointSet[1]) {
+                        setRoute();
                     }
                 }
             }
         });
 
+    }
+
+    private void setRoute(){
+        LatLng origin = MarkerPoints[0];
+        LatLng dest = MarkerPoints[1];
+
+        // Getting URL to the Google Directions API
+        String url = getUrl(origin, dest);
+        Log.d("onMapClick", url.toString());
+        FetchUrl FetchUrl = new FetchUrl();
+
+        // Start downloading json data from Google Directions API
+        FetchUrl.execute(url);
+
+        //move map camera to show both points
+        //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
+        //Date Accessed : 11/24/2016
+        //Author: andr
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng latlng : MarkerPoints) {
+            builder.include(latlng);
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 150; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
+
+        showConfirmButton();
     }
 
     private String getUrl(LatLng origin, LatLng dest) {
@@ -475,7 +503,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Drawing polyline in the Google Map for the i-th route
                 if (lineOptions != null) {
-                    mMap.addPolyline(lineOptions);
+                    routeLine = mMap.addPolyline(lineOptions);
                 } else {
                     Log.d("onPostExecute", "without Polylines drawn");
                 }
@@ -600,8 +628,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Source: https://www.youtube.com/watch?v=dr0zEmuDuIk
     //Date accessed: 11/10/2016
     //Author: TechAcademy
-    public void onSearch(View view){
-        EditText location_tf = (EditText)findViewById(R.id.text_map_search);
+    public void onSearchStart(View view){
+        // Hide Keyboard
+        View keyboard = this.getCurrentFocus();
+        if (keyboard != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboard.getWindowToken(), 0);
+        }
+
+        EditText location_tf = (EditText)findViewById(R.id.text_map_search_start);
         String location = location_tf.getText().toString();
         List<Address> addressList = null;
 
@@ -622,8 +657,100 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Address address = addressList.get(0);
             LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            MarkerPoints[0] = latlng;
+            pointSet[0] = true;
+            if(!pointSet[1]){
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+
+            // Creating MarkerOptions
+            MarkerOptions options = new MarkerOptions();
+
+            // Setting the position of the marker
+            options.position(latlng);
+
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            options.title("Start Location");
+            // Add new marker to the Google Map Android API V2
+            if(startMarker != null){
+                startMarker.remove();
+                startMarker = null;
+            }
+            startMarker = mMap.addMarker(options);
+
+            // Checks, whether start and end locations are captured
+            if (pointSet[0] && pointSet[1]) {
+                if(routeLine != null){
+                    routeLine.remove();
+                    routeLine = null;
+                }
+                setRoute();
+            }
+        }
+    }
+
+    public void onSearchEnd(View view){
+
+        // Hide Keyboard
+        View keyboard = this.getCurrentFocus();
+        if (keyboard != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboard.getWindowToken(), 0);
+        }
+
+        EditText location_tf = (EditText)findViewById(R.id.text_map_search_end);
+        String location = location_tf.getText().toString();
+        List<Address> addressList = null;
+
+
+        if(location != null || !location.isEmpty()){
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location , 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList.isEmpty()) {
+                return;
+            }
+
+            //Get position
+            Address address = addressList.get(0);
+            LatLng latlng = new LatLng(address.getLatitude() , address.getLongitude());
+
+            MarkerPoints[1] = latlng;
+            pointSet[1] = true;
+            if(!pointSet[0]) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+
+            // Creating MarkerOptions
+            MarkerOptions options = new MarkerOptions();
+
+            // Setting the position of the marker
+            options.position(latlng);
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            options.title("End Location");
+            // Add new marker to the Google Map Android API V2
+            if(endMarker != null){
+                endMarker.remove();
+                endMarker = null;
+            }
+            endMarker = mMap.addMarker(options);
+
+
+
+            // Checks, whether start and end locations are captured
+            if (pointSet[0] && pointSet[1]) {
+                if(routeLine != null){
+                    routeLine.remove();
+                    routeLine = null;
+                }
+                setRoute();
+            }
         }
     }
 
@@ -648,7 +775,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         sendRequest = new Request(user);
         sendRequest.setEstimate(distance);
         try {
-            sendRequest.setLocations(MarkerPoints.get(0), MarkerPoints.get(1));
+            sendRequest.setLocations(MarkerPoints[0], MarkerPoints[1]);
             Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
         } catch (LocationException e) {
             e.printStackTrace();
@@ -667,18 +794,82 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            MarkerPoints.clear();
+            pointSet[0] = false;
+            pointSet[1] = false;
             mMap.clear();
             hideConfirmButton();
         }
     }
+
+    // Notifications in action bar
+    // http://stackoverflow.com/questions/17696486/actionbar-notification-count-icon-badge-like-google-has
+    // Accessed November 25, 2016
+    // Posts by: squirrel, AndrewS, pang
+    // http://www.devexchanges.info/2015/05/building-actionbar-notifications-count.html
+    // Accessed November 25, 2016
+    // Post by Hong Thai
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        final View menu_notif = menu.findItem(R.id.menu_hotlist).getActionView();
+        notifText = (TextView) menu_notif.findViewById(R.id.notiflist_hot);
+        updateNotifCount(notif_number);
+
+        menu_notif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(MapsActivity.this, menu_notif);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.menu_popup, popup.getMenu());
+
+                populateNotifItems(popup);
+                popup.show();
+            }
+        });
+        
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void populateNotifItems(final PopupMenu popup) {
+        if (notificationList.size() > 0) {
+            for (String s : notificationList) {
+                popup.getMenu().add(s);
+            }
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    notificationList.remove(item.getTitle()); //remove notification after clicked (read)
+                    updateNotifCount(notificationList.size());
+                    popup.dismiss();
+
+                    return true;
+                }
+            });
+        }
+    }
+
+
+    private void updateNotifCount(final int new_notif_number) {
+        notif_number = new_notif_number;
+        if (notifText == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (new_notif_number == 0)
+                    notifText.setVisibility(View.INVISIBLE);
+                else {
+                    notifText.setVisibility(View.VISIBLE);
+                    notifText.setText(Integer.toString(new_notif_number));
+                }
+            }
+        });
     }
 
     @Override
@@ -688,14 +879,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if (id == R.id.new_request)
-        {
-            return true;
-        }
+        // TODO implement going to offers screen
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//        else if (id == R.id.new_request)
+//        {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -719,7 +911,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             search.putExtras(extras);
             startActivity(search);
         } else if (id == R.id.nav_pickup) {
-
+            Intent pickups = new Intent(this, MyPickupActivity.class);
+            startActivity(pickups);
         } else if (id == R.id.nav_driversignup) {
             Intent driverSignup = new Intent(this, AddDriverInfo.class);
             startActivity(driverSignup);
