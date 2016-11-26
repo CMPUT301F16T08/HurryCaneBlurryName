@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/new_request"
-        android:orderInCategory="100"
-        android:title="@string/new_request"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+
+    <item android:id="@+id/menu_hotlist"
+        app:actionLayout="@layout/action_bar_notification_icon"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_notif_car"
+        android:title="Hotlist" />
+
 </menu>
+

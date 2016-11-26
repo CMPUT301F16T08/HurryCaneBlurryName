@@ -77,35 +77,40 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
 
+            <!-- car infos -->
+            <RelativeLayout
+                android:id="@+id/carInfoPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneTexts">
+                <TextView
+                    android:text="Car Info:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textSize="24sp"
+                    android:id="@+id/carInfo" />
+
+                <TextView
+                    android:text="@string/unavailable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/carInfo"
+                    android:id="@+id/Info"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="20dp"/>
+            </RelativeLayout>
+
             <!-- buttons -->
-
-            <TextView
-                android:text="Car Info (Year/Make/Model):"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/phoneTexts"
-                android:layout_marginTop="15dp"
-                android:id="@+id/carInfo" />
-
-            <TextView
-                android:text="@string/unavailable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/carInfo"
-                android:layout_alignLeft="@+id/phoneTexts"
-                android:layout_alignStart="@+id/phoneTexts"
-                android:layout_marginTop="29dp"
-                android:id="@+id/Info"
-                android:textSize="18sp" />
-
             <LinearLayout
+                android:id="@+id/buttonPanel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="85dp"
-                android:layout_below="@+id/phoneTexts"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true">
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/carInfoPanel"
+                android:layout_centerInParent="true">
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

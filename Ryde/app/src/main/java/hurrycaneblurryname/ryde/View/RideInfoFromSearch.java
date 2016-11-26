@@ -1,6 +1,8 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
 import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
+import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 import hurrycaneblurryname.ryde.UpdateRequestCommand;
 
@@ -35,6 +38,8 @@ public class RideInfoFromSearch extends AppCompatActivity {
     private TextView riderClickTextView;
 
     private Button interestButton;
+    private Button completeButton;
+    private TextView awaitText;
 
     private Request request;
 
@@ -56,6 +61,8 @@ public class RideInfoFromSearch extends AppCompatActivity {
 
         riderClickTextView = (TextView)findViewById(R.id.riderClickText);
         interestButton = (Button)findViewById(R.id.interestButton);
+        completeButton = (Button)findViewById(R.id.completeButton);
+        awaitText = (TextView)findViewById(R.id.awaitText);
 
         request = RequestHolder.getInstance().getRequest();
 
@@ -70,6 +77,8 @@ public class RideInfoFromSearch extends AppCompatActivity {
             public void onClick(View v) {
                 RequestUserHolder.getInstance().setUser(request.getRider());
                 Intent intent = new Intent(RideInfoFromSearch.this, ProfileInfoActivity.class);
+                String showVehicle = "n";
+                intent.putExtra("SHOW_VEHICLE", showVehicle);
                 startActivity(intent);
             }
         });
@@ -81,17 +90,28 @@ public class RideInfoFromSearch extends AppCompatActivity {
                     request.removeOffer(UserHolder.getInstance().getUser());
                     interestButton.setText(R.string.interestRequest);
 
+
+
                 } else {
                     request.addOffer(UserHolder.getInstance().getUser());
                     Toast.makeText(RideInfoFromSearch.this, "You're interested in this request!", Toast.LENGTH_SHORT).show();
                     interestButton.setText(R.string.interestCancel);
 
-                }
+                    NotificationManager.sendAcceptNotification(request.getRider());
 
+                }
+                
                 CommandManager commandManager = CommandManager.getInstance();
                 Command command = new UpdateRequestCommand(request);
                 commandManager.invokeCommand(RideInfoFromSearch.this,command);
+
                 finish();
+            }
+        });
+
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                completeAlertDialog();
             }
         });
 
@@ -102,6 +122,7 @@ public class RideInfoFromSearch extends AppCompatActivity {
         // set up TextView Contents according to Clicked request
         request = RequestHolder.getInstance().getRequest();
         setTextViewContent(request);
+        buttonTextViewControl(request);
     }
 
     // Back Navigation Handle
@@ -122,7 +143,54 @@ public class RideInfoFromSearch extends AppCompatActivity {
         fromTextView.setText(Arrays.toString(request.getFrom()));
         toTextView.setText(Arrays.toString(request.getTo()));
         statusTextView.setText(request.getStatus());
-        feeTextView.setText(request.getEstimate().toString());
+        feeTextView.setText("$"+request.getEstimate().toString());
 
+    }
+
+    private void buttonTextViewControl(Request request){
+        if (request.getStatus().equals("open")) {
+            completeButton.setVisibility(View.GONE);
+        }
+        if (request.getStatus().equals("accepted")){
+            interestButton.setVisibility(View.GONE);
+        }
+        if (!request.getDriverComplete()) {
+            awaitText.setVisibility(View.GONE);
+        }
+        else {
+            completeButton.setVisibility(View.GONE);
+        }
+        if (request.getStatus().equals("closed")){
+            completeButton.setVisibility(View.GONE);
+            interestButton.setVisibility(View.GONE);
+            awaitText.setVisibility(View.GONE);
+        }
+    }
+
+    private void completeAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Complete a request");
+        alertDialogBuilder.setMessage("Fee: " + request.getEstimate().toString()+"\nMark request as Complete?");
+        alertDialogBuilder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO Auto-generated catch block
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Yes",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // Update request using elasticsearch query
+                RequestHolder.getInstance().getRequest().setDriverComplete();
+                ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
+                updateRequestsTask.execute(RequestHolder.getInstance().getRequest());
+                Toast.makeText(RideInfoFromSearch.this, "Success!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
