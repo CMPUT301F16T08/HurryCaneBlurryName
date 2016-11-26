@@ -24,8 +24,8 @@
     <!-- my_ride_requests -->
     <string name="open_list_request">Open Request List</string>
     <string name="no_open">No open requests.</string>
-    <string name="offer">Offer</string>
-    <string name="no_offer">No offers.</string>
+    <string name="offer">Ongoings</string>
+    <string name="no_offer">No ongoing requests.</string>
     <string name="closed_request_list">Closed Request List</string>
     <string name="no_closed">No closed requests.</string>
 

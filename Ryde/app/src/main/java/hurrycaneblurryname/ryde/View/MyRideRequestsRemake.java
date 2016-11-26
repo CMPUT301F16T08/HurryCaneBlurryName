@@ -25,7 +25,7 @@ public class MyRideRequestsRemake extends AppCompatActivity {
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Opened"));
-        tabLayout.addTab(tabLayout.newTab().setText("Offers"));
+        tabLayout.addTab(tabLayout.newTab().setText("Ongoings"));
         tabLayout.addTab(tabLayout.newTab().setText("Closed"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
