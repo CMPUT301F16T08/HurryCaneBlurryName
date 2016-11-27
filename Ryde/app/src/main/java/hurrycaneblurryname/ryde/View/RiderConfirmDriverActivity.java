@@ -124,11 +124,11 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                 finish();
             }
         });
-        alertDialogBuilder.setNegativeButton("Send",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Yes",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Request request = RequestHolder.getInstance().getRequest();
-                if (request.getDriver().getUsername().equals("")) {
+                if (!request.getDriver().getUsername().equals("")) {
                     Toast.makeText(RiderConfirmDriverActivity.this, "You have confirmed a driver for this request!", Toast.LENGTH_SHORT).show();
 
                     NotificationManager.sendConfirmNotification(user, request.getDescription());
@@ -139,7 +139,6 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                 ArrayList<User> updatedOffers = RequestHolder.getInstance().getRequest().getOffers();
                 updatedOffers.remove(user);
                 RequestHolder.getInstance().getRequest().setOffers(updatedOffers);
-                // TODO
                 // Update request using elasticsearch query
                 ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
                 updateRequestsTask.execute(RequestHolder.getInstance().getRequest());
