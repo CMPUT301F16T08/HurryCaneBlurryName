@@ -60,54 +60,98 @@
             android:id="@+id/searchButton2"
             android:text="@string/search" />
     </LinearLayout>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchRequestBar"
+        android:orientation="horizontal"
+        android:checkedButton="@+id/radio_location"
+        android:id="@+id/searchRadioGroup">
 
-
-        <RadioGroup
-            android:layout_width="match_parent"
+        <RadioButton
+            android:text="by location"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/searchRequestBar"
-            android:orientation="horizontal"
-            android:checkedButton="@+id/radio_location"
-            android:id="@+id/searchRadioGroup">
+            android:id="@+id/radio_location"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"/>
 
-            <RadioButton
-                android:text="by location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radio_location"
-                android:layout_weight="1"
-                android:onClick="onRadioButtonClicked"/>
-
-            <RadioButton
-                android:text="by keyword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radio_keyword"
-                android:layout_weight="1"
-                android:onClick="onRadioButtonClicked"/>
-
-            <RadioButton
-                android:text="by geolocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radio_geo"
-                android:layout_weight="1"
-                android:onClick="onRadioButtonClicked"/>
-        </RadioGroup>
-        <Button
-            android:text="@string/searchNearby"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:text="by keyword"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/searchNearbyButton"
-            android:layout_below="@id/searchRadioGroup"/>
-        <ListView
-            android:id="@+id/SearchResultListView"
-            android:layout_width="match_parent"
+            android:id="@+id/radio_keyword"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:text="by geolocation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/searchNearbyButton"
-            android:scrollbars="vertical"
-            android:clickable="true">
-        </ListView>
+            android:id="@+id/radio_geo"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+    <Button
+        android:text="@string/searchNearby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchNearbyButton"
+        android:layout_below="@id/searchRadioGroup"/>
+
+    <LinearLayout
+        android:id="@+id/FilterBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="7dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAlignment="gravity"
+            android:gravity="center_vertical"
+            android:text="Filter by:"
+            android:textSize="20sp"
+            android:layout_marginRight="20dp"
+            />
+
+        <ToggleButton
+            android:text="ToggleFilterDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toggleDistanceFilter"
+            android:layout_weight="0.51"
+            android:textOff="@string/distance"
+            android:textOn="@string/distance" />
+
+        <ToggleButton
+            android:text="ToggleFilterPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/togglePriceFilter"
+            android:layout_weight="0.51"
+            android:textOff="@string/price"
+            android:textOn="@string/price" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/SearchResultListView"
+        android:layout_width="match_parent"
+        android:layout_below="@id/searchNearbyButton"
+        android:scrollbars="vertical"
+        android:clickable="true"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/FilterBar">
+    </ListView>
+
 
 
 

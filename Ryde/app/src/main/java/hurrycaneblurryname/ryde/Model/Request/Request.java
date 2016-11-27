@@ -26,6 +26,7 @@ public class Request {
     private User rider;
     private User driver;
     private Double estimate;
+    private Double distance;
     private String status;
     private String description;
     private ArrayList<User> offers;
@@ -48,6 +49,7 @@ public class Request {
         this.offers = new ArrayList<User>();
         this.DriverComplete = false;
         this.RiderComplete = false;
+        this.distance = 0.0;
     }
 
     /**
@@ -143,6 +145,24 @@ public class Request {
      */
     public Double getEstimate() {
         return estimate;
+    }
+
+    /**
+     * Sets estimate.
+     *
+     * @param distance the distance between from and to
+     */
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    /**
+     * Gets estimate.
+     *
+     * @return the distance
+     */
+    public Double getDistance() {
+        return this.distance;
     }
 
 
@@ -280,6 +300,27 @@ public class Request {
     @Override
     public String toString() {
         return this.description;
+    }
+
+    /**
+     * compare requests for testing requests.
+     *
+     * @param other the other request
+     */
+    public int compareTo(Request other) {
+        boolean x = (driver == other.getDriver());
+        int i = 0;
+        if (x){i = 1;}
+        if (i != 0) return i;
+
+        x = estimate == other.getEstimate();
+        if (x){i = 1;}
+        if (i != 0) return i;
+
+        x = id == other.getId();
+        if (x){i = 1;}
+
+        return i;
     }
 
     @Override
