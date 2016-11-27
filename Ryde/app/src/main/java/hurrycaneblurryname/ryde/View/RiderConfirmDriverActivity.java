@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,9 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
     private TextView phoneTextView;
     private Button callButton;
     private Button emailButton;
-    private Button confirmButton;// TODO
+    private Button confirmButton;
+
+    private TextView carInfoTextView;
 
     private User user;
 
@@ -49,6 +52,7 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
         userTextView = (TextView)findViewById(R.id.userTexts);
         emailTextView = (TextView)findViewById(R.id.emailTexts);
         phoneTextView = (TextView)findViewById(R.id.phoneTexts);
+        carInfoTextView = (TextView)findViewById(R.id.Info);
 
         callButton = (Button)findViewById(R.id.callButton);
         emailButton = (Button)findViewById(R.id.emailButton);
@@ -93,7 +97,7 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
         userTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
         phoneTextView.setText(user.getPhone());
-
+        carInfoTextView.setText(user.getVehicleYear() + "\n" + user.getVehicleMake() + "\n" + user.getVehicleModel());
     }
 
     // Back Navigation Handle
@@ -120,11 +124,11 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                 finish();
             }
         });
-        alertDialogBuilder.setNegativeButton("Send",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Yes",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Request request = RequestHolder.getInstance().getRequest();
-                if (request.getDriver().getUsername().equals("")) {
+                if (!request.getDriver().getUsername().equals("")) {
                     Toast.makeText(RiderConfirmDriverActivity.this, "You have confirmed a driver for this request!", Toast.LENGTH_SHORT).show();
 
                     NotificationManager.sendConfirmNotification(user, request.getDescription());
@@ -135,7 +139,6 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                 ArrayList<User> updatedOffers = RequestHolder.getInstance().getRequest().getOffers();
                 updatedOffers.remove(user);
                 RequestHolder.getInstance().getRequest().setOffers(updatedOffers);
-                // TODO
                 // Update request using elasticsearch query
                 ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask = new ElasticSearchRequestController.UpdateRequestsTask();
                 updateRequestsTask.execute(RequestHolder.getInstance().getRequest());

@@ -33,5 +33,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:9.2.1'
     compile 'com.google.android.gms:play-services-location:9.2.1'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.jayway.android.robotium:robotium-solo:5.6.3'
     compile 'com.edmodo:rangebar:1.0.0'
 }
