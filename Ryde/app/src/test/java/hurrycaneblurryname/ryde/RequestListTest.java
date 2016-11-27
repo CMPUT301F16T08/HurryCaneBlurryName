@@ -26,12 +26,17 @@ public class RequestListTest extends TestCase{
      * </p>
      */
     public void testAddRequest(){
+
         RequestList requests = new RequestList();
         User user = new User("user");
         Request request = new Request(user);
         requests.addRequest(request);
 
-        assertTrue("Test Request Not Contained!" , requests.contains(request));
+        //rtEquals(requests.getRequest(0),request);
+        int z = requests.getRequest(0).compareTo(request);
+        boolean x = false;
+        if (z == 1){x = true;}
+        assertTrue("Test Request Not Contained!" , x);
     }
 
     /**

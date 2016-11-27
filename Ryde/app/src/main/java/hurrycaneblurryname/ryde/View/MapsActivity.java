@@ -70,6 +70,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.lang.Math;
 
 import hurrycaneblurryname.ryde.AddRequestCommand;
 import hurrycaneblurryname.ryde.Command;
@@ -466,7 +467,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Starts parsing data
                 routes = parser.parse(jObject);
                 System.out.println("Distance Sum : " + parser.getDistance(jObject));
-                Double x = parser.getDistance(jObject)/1000.0;
+                Double x = parser.getDistance(jObject)/1.0;
                 System.out.println(x);
                 distance = x+4.0;
                 //sendRequest.setEstimate(x);
@@ -476,7 +477,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 Log.d("ParserTask",e.toString());
                 e.printStackTrace();
-                distance = 4.0;
+                //MarkerPoints[0], MarkerPoints[1]
+                distance =  Math.sqrt(Math.pow(MarkerPoints[0].latitude+MarkerPoints[1].latitude,2.0)
+                        + Math.pow(MarkerPoints[0].longitude+MarkerPoints[1].longitude,2.0));
             }
             return routes;
         }
@@ -788,7 +791,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestConfirm(View view){
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
-        sendRequest.setEstimate(distance);
+        sendRequest.setEstimate(4 + distance/1000.0);
+        sendRequest.setDistance(distance);
         try {
             sendRequest.setLocations(MarkerPoints[0], MarkerPoints[1]);
             Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
@@ -1021,6 +1025,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 //TODO Shorten input text if too long
+                //Context context = this;
+
                 try {
                     double x = Double.valueOf(input.getText().toString());
                     sendRequest.setEstimate(x);

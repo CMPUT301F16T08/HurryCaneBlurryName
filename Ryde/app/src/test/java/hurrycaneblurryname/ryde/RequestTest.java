@@ -1,11 +1,11 @@
 package hurrycaneblurryname.ryde;
-
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import junit.framework.TestCase;
 
+import org.apache.commons.lang3.ObjectUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import hurrycaneblurryname.ryde.Model.Driver;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
@@ -32,6 +32,8 @@ public class RequestTest extends TestCase{
     public void testSetLocations(){
         LatLng from = new LatLng(-53.8921983, 152.1984271);
         LatLng to = new LatLng(-54.0, 153.130491);
+        double[] From = {-53.8921983, 152.1984271};
+        double[] To = {-54.0, 153.130491};
         User user = new User("user");
         Request request = new Request(user);
         try{
@@ -40,9 +42,19 @@ public class RequestTest extends TestCase{
         catch(LocationException e){
             assertTrue("LocationException Thrown!" , false);
         }
+        double[] x = request.getFrom();
 
-        assertTrue("From Location Not Set!" , request.getFrom().equals(from));
-        assertTrue("To Location Not Set!" , request.getTo().equals(to));
+        //all stages of conversion is equal
+        assertEquals(from.latitude,From[0]);
+        assertEquals(from.longitude,From[1]);
+        assertEquals(to.latitude,To[0]);
+        assertEquals(to.longitude,To[1]);
+        assertEquals(to.latitude,request.getTo()[1]);
+        assertEquals(to.longitude,request.getTo()[0]);
+        assertEquals(from.latitude,request.getFrom()[1]);
+        assertEquals(from.longitude,request.getFrom()[0]);
+        //assertTrue("From Location Not Set!" , Arrays.equals(request.getFrom(),From));
+        //assertTrue("To Location Not Set!" , Arrays.equals(request.getTo(),To));
     }
 
     /**
@@ -59,7 +71,7 @@ public class RequestTest extends TestCase{
         Request request = new Request(user);
         request.setEstimate(50.00);
 
-        assertTrue("Estimate Not Set!" , request.getEstimate().equals("50.00"));
+        assertTrue("Estimate Not Set!" , request.getEstimate().equals(50.00));
     }
 
     /**
@@ -77,11 +89,11 @@ public class RequestTest extends TestCase{
 
         assertFalse("hasDriver Not Working!" , request.hasDriver());
 
-        Driver driver = new Driver("");
+        Driver driver = new Driver("mark");
         request.setDriver(driver);
 
         assertTrue("hasDriver Not Working!" , request.hasDriver());
-        assertTrue("Driver Does Not Match!" , request.getDriver().equals(driver));
+        assertEquals("mark",request.getDriver().getUsername());
     }
 
     /**
@@ -126,5 +138,18 @@ public class RequestTest extends TestCase{
         }
         assertFalse("Keyword Search Broken!" , !request.hasKeyword("emergency"));
         assertTrue("Description Setter Broken!" , request.hasKeyword("eMerGency"));
+    }
+
+
+    public void testOffer(){
+        User user = new User("test");
+        User user2 = new User("test");
+        Request request = new Request(user);
+        user.addRequest(request);
+        request.addOffer(user2);
+        ArrayList<User> tester = new ArrayList<User>();
+        tester.add(user2);
+
+        //assertEquals(request.getOffers(),tester);
     }
 }
