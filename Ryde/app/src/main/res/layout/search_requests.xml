@@ -10,60 +10,39 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".View.SearchRequestsActivity">
 
-
-    <LinearLayout
-        android:id="@+id/searchRequestBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
         <EditText android:id="@+id/SearchEditText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:hint="@string/searchLocation"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_weight="1.02"/>
-
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/searchButton"
-            android:text="@string/search" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/searchRequestBar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@id/searchRequestBar"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        android:visibility="invisible">
+            android:layout_toLeftOf="@+id/searchButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <EditText android:id="@+id/SearchEditText2"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_below="@id/SearchEditText"
             android:hint="@string/searchRequest"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_weight="1.02"/>
+            android:visibility="invisible"
+            android:layout_toLeftOf="@+id/searchButton"
+            android:layout_toStartOf="@+id/searchButton" />
 
         <Button
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:id="@+id/searchButton2"
+            android:layout_alignParentRight="true"
+            android:layout_weight="0.20"
+            android:id="@+id/searchButton"
             android:text="@string/search" />
-    </LinearLayout>
+
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/searchRequestBar"
+        android:layout_below="@id/SearchEditText"
         android:orientation="horizontal"
         android:checkedButton="@+id/radio_location"
         android:id="@+id/searchRadioGroup">

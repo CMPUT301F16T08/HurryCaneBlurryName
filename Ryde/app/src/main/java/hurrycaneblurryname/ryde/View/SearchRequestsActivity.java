@@ -57,7 +57,6 @@ public class SearchRequestsActivity extends AppCompatActivity {
     private RadioGroup searchGroup;
     private EditText searchEditText;
     private EditText searchEditText2;
-    private LinearLayout searchBar2;
 
     private ListView searchView;
     private ArrayAdapter<Request> searchViewAdapter;
@@ -83,7 +82,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        searchBar2 = (LinearLayout) findViewById(R.id.searchRequestBar2);
+//        searchBlock = (RelativeLayout) findViewById(R.id.searchRequestBlock);
         searchResult = new ArrayList<>();
 
         searchEditText = (EditText) findViewById(R.id.SearchEditText);
@@ -113,6 +112,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
                   searchResult.clear();
                   distanceToggle.setChecked(false);
                   priceToggle.setChecked(false);
+                  priceFilterApplied = distanceFilterApplied = false;
 
                   String[] searchText = new String[2];
 
@@ -280,6 +280,11 @@ public class SearchRequestsActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Change of search mode when a radio button is clicked
+     * @param view
+     */
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
@@ -293,6 +298,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
         searchResult.clear();
         distanceToggle.setChecked(false);
         priceToggle.setChecked(false);
+        priceFilterApplied = distanceFilterApplied = false;
 
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -300,31 +306,32 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
 
         // Check which radio button was clicked
+        // Readjust layout based on search mode
         switch(view.getId()) {
             case R.id.radio_location:
                 if (checked) {
-                    p.addRule(RelativeLayout.BELOW, R.id.searchRequestBar);
+                    p.addRule(RelativeLayout.BELOW, R.id.SearchEditText);
                     findViewById(R.id.searchRadioGroup).setLayoutParams(p);
 
-                    searchBar2.setVisibility(View.INVISIBLE);
+                    searchEditText2.setVisibility(View.INVISIBLE);
                     searchEditText.setHint(R.string.searchLocation);
                 }
                 break;
             case R.id.radio_keyword:
                 if (checked) {
-                    p.addRule(RelativeLayout.BELOW, R.id.searchRequestBar);
+                    p.addRule(RelativeLayout.BELOW, R.id.SearchEditText);
                     findViewById(R.id.searchRadioGroup).setLayoutParams(p);
 
-                    searchBar2.setVisibility(View.INVISIBLE);
+                    searchEditText2.setVisibility(View.INVISIBLE);
                     searchEditText.setHint(R.string.searchKeyword);
                 }
                 break;
             case R.id.radio_geo:
                 if (checked) {
-                    p.addRule(RelativeLayout.BELOW, R.id.searchRequestBar2);
+                    p.addRule(RelativeLayout.BELOW, R.id.SearchEditText2);
                     findViewById(R.id.searchRadioGroup).setLayoutParams(p);
 
-                    searchBar2.setVisibility(View.VISIBLE);
+                    searchEditText2.setVisibility(View.VISIBLE);
                     searchEditText.setHint(R.string.latitude);
                     searchEditText2.setHint(R.string.longitude);
                 }
@@ -366,6 +373,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
     /**
      * Creates a dialog for getting filter price parameters for user
+     * Filter is only applied when user clicks "filter"
      */
     private void filterPriceParamsDialog() {
         final Dialog filterDialog = new Dialog(SearchRequestsActivity.this);
@@ -423,7 +431,8 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
 
     /**
-     * Creates a dialog for getting filter price parameters for user
+     * Creates a dialog for getting filter price parameters for user.
+     * Filter is not applied until user clicks "filter"
      */
     private void filterPricePerKMParamsDialog() {
         final Dialog filterDialog = new Dialog(SearchRequestsActivity.this);
@@ -479,9 +488,9 @@ public class SearchRequestsActivity extends AppCompatActivity {
     }
 
     /**
-     * Wrapper that helps to find requests based on searchParam.
+     * Wrapper that helps to find requests based on searchParam geolocation
      *
-     * @param searchParam can contain [lon, lat] or can contain description
+     * @param searchParam string array can contain [lat, lon]
      */
     private void searchByGeo(String... searchParam) {
         Log.i("SEARCH", Arrays.toString(searchParam));
@@ -507,6 +516,10 @@ public class SearchRequestsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Wrapper for searching through request descriptions with searchParam[0]
+     * @param searchParam
+     */
     private void searchByKeyword(String... searchParam) {
         ElasticSearchRequestController.GetOpenRequestsDescTask getRequestsTask = new ElasticSearchRequestController.GetOpenRequestsDescTask();
         getRequestsTask.execute(searchParam);
@@ -530,7 +543,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
     }
 
     /**
-     * Search google maps location services (addresses, landmarks, etc.)
+     * Wrapper for searching location using geocoding (addresses, landmarks, etc.)
      * @param searchParam search string
      */
     private void searchByLocation(String... searchParam) {
