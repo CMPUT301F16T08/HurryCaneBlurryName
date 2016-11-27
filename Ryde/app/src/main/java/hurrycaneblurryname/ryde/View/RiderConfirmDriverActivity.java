@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,9 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
     private TextView phoneTextView;
     private Button callButton;
     private Button emailButton;
-    private Button confirmButton;// TODO
+    private Button confirmButton;
+
+    private TextView carInfoTextView;
 
     private User user;
 
@@ -49,6 +52,7 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
         userTextView = (TextView)findViewById(R.id.userTexts);
         emailTextView = (TextView)findViewById(R.id.emailTexts);
         phoneTextView = (TextView)findViewById(R.id.phoneTexts);
+        carInfoTextView = (TextView)findViewById(R.id.Info);
 
         callButton = (Button)findViewById(R.id.callButton);
         emailButton = (Button)findViewById(R.id.emailButton);
@@ -93,7 +97,7 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
         userTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
         phoneTextView.setText(user.getPhone());
-
+        carInfoTextView.setText(user.getVehicleYear() + "\n" + user.getVehicleMake() + "\n" + user.getVehicleModel());
     }
 
     // Back Navigation Handle
