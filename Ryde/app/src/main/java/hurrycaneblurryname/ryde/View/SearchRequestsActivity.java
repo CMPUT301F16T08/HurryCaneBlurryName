@@ -1,10 +1,13 @@
 package hurrycaneblurryname.ryde.View;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.location.Location;
 import android.util.Log;
@@ -13,19 +16,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.edmodo.rangebar.RangeBar;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.common.base.Predicate;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
@@ -55,6 +65,15 @@ public class SearchRequestsActivity extends AppCompatActivity {
     private ArrayList<Request> searchResult;
     private Location mLastLocation;
 
+    private ToggleButton distanceToggle;
+    private ToggleButton priceToggle;
+    private TextView minValueText;
+    private TextView maxValueText;
+    private boolean priceFilterApplied;
+    private boolean distanceFilterApplied;
+
+    private int min = 0;
+    private int max = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +92,18 @@ public class SearchRequestsActivity extends AppCompatActivity {
         searchNearbyButton = (Button)findViewById(R.id.searchNearbyButton);
 
         searchGroup = (RadioGroup)findViewById(R.id.searchRadioGroup);
-
         searchView = (ListView) findViewById(R.id.SearchResultListView);
+
+        distanceToggle = (ToggleButton) findViewById(R.id.toggleDistanceFilter);
+        priceToggle = (ToggleButton) findViewById(R.id.togglePriceFilter);
+        priceFilterApplied = false;
+
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
             mLastLocation = extras.getParcelable("currLocation");
         }
-
-
 
         searchButton.setOnClickListener(new View.OnClickListener() {
               public void onClick(View v) {
@@ -119,7 +140,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
                 if (mLastLocation != null) {
                     String lon = String.valueOf(mLastLocation.getLongitude());
                     String lat = String.valueOf(mLastLocation.getLatitude());
-                    searchRequests(lat, lon);
+                    searchByGeo(lat, lon);
                 } else {
                     Toast.makeText(SearchRequestsActivity.this, "Current location not found", Toast.LENGTH_SHORT).show();
                 }
@@ -134,6 +155,127 @@ public class SearchRequestsActivity extends AppCompatActivity {
                 RequestHolder.getInstance().setRequest(requestSelected);
                 Intent info = new Intent(SearchRequestsActivity.this, RideInfoFromSearch.class);
                 startActivity(info);
+            }
+        });
+
+        distanceToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("TOGGLE", "CLICKED");
+                if(priceFilterApplied) {
+                    priceFilterApplied=false;
+                    priceToggle.setChecked(false);
+                }
+
+                Log.i("FilterTOGGLE", String.valueOf(priceToggle.isChecked()));
+                Log.i("FilterBOOL", String.valueOf(priceFilterApplied));
+
+
+                if (!distanceFilterApplied && distanceToggle.isChecked()) {
+
+                    filterDistanceParamsDialog();
+                    distanceToggle.setChecked(true);
+                    distanceToggle.setSelected(true);
+                    ArrayList<Request> filtered = new ArrayList<Request>();
+
+                    // Set predicate for filtering
+                    // http://guidogarcia.net/blog/2011/10/29/java-different-ways-filter-collection/
+                    // Accessed: November 26
+                    // Post by Guido Garcia
+
+                    Predicate<Request> pred = new Predicate<Request>() {
+                        public boolean apply(Request r) {
+                            // do the filtering
+//                            return (min<r.getEstimate() && r.getEstimate()<max) ;
+                            return true; //TODO implement distance filtering
+                        }
+                    };
+
+                    Comparator<Request> comp = new Comparator<Request>() {
+                        @Override
+                        public int compare(Request r1, Request r2) {
+//                            return r1.getEstimate().compareTo(r2.getEstimate());
+                            return 0; // RODO implement distance sorting
+                        }
+                    };
+
+                    filtered =  filterAndSortList(pred, comp);
+
+                    searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, filtered);
+                    searchView.setAdapter(searchViewAdapter);
+
+                } else if (distanceFilterApplied && !distanceToggle.isChecked()) {
+                    distanceToggle.setChecked(false);
+                    distanceFilterApplied = false;
+
+                    // The toggle is disabled
+                    // Set the view back to al the results
+                    searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
+                    searchView.setAdapter(searchViewAdapter);
+                } else {
+                    distanceFilterApplied = false;
+                    distanceToggle.setChecked(false);
+                }
+            }
+        });
+
+        priceToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("TOGGLE", "CLICKED");
+                if(distanceFilterApplied) {
+                    distanceFilterApplied=false;
+                    distanceToggle.setChecked(false);
+                }
+
+                Log.i("FilterTOGGLE", String.valueOf(priceToggle.isChecked()));
+                Log.i("FilterBOOL", String.valueOf(priceFilterApplied));
+
+
+                if (!priceFilterApplied && priceToggle.isChecked()) {
+
+                    filterPriceParamsDialog();
+                    priceToggle.setChecked(true);
+                    priceToggle.setSelected(true);
+                    ArrayList<Request> filtered = new ArrayList<Request>(searchResult);
+
+                    // Set predicate for filtering
+                    // http://guidogarcia.net/blog/2011/10/29/java-different-ways-filter-collection/
+                    // Accessed: November 26
+                    // Post by Guido Garcia
+
+                    Predicate<Request> pred = new Predicate<Request>() {
+                        public boolean apply(Request r) {
+                            // do the filtering
+                            return (min<r.getEstimate() && r.getEstimate()<max) ;
+                        }
+                    };
+
+                    Comparator<Request> comp = new Comparator<Request>() {
+                        @Override
+                        public int compare(Request r1, Request r2) {
+                            return r1.getEstimate().compareTo(r2.getEstimate());
+                        }
+                    };
+
+                   filtered =  filterAndSortList(pred, comp);
+
+                    searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, filtered);
+                    searchView.setAdapter(searchViewAdapter);
+
+                } else if (priceFilterApplied && !priceToggle.isChecked()) {
+                    priceToggle.setChecked(false);
+                    priceFilterApplied = false;
+
+                    // The toggle is disabled
+                    // Set the view back to al the results
+                    searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, searchResult);
+                    searchView.setAdapter(searchViewAdapter);
+                } else {
+                    priceFilterApplied = false;
+                    priceToggle.setChecked(false);
+                }
+
             }
         });
     }
@@ -200,13 +342,124 @@ public class SearchRequestsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    /**
-     * Execute search for open requests
-     * @param searchParam
-     */
-    private void searchRequests(String... searchParam) {
 
-        String[] searchText =  searchEditText.getText().toString().split(",");
+    /**
+     * Filter and sort based on predicate and comparator
+     * @param predicate filter criteria
+     * @param comparator sort criteria
+     * @return filtered and sorted list
+     */
+
+    private ArrayList<Request> filterAndSortList (Predicate<Request> predicate, Comparator<Request> comparator) {
+        // Filter the search results
+        ArrayList<Request> filterList = new ArrayList<>();
+        for (Request r : searchResult) {
+            if (predicate.apply(r)) {
+                filterList.add(r);
+            }
+        }
+        Collections.sort(filterList, comparator);
+        return filterList;
+    }
+
+    /**
+     * Creates a dialog for getting filter price parameters for user
+     */
+    private void filterPriceParamsDialog() {
+        final Dialog filterDialog = new Dialog(SearchRequestsActivity.this);
+        LayoutInflater inflater = (LayoutInflater)SearchRequestsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.filter_dialog, (ViewGroup)findViewById(R.id.filter_dialog_root_element));
+        filterDialog.setContentView(layout);
+
+        min = 0; max = 1000;
+        minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
+        minValueText.setText("$"+String.valueOf(min).toString()+".00");
+        maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
+        maxValueText.setText("$"+String.valueOf(max)+".00");
+
+        Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
+        RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
+
+        filterDialog.show();
+
+        filterDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                priceFilterApplied=false;
+                priceToggle.setChecked(false);
+                filterDialog.dismiss();
+            }
+        });
+
+        dialogSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
+                minValueText.setText("$"+String.valueOf(leftThumbIndex)+".00");
+                maxValueText.setText("$"+String.valueOf(rightThumbIndex)+".00");
+                min = leftThumbIndex;
+                max = rightThumbIndex;
+
+            }
+        });
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                priceFilterApplied = true;
+                filterDialog.dismiss();
+            }
+        });
+    }
+
+
+    /**
+     * Creates a dialog for getting filter price parameters for user
+     */
+    private void filterDistanceParamsDialog() {
+        final Dialog filterDialog = new Dialog(SearchRequestsActivity.this);
+        LayoutInflater inflater = (LayoutInflater)SearchRequestsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.filter_dialog, (ViewGroup)findViewById(R.id.filter_dialog_root_element));
+        filterDialog.setContentView(layout);
+
+        min = 0; max = 100;
+        minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
+        minValueText.setText(String.valueOf(min)+" km");
+        maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
+        maxValueText.setText(String.valueOf(max)+" km");
+
+        Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
+        RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
+        dialogSeekBar.setTickCount(100);
+
+        filterDialog.show();
+
+        filterDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                distanceFilterApplied=false;
+                distanceToggle.setChecked(false);
+                filterDialog.dismiss();
+            }
+        });
+
+        dialogSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
+                Log.i("LeftIndex", Integer.toString(leftThumbIndex));
+                minValueText.setText(String.valueOf(leftThumbIndex)+"km");
+                min = leftThumbIndex;
+                maxValueText.setText(String.valueOf(rightThumbIndex)+"km");
+                max = rightThumbIndex;
+            }
+        });
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                distanceFilterApplied = true;
+                filterDialog.dismiss();
+            }
+        });
     }
 
     /**

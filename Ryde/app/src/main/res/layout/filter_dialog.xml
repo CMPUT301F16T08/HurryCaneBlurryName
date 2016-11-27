@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/filter_dialog_root_element">
+
+    <com.edmodo.rangebar.RangeBar
+        android:id="@+id/filter_dialog_rangebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:tickCount="1000"
+        custom:tickHeight="0dp"
+        />
+
+
+        <RelativeLayout
+            android:id="@+id/seek_text_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/filter_dialog_rangebar"
+            android:padding="10dp">
+        <TextView
+            android:id="@+id/minFilterText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="0.00"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/maxFilterText"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="1000.00"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="10dp"/>
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/filter_dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seek_text_bar"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:text="Set Filter">
+        </Button>
+
+
+</RelativeLayout>
