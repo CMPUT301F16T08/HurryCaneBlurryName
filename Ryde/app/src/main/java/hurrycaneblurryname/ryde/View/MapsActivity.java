@@ -964,7 +964,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                // TODO Auto-generated catch block
+                // TODO Auto-generaFdeted catch block
             }
         });
         alertDialogBuilder.setNegativeButton("Confirm",new DialogInterface.OnClickListener() {
