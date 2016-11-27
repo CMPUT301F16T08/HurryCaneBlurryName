@@ -3,6 +3,7 @@ package hurrycaneblurryname.ryde.View;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -111,6 +111,8 @@ public class SearchRequestsActivity extends AppCompatActivity {
                   int selectedId = searchGroup.getCheckedRadioButtonId();
 
                   searchResult.clear();
+                  distanceToggle.setChecked(false);
+                  priceToggle.setChecked(false);
 
                   String[] searchText = new String[2];
 
@@ -173,7 +175,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
                 if (!distanceFilterApplied && distanceToggle.isChecked()) {
 
-                    filterDistanceParamsDialog();
+                    filterPricePerKMParamsDialog();
                     distanceToggle.setChecked(true);
                     distanceToggle.setSelected(true);
                     ArrayList<Request> filtered = new ArrayList<Request>();
@@ -186,16 +188,19 @@ public class SearchRequestsActivity extends AppCompatActivity {
                     Predicate<Request> pred = new Predicate<Request>() {
                         public boolean apply(Request r) {
                             // do the filtering
-//                            return (min<r.getEstimate() && r.getEstimate()<max) ;
-                            return true; //TODO implement distance filtering
+                            return (min*1000 < r.getDistance() && r.getDistance() < max*1000) ;
+//                            return true; //TODO implement distance filtering
                         }
                     };
 
                     Comparator<Request> comp = new Comparator<Request>() {
                         @Override
                         public int compare(Request r1, Request r2) {
-//                            return r1.getEstimate().compareTo(r2.getEstimate());
-                            return 0; // RODO implement distance sorting
+                            Double ppk1 = r1.getEstimate()/r1.getDistance();
+                            Double ppk2 = r2.getEstimate()/r2.getDistance();
+
+                            return (ppk1).compareTo(ppk2);
+
                         }
                     };
 
@@ -222,15 +227,10 @@ public class SearchRequestsActivity extends AppCompatActivity {
         priceToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("TOGGLE", "CLICKED");
                 if(distanceFilterApplied) {
                     distanceFilterApplied=false;
                     distanceToggle.setChecked(false);
                 }
-
-                Log.i("FilterTOGGLE", String.valueOf(priceToggle.isChecked()));
-                Log.i("FilterBOOL", String.valueOf(priceFilterApplied));
-
 
                 if (!priceFilterApplied && priceToggle.isChecked()) {
 
@@ -291,6 +291,8 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
         searchEditText.getText().clear();
         searchResult.clear();
+        distanceToggle.setChecked(false);
+        priceToggle.setChecked(false);
 
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -323,8 +325,8 @@ public class SearchRequestsActivity extends AppCompatActivity {
                     findViewById(R.id.searchRadioGroup).setLayoutParams(p);
 
                     searchBar2.setVisibility(View.VISIBLE);
-                    searchEditText.setHint(R.string.search2);
-                    searchEditText2.setHint(R.string.search3);
+                    searchEditText.setHint(R.string.latitude);
+                    searchEditText2.setHint(R.string.longitude);
                 }
                 break;
 
@@ -369,13 +371,19 @@ public class SearchRequestsActivity extends AppCompatActivity {
         final Dialog filterDialog = new Dialog(SearchRequestsActivity.this);
         LayoutInflater inflater = (LayoutInflater)SearchRequestsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.filter_dialog, (ViewGroup)findViewById(R.id.filter_dialog_root_element));
+        filterDialog.setTitle("Set price filter:");
         filterDialog.setContentView(layout);
 
+
         min = 0; max = 1000;
+        final Resources res = getResources();
+        String minText = String.format(res.getString(R.string.priceFormat), min);
+        String maxText = String.format(res.getString(R.string.priceFormat), max);
+
         minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
-        minValueText.setText("$"+String.valueOf(min).toString()+".00");
+        minValueText.setText(minText);
         maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
-        maxValueText.setText("$"+String.valueOf(max)+".00");
+        maxValueText.setText(maxText);
 
         Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
         RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
@@ -394,8 +402,10 @@ public class SearchRequestsActivity extends AppCompatActivity {
         dialogSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
-                minValueText.setText("$"+String.valueOf(leftThumbIndex)+".00");
-                maxValueText.setText("$"+String.valueOf(rightThumbIndex)+".00");
+                String minText = String.format(res.getString(R.string.priceFormat), leftThumbIndex+1);
+                String maxText = String.format(res.getString(R.string.priceFormat), rightThumbIndex+1);
+                minValueText.setText(minText);
+                maxValueText.setText(maxText);
                 min = leftThumbIndex;
                 max = rightThumbIndex;
 
@@ -415,17 +425,21 @@ public class SearchRequestsActivity extends AppCompatActivity {
     /**
      * Creates a dialog for getting filter price parameters for user
      */
-    private void filterDistanceParamsDialog() {
+    private void filterPricePerKMParamsDialog() {
         final Dialog filterDialog = new Dialog(SearchRequestsActivity.this);
         LayoutInflater inflater = (LayoutInflater)SearchRequestsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.filter_dialog, (ViewGroup)findViewById(R.id.filter_dialog_root_element));
+        filterDialog.setTitle("Set price/km filter:");
         filterDialog.setContentView(layout);
 
         min = 0; max = 100;
+        final Resources res = getResources();
+        String minText = String.format(res.getString(R.string.distanceFormat), min);
+        String maxText = String.format(res.getString(R.string.distanceFormat), max);
         minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
-        minValueText.setText(String.valueOf(min)+" km");
+        minValueText.setText(minText);
         maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
-        maxValueText.setText(String.valueOf(max)+" km");
+        maxValueText.setText(maxText);
 
         Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
         RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
@@ -446,9 +460,11 @@ public class SearchRequestsActivity extends AppCompatActivity {
             @Override
             public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
                 Log.i("LeftIndex", Integer.toString(leftThumbIndex));
-                minValueText.setText(String.valueOf(leftThumbIndex)+"km");
+                String minText = String.format(res.getString(R.string.priceFormat), leftThumbIndex+1);
+                String maxText = String.format(res.getString(R.string.priceFormat), rightThumbIndex+1);
+                minValueText.setText(minText);
+                maxValueText.setText(maxText);
                 min = leftThumbIndex;
-                maxValueText.setText(String.valueOf(rightThumbIndex)+"km");
                 max = rightThumbIndex;
             }
         });

@@ -126,8 +126,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/toggleDistanceFilter"
             android:layout_weight="0.51"
-            android:textOff="Distance"
-            android:textOn="Distance" />
+            android:textOff="@string/distance"
+            android:textOn="@string/distance" />
 
         <ToggleButton
             android:text="ToggleFilterPrice"
@@ -137,8 +137,8 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/togglePriceFilter"
             android:layout_weight="0.51"
-            android:textOff="Price"
-            android:textOn="Price" />
+            android:textOff="@string/price"
+            android:textOn="@string/price" />
 
     </LinearLayout>
 
