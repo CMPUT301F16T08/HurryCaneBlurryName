@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,10 @@ public class AddDriverInfo extends AppCompatActivity {
     private Button cancelButton;
 
     private User user;
+    private RelativeLayout vehicleInfo;
+    private EditText MakeEditText;
+    private EditText ModelEditText;
+    private EditText YearEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,11 @@ public class AddDriverInfo extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        vehicleEditText = (EditText)findViewById(R.id.vehicleEditText);
+        //vehicle fields
+        MakeEditText = (EditText)findViewById(R.id.vehicleMake);
+        ModelEditText = (EditText)findViewById(R.id.vehicleModel);
+        YearEditText = (EditText)findViewById(R.id.vehicleYear);
+        vehicleInfo = (RelativeLayout)findViewById(R.id.vehicleInfoPanel);
 
         emailEditText = (TextView)findViewById(R.id.userEmailTextView);
         phoneEditText = (TextView)findViewById(R.id.userPhoneTextView);

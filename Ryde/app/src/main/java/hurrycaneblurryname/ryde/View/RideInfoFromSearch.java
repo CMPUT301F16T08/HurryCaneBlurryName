@@ -97,7 +97,7 @@ public class RideInfoFromSearch extends AppCompatActivity {
                     Toast.makeText(RideInfoFromSearch.this, "You're interested in this request!", Toast.LENGTH_SHORT).show();
                     interestButton.setText(R.string.interestCancel);
 
-                    NotificationManager.sendAcceptNotification(request.getRider());
+                    NotificationManager.sendAcceptNotification(request.getRider(), request.getDescription());
 
                 }
                 

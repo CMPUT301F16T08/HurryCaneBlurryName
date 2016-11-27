@@ -51,27 +51,30 @@ public class ElasticSearchRequestController {
 
             ArrayList<Request> requests = new ArrayList<Request>();
             String search_string;
-            // search for first 10 requests with geolocation
-            // Default to 500m
-            // "{"from": 0, "size":10, "filter" : {"geo_distance" : { "distance" : "10km", "location" :  [ -113.49026, 53.54565 ]}}}";
+
+            // {"query" :  { bool : { should : [ { "match" : { "status" : "open" }}] } },"filter" : {"geo_distance" : {"distance" : "10km", "from" : [-113.49026,53.54565] }} };
             if (searchParam.length == 2) {
-                search_string = "{\"from\": 0, \"size\":10, \"filter\" : {\"geo_distance\" : { \"distance\" : \"10km\", \"from\" :  [ "+ searchParam[1] +"," + searchParam[0] +"]}}}";
+                search_string = "{\"query\" :  { bool : { should : [ { \"match\" : { \"status\" : " +
+                        "\"open\" }}] } },\"filter\" : {\"geo_distance\" : {\"distance\" : \"10km\", \"from\" : ["+searchParam[1]+","+searchParam[0]+"] }} }";
             } else {
                 search_string = "";
             }
 
-
-            // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("crequests")   //TODO after geolocation conflict sorted out, change to requests
+                    .addType("requests")   //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
-                    requests.addAll(foundTweets);
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    String currentUser = UserHolder.getInstance().getUser().getUsername();
+                    for(Request r : foundRequests) {
+                        if (!r.getRider().getUsername().equals(currentUser)) {
+                            requests.add(r);
+                        }
+                    }
 
                 }
                 else {
@@ -108,26 +111,28 @@ public class ElasticSearchRequestController {
 
             String search_string;
             if (searchParam[0].isEmpty() ) {
-                return requests;
+                search_string = "";
             } else {
-                search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"description\" : \""+ searchParam[0] +"\" }}}";
+                search_string = "{\"query\" :  { bool : { should : [ { \"match\" : { \"status\" : \"open\" }}, { \"match\" : { \"description\" : \""+searchParam[0]+"\"}}] } }}";
             }
-            Log.i("Debug", search_string);
 
 
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("crequests")
+                    .addType("requests")
                     .build();
 
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     requests = new ArrayList<Request>();
-                    List<Request> foundTweets = result.getSourceAsObjectList(Request.class);
-                    requests.addAll(foundTweets);
-
-
+                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                    String currentUser = UserHolder.getInstance().getUser().getUsername();
+                    for(Request r : foundRequests) {
+                        if (!r.getRider().getUsername().equals(currentUser)) {
+                            requests.add(r);
+                        }
+                    }
                 }
                 else {
                     Log.i("ErrorGetRequest", "The search query failed to find request that matched ID.");
@@ -167,7 +172,7 @@ public class ElasticSearchRequestController {
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("crequests")
+                    .addType("requests")
                     .build();
 
             try {
@@ -216,7 +221,7 @@ public class ElasticSearchRequestController {
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
-                    .addType("crequests") //TODO after geolocation conflict sorted out, change to requests
+                    .addType("requests") //TODO after geolocation conflict sorted out, change to requests
                     .build();
 
             try {
@@ -259,7 +264,7 @@ public class ElasticSearchRequestController {
             verifySettings();
 
             for (Request r : requests) {
-                Index index = new Index.Builder(r).index("f16t08").type("crequests").id(r.getId()).build();
+                Index index = new Index.Builder(r).index("f16t08").type("requests").id(r.getId()).build();
 
                 try {
                     DocumentResult result = client.execute(index);
@@ -297,7 +302,7 @@ public class ElasticSearchRequestController {
             for (Request r : requests) {
                 Delete delete = new Delete.Builder(r.getId())
                         .index("f16t08")
-                        .type("crequests")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {
@@ -335,7 +340,7 @@ public class ElasticSearchRequestController {
             for (Request request: requests) {
                 Index index = new Index.Builder(request)
                         .index("f16t08")
-                        .type("crequests")  //TODO after geolocation conflict sorted out, change to requests
+                        .type("requests")  //TODO after geolocation conflict sorted out, change to requests
                         .build();
 
                 try {

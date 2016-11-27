@@ -19,6 +19,7 @@ import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
 import hurrycaneblurryname.ryde.Model.User;
+import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 
 /**
@@ -122,8 +123,11 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
         alertDialogBuilder.setNegativeButton("Send",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                if (!RequestHolder.getInstance().getRequest().getDriver().getUsername().equals("")) {
+                Request request = RequestHolder.getInstance().getRequest();
+                if (request.getDriver().getUsername().equals("")) {
                     Toast.makeText(RiderConfirmDriverActivity.this, "You have confirmed a driver for this request!", Toast.LENGTH_SHORT).show();
+
+                    NotificationManager.sendConfirmNotification(user, request.getDescription());
                     return;
                 }
                 RequestHolder.getInstance().getRequest().setDriver(user);
