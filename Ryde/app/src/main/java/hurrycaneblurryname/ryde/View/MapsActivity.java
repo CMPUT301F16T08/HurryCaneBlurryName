@@ -70,6 +70,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.lang.Math;
 
 import hurrycaneblurryname.ryde.AddRequestCommand;
 import hurrycaneblurryname.ryde.Command;
@@ -466,7 +467,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Starts parsing data
                 routes = parser.parse(jObject);
                 System.out.println("Distance Sum : " + parser.getDistance(jObject));
-                Double x = parser.getDistance(jObject)/1000.0;
+                Double x = parser.getDistance(jObject)/1.0;
                 System.out.println(x);
                 distance = x+4.0;
                 //sendRequest.setEstimate(x);
@@ -476,7 +477,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 Log.d("ParserTask",e.toString());
                 e.printStackTrace();
-                distance = 4.0;
+                //MarkerPoints[0], MarkerPoints[1]
+                distance =  Math.sqrt(Math.pow(MarkerPoints[0].latitude+MarkerPoints[1].latitude,2.0)
+                        + Math.pow(MarkerPoints[0].longitude+MarkerPoints[1].longitude,2.0));
             }
             return routes;
         }
@@ -788,7 +791,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestConfirm(View view){
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
-        sendRequest.setEstimate(distance);
+        sendRequest.setEstimate(4 + distance/1000.0);
+        sendRequest.setDistance(distance);
         try {
             sendRequest.setLocations(MarkerPoints[0], MarkerPoints[1]);
             Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
@@ -898,25 +902,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        // TODO implement going to offers screen
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//        else if (id == R.id.new_request)
-//        {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -1000,7 +985,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Set fee offer for the trip:");
         alertDialogBuilder.setMessage(
-                "Estimated fee: $"+ new DecimalFormat("#0.00").format(sendRequest.getEstimate())+ "\n");
+                "Estimated distance: "+ distance/1000 +" \n"+
+                        "Estimated fee: $"+ new DecimalFormat("#0.00").format(sendRequest.getEstimate())+ "\n");
 
 //        final EditText input = new EditText(this);
         // Specify the type of input expected
@@ -1021,6 +1007,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 //TODO Shorten input text if too long
+                //Context context = this;
+
                 try {
                     double x = Double.valueOf(input.getText().toString());
                     sendRequest.setEstimate(x);

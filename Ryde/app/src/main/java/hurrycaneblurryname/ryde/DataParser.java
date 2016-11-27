@@ -9,9 +9,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import hurrycaneblurryname.ryde.View.MapsActivity;
 
 public class DataParser {
-
+    public Context context = this.context;
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 
@@ -79,7 +84,8 @@ public class DataParser {
                 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
                     jDistance = ( (JSONObject)jLegs.get(j)).getJSONObject("distance");
-                    distance += (Integer)jDistance.get("value");
+                    distance += (Integer) jDistance.get("value");
+
                 }
             }
 

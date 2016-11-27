@@ -77,6 +77,12 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_my_ride_request_remake">MyRideRequestRemake</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="distanceFormat">%d km</string>
+    <string name="priceFormat">$%1$d</string>
+    <string name="distance">Price/km</string>
+    <string name="price">Price</string>
 
     <!-- rider_confirm_driver -->
     <string name="confirm">Confirm Driver</string>
