@@ -802,7 +802,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
         sendRequest.setEstimate(4 + (distance/1000.0));
-        sendRequest.setDistance(distance);
+        sendRequest.setDistance(distance/1000.0);
         try {
             sendRequest.setLocations(MarkerPoints[0], MarkerPoints[1]);
             Log.i("RequestLatLng", Arrays.toString(sendRequest.getFrom()) + " " + Arrays.toString(sendRequest.getTo()));
