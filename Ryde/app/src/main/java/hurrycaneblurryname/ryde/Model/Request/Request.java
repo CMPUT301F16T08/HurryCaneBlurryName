@@ -65,11 +65,6 @@ public class Request {
         this.to[0] = to.longitude;
         this.to[1] = to.latitude;
 
-        Double x = Math.sqrt(Math.pow(this.from[0]+this.to[0],2.0)
-                + Math.pow(this.from[1]+this.to[1],2.0));
-
-        this.distance = x;
-
         //TODO Determine when to throw location exception
         if(false){
             throw new LocationException();

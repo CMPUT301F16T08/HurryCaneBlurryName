@@ -332,6 +332,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Start downloading json data from Google Directions API
             FetchUrl.execute(url);
         }
+        else{
+            distance = getRoughDistance(MarkerPoints[0], MarkerPoints[1]);
+            System.out.println("Rough Distance:" + distance);
+        }
 
         //move map camera to show both points
         //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
@@ -466,10 +470,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                System.out.println("Distance Sum : " + parser.getDistance(jObject));
-                Double x = parser.getDistance(jObject)/1.0;
-                System.out.println(x);
-                distance = x+4.0;
+                distance = parser.getDistance(jObject)/1.0;
+                System.out.println("Actual Route Distance:" + distance);
+                if(distance.equals(0.0)){
+                    distance = getRoughDistance(MarkerPoints[0], MarkerPoints[1]);
+                    System.out.println("Rough Distance:" + distance);
+                }
                 //sendRequest.setEstimate(x);
                 Log.d("ParserTask","Executing routes");
                 Log.d("ParserTask",routes.toString());
@@ -477,9 +483,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 Log.d("ParserTask",e.toString());
                 e.printStackTrace();
-                //MarkerPoints[0], MarkerPoints[1]
-                distance =  Math.sqrt(Math.pow(MarkerPoints[0].latitude+MarkerPoints[1].latitude,2.0)
-                        + Math.pow(MarkerPoints[0].longitude+MarkerPoints[1].longitude,2.0));
             }
             return routes;
         }
@@ -647,6 +650,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Date accessed: 11/10/2016
     //Author: TechAcademy
     public void onSearchStart(View view){
+        //Don't do anything if offline
+        if(NetworkUtil.getConnectivityStatusString(MapsActivity.this) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED){
+            return;
+        }
         // Hide Keyboard
         View keyboard = this.getCurrentFocus();
         if (keyboard != null) {
@@ -709,7 +716,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void onSearchEnd(View view){
-
+        //Don't do anything if offline
+        if(NetworkUtil.getConnectivityStatusString(MapsActivity.this) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED){
+            return;
+        }
         // Hide Keyboard
         View keyboard = this.getCurrentFocus();
         if (keyboard != null) {
@@ -791,7 +801,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestConfirm(View view){
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
-        sendRequest.setEstimate(4 + distance/1000.0);
+        sendRequest.setEstimate(4 + (distance/1000.0));
         sendRequest.setDistance(distance);
         try {
             sendRequest.setLocations(MarkerPoints[0], MarkerPoints[1]);
@@ -962,6 +972,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(DialogInterface dialog, int id) {
                 if (input.getText().toString().isEmpty()) {
                     Toast.makeText(MapsActivity.this, "Please provide a description", Toast.LENGTH_SHORT).show();
+                    setDescriptionAlertDialog();
                 } else {
 
                     //TODO Shorten input text if too long
@@ -971,7 +982,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         e.printStackTrace();
                     }
                     setEstimateAlertDialog();
-//                requestConfirmAlertDialog();
                 }
 
             }
@@ -1064,6 +1074,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    /**
+     * Get rough distance in meters between two geopoints using Haversine formula
+     * Source: http://stackoverflow.com/questions/15736995/how-can-i-quickly-estimate-the-distance-between-two-latitude-longitude-points
+     * Date Accessed: 11/27/2016
+     * Author: Aaron D
+     * @return double
+     */
+    private double getRoughDistance(LatLng latlng0, LatLng latlng1){
+        double newDistance;
+        double earthRadius = 6371;
+        double lat0 = Math.toRadians(latlng0.latitude);
+        double lat1 = Math.toRadians(latlng1.latitude);
+        double lon0 = Math.toRadians(latlng0.longitude);
+        double lon1 = Math.toRadians(latlng1.longitude);
+        //Haversine Formula
+        double dlon = lon1 - lon0;
+        double dlat = lat1 - lat0;
+        double a = Math.pow(Math.sin(dlat/2),2) + Math.cos(lat0) * Math.cos(lat1) * Math.pow(Math.sin(dlon/2),2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        newDistance = (earthRadius * c)*1000;
+        return newDistance;
     }
 }
 
