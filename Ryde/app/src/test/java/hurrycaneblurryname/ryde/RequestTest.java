@@ -1,6 +1,10 @@
 package hurrycaneblurryname.ryde;
 import com.google.android.gms.maps.model.LatLng;
 import junit.framework.TestCase;
+
+import org.apache.commons.lang3.ObjectUtils;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import hurrycaneblurryname.ryde.Model.Driver;
 import hurrycaneblurryname.ryde.Model.Request.Request;
@@ -39,7 +43,16 @@ public class RequestTest extends TestCase{
             assertTrue("LocationException Thrown!" , false);
         }
         double[] x = request.getFrom();
-        assertEquals(From[0],x[0]);
+
+        //all stages of conversion is equal
+        assertEquals(from.latitude,From[0]);
+        assertEquals(from.longitude,From[1]);
+        assertEquals(to.latitude,To[0]);
+        assertEquals(to.longitude,To[1]);
+        assertEquals(to.latitude,request.getTo()[1]);
+        assertEquals(to.longitude,request.getTo()[0]);
+        assertEquals(from.latitude,request.getFrom()[1]);
+        assertEquals(from.longitude,request.getFrom()[0]);
         //assertTrue("From Location Not Set!" , Arrays.equals(request.getFrom(),From));
         //assertTrue("To Location Not Set!" , Arrays.equals(request.getTo(),To));
     }
@@ -125,5 +138,18 @@ public class RequestTest extends TestCase{
         }
         assertFalse("Keyword Search Broken!" , !request.hasKeyword("emergency"));
         assertTrue("Description Setter Broken!" , request.hasKeyword("eMerGency"));
+    }
+
+
+    public void testOffer(){
+        User user = new User("test");
+        User user2 = new User("test");
+        Request request = new Request(user);
+        user.addRequest(request);
+        request.addOffer(user2);
+        ArrayList<User> tester = new ArrayList<User>();
+        tester.add(user2);
+
+        //assertEquals(request.getOffers(),tester);
     }
 }

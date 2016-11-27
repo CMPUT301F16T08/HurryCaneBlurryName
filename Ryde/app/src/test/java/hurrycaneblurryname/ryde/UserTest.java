@@ -9,7 +9,7 @@ import hurrycaneblurryname.ryde.Model.User;
  * <h1>User Test</h1>
  * Tests User Class
  *
- * @author Blaz Pocrnja
+ * @author Blaz Pocrnja & Nolan Beck
  * @version 1.0
  * @since 10/12/2016
  */
@@ -129,5 +129,18 @@ public class UserTest extends TestCase{
         assertEquals(1995 , user.getVehicleYear());
         assertEquals("Dodge" , user.getVehicleMake());
         assertEquals("Dakota" , user.getVehicleModel());
+    }
+
+    public void testPassword(){
+        User user = new User("teste");
+        user.setPassword("Trump");
+        assertEquals("Trump",user.getPassword());
+    }
+
+    public void testRole(){
+        User user = new User("teste");
+        user.setRole("Driver");
+        assertEquals("Driver",user.getRole());
+
     }
 }

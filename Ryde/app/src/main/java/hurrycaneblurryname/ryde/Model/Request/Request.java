@@ -26,6 +26,7 @@ public class Request {
     private User rider;
     private User driver;
     private Double estimate;
+    private Double distance;
     private String status;
     private String description;
     private ArrayList<User> offers;
@@ -48,6 +49,7 @@ public class Request {
         this.offers = new ArrayList<User>();
         this.DriverComplete = false;
         this.RiderComplete = false;
+        this.distance = 0.0;
     }
 
     /**
@@ -62,6 +64,11 @@ public class Request {
         this.from[1] = from.latitude;
         this.to[0] = to.longitude;
         this.to[1] = to.latitude;
+
+        Double x = Math.sqrt(Math.pow(this.from[0]+this.to[0],2.0)
+                + Math.pow(this.from[1]+this.to[1],2.0));
+
+        this.distance = x;
 
         //TODO Determine when to throw location exception
         if(false){
@@ -143,6 +150,24 @@ public class Request {
      */
     public Double getEstimate() {
         return estimate;
+    }
+
+    /**
+     * Sets estimate.
+     *
+     * @param distance the distance between from and to
+     */
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    /**
+     * Gets estimate.
+     *
+     * @return the distance
+     */
+    public Double getDistance() {
+        return this.distance;
     }
 
 
