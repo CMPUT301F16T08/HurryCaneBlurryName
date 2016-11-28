@@ -64,6 +64,15 @@ public class EditSelfProfileIntentTest extends ActivityInstrumentationTestCase2<
 
         //
         solo.enterText((EditText) solo.getView(R.id.phoneEditText), value);
+        EditText make=(EditText) solo.getText(2);
+        String make_String=String.valueOf(make);
+        if (make_String=="Toyota"){
+            make_String="Ford";
+        }
+        else{make_String="Toyota";}
+        solo.clearEditText(2);
+
+        solo.enterText((EditText) solo.getView(R.id.vehicleMake), make_String);
         solo.clickOnText("Save");
 
         //http://stackoverflow.com/questions/26118480/how-to-open-navigation-drawer-menu-in-robotium-automation-script-in-android/29645959#29645959

@@ -48,13 +48,15 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
 
         //http://stackoverflow.com/questions/6741100/random-numbers-in-java-when-working-with-android
         Random rand=new Random();
-        int n=rand.nextInt(100);
+        int n=rand.nextInt(1000);
         solo.enterText(0, String.valueOf(n));
         /*
         http://stackoverflow.com/questions/10359192/how-to-select-which-button-to-click-on-robotium-for-an-alert-dialog
          */
         solo.clickOnView(solo.getView(android.R.id.button2));
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(android.R.id.button2));
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(android.R.id.button2));
 
         //http://stackoverflow.com/questions/26118480/how-to-open-navigation-drawer-menu-in-robotium-automation-script-in-android/29645959#29645959
@@ -67,9 +69,18 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
         /////////////////
         solo.clickOnText("My Ride Requests");
 
+
         //http://stackoverflow.com/questions/5323487/verify-alertdialog-shown-on-invalid-text-input
         boolean correctInput = solo.searchText(String.valueOf(n));
         assertEquals(true, correctInput);
+
+        solo.clickOnText(String.valueOf(n));
+        solo.clickOnView(solo.getView(R.id.cancelButton));
+        solo.clickOnView(solo.getView(android.R.id.button2));
+        solo.goBack();
+
+        boolean correctInput2 = solo.searchText(String.valueOf(n));
+        assertEquals(true, !correctInput2);
     }
 
     @Override
