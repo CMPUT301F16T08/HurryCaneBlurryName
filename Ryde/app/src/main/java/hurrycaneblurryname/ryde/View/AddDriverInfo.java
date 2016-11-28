@@ -59,13 +59,29 @@ public class AddDriverInfo extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (vehicleEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(AddDriverInfo.this, "Please enter your vehicle description", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
                 //user.setVehicle(vehicleEditText.getText().toString());
                 user.setRole("driver");
                 UserHolder.getInstance().setUser(user);
+
+                    if (YearEditText.getText().length() == 0) {
+                        Toast.makeText(AddDriverInfo.this, "Year cannot be empty!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (MakeEditText.getText().length() == 0) {
+                        Toast.makeText(AddDriverInfo.this, "Make cannot be empty!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (ModelEditText.getText().length() == 0) {
+                        Toast.makeText(AddDriverInfo.this, "Model cannot be empty!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                user.setRole("driver");
+                //newUser.setVehicle(vehicleEditText.getText().toString());
+                user.setVehicleYear(Integer.parseInt(YearEditText.getText().toString()));
+                user.setVehicleMake(MakeEditText.getText().toString());
+                user.setVehicleModel(ModelEditText.getText().toString());
 
 
                 // elastic request to update user profile

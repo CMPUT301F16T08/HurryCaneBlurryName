@@ -113,10 +113,10 @@ public class ElasticSearchRequestController {
             if (searchParam[0].isEmpty() ) {
                 search_string = "";
             } else {
-                search_string = "{\"query\" :  { bool : { should : [ { \"match\" : { \"status\" : \"open\" }}, { \"match\" : { \"description\" : \""+searchParam[0]+"\"}}] } }}";
+                search_string = "{\"query\" :  { bool : { must : [ { \"match\" : { \"status\" : \"open\" }}, { \"match\" : { \"description\" : \""+searchParam[0]+"\"}}] } }}";
             }
 
-
+            Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
                     .addType("requests")
@@ -167,9 +167,9 @@ public class ElasticSearchRequestController {
             ArrayList<Request> requests;;
 
             //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
-            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"driver.username\" : \""+ searchParam[0] +"\" }}}";
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"driver.username\" : \""+ searchParam[0].toLowerCase() +"\" }}}";
 
-            Log.i("Debug", search_string);
+
             Search search = new Search.Builder(search_string)
                     .addIndex("f16t08")
                     .addType("requests")
@@ -216,7 +216,7 @@ public class ElasticSearchRequestController {
             ArrayList<Request> requests;;
 
             //{"size" : 10, "query" : { "match" : { "username" : "username", "status" : "open" }}}
-            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"rider.username\" : \""+ searchParam[0] +"\" }}}";
+            String search_string = "{\"size\" : 10, \"query\" : { \"match\" : { \"rider.username\" : \""+ searchParam[0].toLowerCase() +"\" }}}";
 
             Log.i("Debug", search_string);
             Search search = new Search.Builder(search_string)
@@ -388,11 +388,11 @@ public class ElasticSearchRequestController {
                     "{\n" + "    \"query\": {\n" +
                             "       \"term\" : { \"username\" : \"%s\" }\n" +
                             "    }\n" +
-                            "}", search_parameters[0]);
+                            "}", search_parameters[0].toLowerCase());
 
             //if input is empty, pull all tweets
             if (search_parameters[0].equals("")) {
-                search_string = "";
+                return new User("");
             }
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)

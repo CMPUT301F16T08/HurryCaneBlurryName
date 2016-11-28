@@ -51,6 +51,7 @@
     <string name="to">To: </string>
     <string name="status">Status: </string>
     <string name="est">Fee Estimate: </string>
+    <string name="ppk">Price per km:</string>
     <string name="riderClick">Check to see Rider Profile</string>
     <string name="driverClick">Check to see Driver Profile</string>
     <string name="driversClick">Check to see available Drivers</string>

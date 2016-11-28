@@ -33,6 +33,7 @@ public class RideInfoFromSearch extends AppCompatActivity {
     private TextView toTextView;
     private TextView statusTextView;
     private TextView feeTextView;
+    private TextView ppkTextView;
     private TextView riderClickTextView;
 
     private Button interestButton;
@@ -56,6 +57,7 @@ public class RideInfoFromSearch extends AppCompatActivity {
         toTextView = (TextView)findViewById(R.id.toTexts);
         statusTextView = (TextView)findViewById(R.id.statusTexts);
         feeTextView = (TextView)findViewById(R.id.estTexts);
+        ppkTextView = (TextView)findViewById(R.id.ppkTexts);
 
         riderClickTextView = (TextView)findViewById(R.id.riderClickText);
         interestButton = (Button)findViewById(R.id.interestButton);
@@ -145,6 +147,8 @@ public class RideInfoFromSearch extends AppCompatActivity {
 
         statusTextView.setText(request.getStatus());
         feeTextView.setText(new DecimalFormat("$#0.00").format(request.getEstimate()));
+
+        ppkTextView.setText(new DecimalFormat("$#0.00").format(request.getEstimate()/request.getDistance()));
 
     }
 
