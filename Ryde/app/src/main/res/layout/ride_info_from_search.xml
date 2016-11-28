@@ -14,9 +14,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- MapView inside, show location markup -->
+        <LinearLayout
+            android:id="@+id/rideInfoLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+
+            <!-- MapView inside -->
+
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rideInfoLayout">
 
             <!-- description -->
             <TextView android:id="@+id/descTextView"
@@ -136,6 +154,24 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"/>
 
+            <!-- price/fee -->
+            <TextView android:id="@+id/ppkTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ppk"
+                android:layout_below="@id/estTexts"
+                android:layout_marginTop="20dp"
+                android:textSize="24sp"/>
+
+            <TextView android:id="@+id/ppkTexts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ppkTextView"
+                android:text="@string/unavailable"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"/>
+
             <!-- buttons -->
 
             <Button
@@ -143,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/interestRequest"
                 android:id="@+id/interestButton"
-                android:layout_below="@id/estTexts"
+                android:layout_below="@id/ppkTexts"
                 android:layout_marginTop="20dp"
                 android:layout_centerInParent="true"/>
 

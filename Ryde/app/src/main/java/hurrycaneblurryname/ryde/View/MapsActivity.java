@@ -89,6 +89,11 @@ import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
 
 /**
+ * Our true "Main Activity" for the Ryde application.
+ * Contains a Google Map that is searchable, clickable, and able to track your GPS so you can make
+ * ride requests between any given points. Other activities are accessible through our drawer menu
+ * in the top left of the screen. Notifications pop up in the top right of the screen, to indicate
+ * when a driver is interested in your request, and when a rider accepts your offer to driver them.
  * Sources:
  * http://www.androidtutorialpoint.com/intermediate/google-maps-draw-path-two-points-using-google-directions-google-map-android-api-v2/
  * http://www.androidtutorialpoint.com/intermediate/android-map-app-showing-current-location-android/
@@ -327,6 +332,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Fetches URL to draw Route on the map if online. Otherwise calculate distance by approximation.
+     * Zooms in on the markers.
+     */
     private void setRoute(){
         LatLng origin = MarkerPoints[0];
         LatLng dest = MarkerPoints[1];
@@ -361,6 +370,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         showConfirmButton();
     }
 
+    /**
+     * Creates a google URL from two LatLng objects
+     * @param origin
+     * @param dest
+     * @return URL
+     */
     private String getUrl(LatLng origin, LatLng dest) {
 
         // Origin of route
@@ -654,9 +669,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    //Source: https://www.youtube.com/watch?v=dr0zEmuDuIk
-    //Date accessed: 11/10/2016
-    //Author: TechAcademy
+    /**
+     * Sets start location as specified by the start location searchbar.
+     * Source: https://www.youtube.com/watch?v=dr0zEmuDuIk
+     * Date accessed: 11/10/2016
+     * Author: TechAcademy
+     * @param view
+     */
     public void onSearchStart(View view){
         //Don't do anything if offline
         if(NetworkUtil.getConnectivityStatusString(MapsActivity.this) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED){
@@ -723,6 +742,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Sets start location as specified by the end location searchbar.
+     * Source: https://www.youtube.com/watch?v=dr0zEmuDuIk
+     * Date accessed: 11/10/2016
+     * Author: TechAcademy
+     * @param view
+     */
     public void onSearchEnd(View view){
         //Don't do anything if offline
         if(NetworkUtil.getConnectivityStatusString(MapsActivity.this) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED){
@@ -790,7 +816,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
+    /**
+     * Show the confirm button  move google map icons out of the way
+     */
     private void showConfirmButton(){
 
         Button requestButton = (Button) findViewById(R.id.button_map_request);
@@ -799,6 +827,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Hide the confirm button from view and move google map icons to bottom of screen
+     */
     private void hideConfirmButton(){
         Button requestButton = (Button) findViewById(R.id.button_map_request);
         requestButton.setVisibility(View.INVISIBLE);
@@ -806,6 +837,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Sets the private request object to the specified field indicated by the route selected
+     */
     public void onRequestConfirm(View view){
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
@@ -825,6 +859,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Closes the drawer or clears the map
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -955,9 +992,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    //Source: http://stackoverflow.com/questions/10903754/input-text-dialog-android
-    //Date Accessed: 11/12/2016
-    //Author: Aaron
+    /**
+     * Inputs a large string that can be multiple lines to set as request description
+     * Source: http://stackoverflow.com/questions/10903754/input-text-dialog-android
+     * Date Accessed: 11/12/2016
+     * Author: Aaron
+     */
     private void setDescriptionAlertDialog(){
         //text dialog to input an optional string description for the ride request
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -998,6 +1038,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertDialog.show();
     }
 
+    /**
+     * Gives option to set a new estimate or stay with the default calculated value for a request
+     */
     private void setEstimateAlertDialog(){
         //text dialog to input an optional string description for the ride request
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -1043,6 +1086,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    /**
+     * Sends request to the server
+     */
     private void requestConfirmAlertDialog() {
         // dialog show detail of habit when selected
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

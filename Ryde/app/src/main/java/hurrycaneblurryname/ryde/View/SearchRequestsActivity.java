@@ -179,36 +179,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
                     filterPricePerKMParamsDialog();
                     distanceToggle.setChecked(true);
                     distanceToggle.setSelected(true);
-                    ArrayList<Request> filtered = new ArrayList<Request>();
 
-                    // Set predicate for filtering
-                    // http://guidogarcia.net/blog/2011/10/29/java-different-ways-filter-collection/
-                    // Accessed: November 26
-                    // Post by Guido Garcia
-
-                    Predicate<Request> pred = new Predicate<Request>() {
-                        public boolean apply(Request r) {
-                            // do the filtering
-                            return (min*1000 < r.getDistance() && r.getDistance() < max*1000) ;
-//                            return true; //TODO implement distance filtering
-                        }
-                    };
-
-                    Comparator<Request> comp = new Comparator<Request>() {
-                        @Override
-                        public int compare(Request r1, Request r2) {
-                            Double ppk1 = r1.getEstimate()/r1.getDistance();
-                            Double ppk2 = r2.getEstimate()/r2.getDistance();
-
-                            return (ppk1).compareTo(ppk2);
-
-                        }
-                    };
-
-                    filtered =  filterAndSortList(pred, comp);
-
-                    searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, filtered);
-                    searchView.setAdapter(searchViewAdapter);
 
                 } else if (distanceFilterApplied && !distanceToggle.isChecked()) {
                     distanceToggle.setChecked(false);
@@ -238,31 +209,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
                     filterPriceParamsDialog();
                     priceToggle.setChecked(true);
                     priceToggle.setSelected(true);
-                    ArrayList<Request> filtered = new ArrayList<Request>(searchResult);
 
-                    // Set predicate for filtering
-                    // http://guidogarcia.net/blog/2011/10/29/java-different-ways-filter-collection/
-                    // Accessed: November 26
-                    // Post by Guido Garcia
-
-                    Predicate<Request> pred = new Predicate<Request>() {
-                        public boolean apply(Request r) {
-                            // do the filtering
-                            return (min<r.getEstimate() && r.getEstimate()<max) ;
-                        }
-                    };
-
-                    Comparator<Request> comp = new Comparator<Request>() {
-                        @Override
-                        public int compare(Request r1, Request r2) {
-                            return r1.getEstimate().compareTo(r2.getEstimate());
-                        }
-                    };
-
-                   filtered =  filterAndSortList(pred, comp);
-
-                    searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, filtered);
-                    searchView.setAdapter(searchViewAdapter);
 
                 } else if (priceFilterApplied && !priceToggle.isChecked()) {
                     priceToggle.setChecked(false);
@@ -384,14 +331,14 @@ public class SearchRequestsActivity extends AppCompatActivity {
         filterDialog.setContentView(layout);
 
 
-        min = 0; max = 1000;
+        min = 0; max = 100;
         final double limit = max;
         final int ticks = 1000;
 
         minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
         minValueText.setText(new DecimalFormat("$#0.00").format(min));
         maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
-        maxValueText.setText(new DecimalFormat("$#0.00").format(max));
+        maxValueText.setText("No max");
 
         Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
         RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
@@ -413,8 +360,12 @@ public class SearchRequestsActivity extends AppCompatActivity {
             public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
                 minValueText.setText(new DecimalFormat("$#0.00").format(leftThumbIndex/(ticks/limit)));
                 maxValueText.setText(new DecimalFormat("$#0.00").format((rightThumbIndex+1)/(ticks/limit)));
+                if (rightThumbIndex+1 == limit) {
+                    max = 99999;    // set no limit!
+                } else {
+                    max = rightThumbIndex/(ticks/max);
+                }
                 min = (leftThumbIndex+1)/(ticks/max);
-                max = rightThumbIndex/(ticks/max);
             }
         });
 
@@ -422,6 +373,32 @@ public class SearchRequestsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 priceFilterApplied = true;
+
+
+                // Set predicate for filtering
+                // http://guidogarcia.net/blog/2011/10/29/java-different-ways-filter-collection/
+                // Accessed: November 26
+                // Post by Guido Garcia
+
+                Predicate<Request> pred = new Predicate<Request>() {
+                    public boolean apply(Request r) {
+                        // do the filtering
+                        return (min<r.getEstimate() && r.getEstimate()<max) ;
+                    }
+                };
+
+                Comparator<Request> comp = new Comparator<Request>() {
+                    @Override
+                    public int compare(Request r1, Request r2) {
+                        return r1.getEstimate().compareTo(r2.getEstimate());
+                    }
+                };
+
+                ArrayList<Request> filtered =  filterAndSortList(pred, comp);
+
+                searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, filtered);
+                searchView.setAdapter(searchViewAdapter);
+
                 filterDialog.dismiss();
             }
         });
@@ -445,7 +422,7 @@ public class SearchRequestsActivity extends AppCompatActivity {
         minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
         minValueText.setText(new DecimalFormat("$#0.00").format(min));
         maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
-        maxValueText.setText(new DecimalFormat("$#0.00").format(max));
+        maxValueText.setText("No max");
 
         Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
         RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
@@ -467,8 +444,14 @@ public class SearchRequestsActivity extends AppCompatActivity {
             public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
                 minValueText.setText(new DecimalFormat("$#0.00").format(leftThumbIndex/(ticks/limit)));
                 maxValueText.setText(new DecimalFormat("$#0.00").format((rightThumbIndex+1)/(ticks/limit)));
+
+                if (rightThumbIndex+1 == limit) {
+                    max = 99999;    // set no limit!
+                } else {
+                    max = rightThumbIndex/(ticks/max);
+                }
                 min = (leftThumbIndex+1)/(ticks/max);
-                max = rightThumbIndex/(ticks/max);
+
             }
         });
 
@@ -476,6 +459,35 @@ public class SearchRequestsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 distanceFilterApplied = true;
+                ArrayList<Request> filtered = new ArrayList<Request>();
+
+                // Set predicate for filtering
+                // http://guidogarcia.net/blog/2011/10/29/java-different-ways-filter-collection/
+                // Accessed: November 26
+                // Post by Guido Garcia
+                Predicate<Request> pred = new Predicate<Request>() {
+                    public boolean apply(Request r) {
+                        // do the filtering
+                        return (min < r.getEstimate()/r.getDistance() && r.getEstimate()/r.getDistance() < max) ;
+//                            return true; //TODO implement distance filtering
+                    }
+                };
+
+                Comparator<Request> comp = new Comparator<Request>() {
+                    @Override
+                    public int compare(Request r1, Request r2) {
+                        Double ppk1 = r1.getEstimate()/r1.getDistance();
+                        Double ppk2 = r2.getEstimate()/r2.getDistance();
+
+                        return (ppk1).compareTo(ppk2);
+
+                    }
+                };
+
+                filtered =  filterAndSortList(pred, comp);
+
+                searchViewAdapter = new ArrayAdapter<Request>(SearchRequestsActivity.this, R.layout.list_item, filtered);
+                searchView.setAdapter(searchViewAdapter);
                 filterDialog.dismiss();
             }
         });

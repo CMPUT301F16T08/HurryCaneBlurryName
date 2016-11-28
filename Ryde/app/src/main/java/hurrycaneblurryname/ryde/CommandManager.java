@@ -23,14 +23,16 @@ public class CommandManager {
         offlineList = new ArrayList<Command>();
     }
 
-    // invoke a command if online/otherwise add to list
+    /**
+     * invokes a command if online, otherwise adds it to offline queue
+     */
     public void invokeCommand(Context context, Command command ) {
         CommandFileManager commandFileManager = new CommandFileManager(context);
         offlineList = commandFileManager.loadFromFile(FILENAME);
 
         if(isNetworkAvailable(context)){
 
-            //Check if there are any other commands in queue
+            //Check if there are any other commands in offline list
             if(!offlineList.isEmpty()){
                 invokeAll(context);
             }
@@ -44,6 +46,10 @@ public class CommandManager {
         commandFileManager.saveInFile(offlineList,FILENAME);
     }
 
+    /**
+     * Executes all commands in CommandManager offline list
+     * @param context
+     */
     public void invokeAll(Context context){
         CommandFileManager commandFileManager = new CommandFileManager(context);
         offlineList = commandFileManager.loadFromFile(FILENAME);
