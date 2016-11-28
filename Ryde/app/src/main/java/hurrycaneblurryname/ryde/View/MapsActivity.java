@@ -56,6 +56,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.common.base.Predicate;
 
 import org.json.JSONObject;
 
@@ -77,6 +78,7 @@ import hurrycaneblurryname.ryde.Command;
 import hurrycaneblurryname.ryde.CommandManager;
 import hurrycaneblurryname.ryde.DataParser;
 import hurrycaneblurryname.ryde.DescriptionTooLongException;
+import hurrycaneblurryname.ryde.LocationAddressConverter;
 import hurrycaneblurryname.ryde.LocationException;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.User;
@@ -166,6 +168,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // retrieve login user info
         user = UserHolder.getInstance().getUser();
+        if (user == null) {
+            finish();
+        }
         toggleDriverMenu(user);
 
         // set username and email
@@ -200,6 +205,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private void toggleDriverMenu(User user) {
         Menu nav_Menu = navigationView.getMenu();
+        if (user==null) {
+            return;
+        }
         if (user.getRole().equals("rider")) {
             nav_Menu.findItem(R.id.nav_search).setEnabled(false);
             nav_Menu.findItem(R.id.nav_pickup).setEnabled(false);
@@ -995,7 +1003,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Set fee offer for the trip:");
         alertDialogBuilder.setMessage(
-                "Estimated distance: "+ distance +" km\n"+
+                "Estimated distance: "+ new DecimalFormat("#0.0").format(distance/1000) +" km\n"+
                         "Estimated fee: $"+ new DecimalFormat("#0.00").format(sendRequest.getEstimate())+ "\n");
 
 //        final EditText input = new EditText(this);
@@ -1040,8 +1048,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Confirm Request");
         alertDialogBuilder.setMessage(
-                "\nFrom: "+Arrays.toString(sendRequest.getFrom())+
-                        "\nTo: "+Arrays.toString(sendRequest.getTo()) +
+                "\nFrom: \n"+ LocationAddressConverter.getLocationAddress(this, sendRequest.getFrom())+
+                        "\n\nTo: \n"+ LocationAddressConverter.getLocationAddress(this, sendRequest.getTo()) +
                         "\n\nDescription: "+sendRequest.getDescription() +
                         "\nFee offer: " + "$" + new DecimalFormat("#0.00").format(sendRequest.getEstimate()));
         alertDialogBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {

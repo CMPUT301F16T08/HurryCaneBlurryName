@@ -29,9 +29,6 @@ public class DriverTabFragment3 extends TabFragment {
     private User user;
     //ListViews
     private ListView closedView;
-    //Adapters
-    private ArrayAdapter<Request> closedViewAdapter;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,8 +36,8 @@ public class DriverTabFragment3 extends TabFragment {
 
         filteredText = (TextView) view.findViewById(R.id.closedText);
         closedView = (ListView) view.findViewById(R.id.closedView);
-        closedViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
-        closedView.setAdapter(closedViewAdapter);
+        filteredViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
+        closedView.setAdapter(filteredViewAdapter);
         closedView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,7 +83,7 @@ public class DriverTabFragment3 extends TabFragment {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
         factorLists("closed");
-        closedViewAdapter.notifyDataSetChanged();
+        filteredViewAdapter.notifyDataSetChanged();
         changeTextStatus();
     }
 

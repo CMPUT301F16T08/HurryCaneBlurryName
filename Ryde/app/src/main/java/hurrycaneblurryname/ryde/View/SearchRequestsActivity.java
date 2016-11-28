@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Predicate;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,8 +72,8 @@ public class SearchRequestsActivity extends AppCompatActivity {
     private boolean priceFilterApplied;
     private boolean distanceFilterApplied;
 
-    private int min = 0;
-    private int max = 1000;
+    private double min = 0;
+    private double max = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -384,17 +385,17 @@ public class SearchRequestsActivity extends AppCompatActivity {
 
 
         min = 0; max = 1000;
-        final Resources res = getResources();
-        String minText = String.format(res.getString(R.string.priceFormat), min);
-        String maxText = String.format(res.getString(R.string.priceFormat), max);
+        final double limit = max;
+        final int ticks = 1000;
 
         minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
-        minValueText.setText(minText);
+        minValueText.setText(new DecimalFormat("$#0.00").format(min));
         maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
-        maxValueText.setText(maxText);
+        maxValueText.setText(new DecimalFormat("$#0.00").format(max));
 
         Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
         RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
+        dialogSeekBar.setTickCount(ticks);
 
         filterDialog.show();
 
@@ -410,13 +411,10 @@ public class SearchRequestsActivity extends AppCompatActivity {
         dialogSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
-                String minText = String.format(res.getString(R.string.priceFormat), leftThumbIndex+1);
-                String maxText = String.format(res.getString(R.string.priceFormat), rightThumbIndex+1);
-                minValueText.setText(minText);
-                maxValueText.setText(maxText);
-                min = leftThumbIndex;
-                max = rightThumbIndex;
-
+                minValueText.setText(new DecimalFormat("$#0.00").format(leftThumbIndex/(ticks/limit)));
+                maxValueText.setText(new DecimalFormat("$#0.00").format((rightThumbIndex+1)/(ticks/limit)));
+                min = (leftThumbIndex+1)/(ticks/max);
+                max = rightThumbIndex/(ticks/max);
             }
         });
 
@@ -442,17 +440,16 @@ public class SearchRequestsActivity extends AppCompatActivity {
         filterDialog.setContentView(layout);
 
         min = 0; max = 100;
-        final Resources res = getResources();
-        String minText = String.format(res.getString(R.string.distanceFormat), min);
-        String maxText = String.format(res.getString(R.string.distanceFormat), max);
+        final double limit = max;
+        final int ticks = 1000;
         minValueText = (TextView) filterDialog.findViewById(R.id.minFilterText);
-        minValueText.setText(minText);
+        minValueText.setText(new DecimalFormat("$#0.00").format(min));
         maxValueText = (TextView) filterDialog.findViewById(R.id.maxFilterText);
-        maxValueText.setText(maxText);
+        maxValueText.setText(new DecimalFormat("$#0.00").format(max));
 
         Button dialogButton = (Button)layout.findViewById(R.id.filter_dialog_button);
         RangeBar dialogSeekBar = (RangeBar)layout.findViewById(R.id.filter_dialog_rangebar);
-        dialogSeekBar.setTickCount(100);
+        dialogSeekBar.setTickCount(ticks);
 
         filterDialog.show();
 
@@ -468,13 +465,10 @@ public class SearchRequestsActivity extends AppCompatActivity {
         dialogSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
-                Log.i("LeftIndex", Integer.toString(leftThumbIndex));
-                String minText = String.format(res.getString(R.string.priceFormat), leftThumbIndex+1);
-                String maxText = String.format(res.getString(R.string.priceFormat), rightThumbIndex+1);
-                minValueText.setText(minText);
-                maxValueText.setText(maxText);
-                min = leftThumbIndex;
-                max = rightThumbIndex;
+                minValueText.setText(new DecimalFormat("$#0.00").format(leftThumbIndex/(ticks/limit)));
+                maxValueText.setText(new DecimalFormat("$#0.00").format((rightThumbIndex+1)/(ticks/limit)));
+                min = (leftThumbIndex+1)/(ticks/max);
+                max = rightThumbIndex/(ticks/max);
             }
         });
 

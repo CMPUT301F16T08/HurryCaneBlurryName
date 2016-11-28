@@ -11,17 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.DecimalFormat;
 
 import hurrycaneblurryname.ryde.Command;
 import hurrycaneblurryname.ryde.CommandManager;
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+import hurrycaneblurryname.ryde.LocationAddressConverter;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
-import hurrycaneblurryname.ryde.Model.User;
 import hurrycaneblurryname.ryde.Model.UserHolder;
 import hurrycaneblurryname.ryde.NotificationManager;
 import hurrycaneblurryname.ryde.R;
@@ -140,10 +138,13 @@ public class RideInfoFromSearch extends AppCompatActivity {
     private void setTextViewContent(Request request){
         descTextView.setText(request.getDescription());
         riderTextView.setText(request.getRider().getUsername());
-        fromTextView.setText(Arrays.toString(request.getFrom()));
-        toTextView.setText(Arrays.toString(request.getTo()));
+
+        // get address from geolocation
+        fromTextView.setText(LocationAddressConverter.getLocationAddress(this, request.getFrom()));
+        toTextView.setText(LocationAddressConverter.getLocationAddress(this, request.getTo()));
+
         statusTextView.setText(request.getStatus());
-        feeTextView.setText("$"+request.getEstimate().toString());
+        feeTextView.setText(new DecimalFormat("$#0.00").format(request.getEstimate()));
 
     }
 

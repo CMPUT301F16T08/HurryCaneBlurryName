@@ -2,6 +2,7 @@ package hurrycaneblurryname.ryde.View;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import org.w3c.dom.Text;
-import java.util.Arrays;
+import java.text.DecimalFormat;
 
 import hurrycaneblurryname.ryde.ElasticSearchRequestController;
+import hurrycaneblurryname.ryde.LocationAddressConverter;
 import hurrycaneblurryname.ryde.Model.Request.Request;
 import hurrycaneblurryname.ryde.Model.Request.RequestHolder;
 import hurrycaneblurryname.ryde.Model.Request.RequestUserHolder;
@@ -121,6 +122,9 @@ public class RideInfoActivity extends AppCompatActivity {
     }
 
     private void setTextViewContent(Request request){
+
+        final Resources res = getResources();
+
         descTextView.setText(request.getDescription());
         riderTextView.setText(request.getRider().getUsername());
         if (!request.getDriver().getUsername().equals(""))
@@ -131,11 +135,16 @@ public class RideInfoActivity extends AppCompatActivity {
         else{
             driverClickTextView.setVisibility(View.GONE);
         }
-        fromTextView.setText(Arrays.toString(request.getFrom()));
-        toTextView.setText(Arrays.toString(request.getTo()));
-        statusTextView.setText(request.getStatus());
-        feeTextView.setText("$"+request.getEstimate().toString());
 
+        // Display address of locations if possible
+        fromTextView.setText(LocationAddressConverter.getLocationAddress(this, request.getFrom()));
+        toTextView.setText(LocationAddressConverter.getLocationAddress(this, request.getTo()));
+
+
+        statusTextView.setText(request.getStatus());
+        feeTextView.setText(new DecimalFormat("$#0.00").format(request.getEstimate()));
+
+        // display buttons depending on status
         if(request.getStatus().equals("open"))
         {
             completeButton.setVisibility(View.GONE);
