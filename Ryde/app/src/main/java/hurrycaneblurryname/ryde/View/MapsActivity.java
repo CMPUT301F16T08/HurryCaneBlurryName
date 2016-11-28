@@ -995,7 +995,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Set fee offer for the trip:");
         alertDialogBuilder.setMessage(
-                "Estimated distance: "+ distance/1000 +" \n"+
+                "Estimated distance: "+ distance +" km\n"+
                         "Estimated fee: $"+ new DecimalFormat("#0.00").format(sendRequest.getEstimate())+ "\n");
 
 //        final EditText input = new EditText(this);

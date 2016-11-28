@@ -1,3 +1,4 @@
+
 Working:
 	Request:
 		US 01.01.01(request rides between two locations)
@@ -10,6 +11,10 @@ Working:
 		US 01.09.01 (car details) As a rider, I should see a description of the driver's vehicle.
 		US 01.07.01(confirm the completion)
 		US 01.08.01(confirm a driver's acceptance)
+	Accepting:
+		US 05.01.01(accept a request I agree with and accept that offered payment upon completion)
+		US 05.02.01(view a list of things I have accepted that are pending, each request with its description, and locations.)
+		US 05.03.01(see if my acceptance was accepted.)
 	User:
 		US 03.01.01(user setup)
 		US 03.02.01(edit user profile)
@@ -18,36 +23,24 @@ Working:
 		
 	Status:
 		US 02.01.01(status of a request that I am involved in)
+		US 01.03.01(if my request is accepted)
+		US 05.04.01(notified if my ride offer was accepted.)
 
 	Location:
 		US 10.01.01(specify a start and end geo locations on a map for a request)
 		US 10.02.01(view start and end geo locations on a map for a request)
 		US 04.01.01(browse and search for open requests by geo-location)	
-
-Nolan:
-	Demo video
-
-Christina:
-	US 01.03.01(if my request is accepted)
-	US 05.04.01(notified if my ride offer was accepted.)
-	
-	
-in Progress:
-		
-	New:
-		US 04.03.01 (price search) As a driver, I should be able filter request searches by price per KM and price.
-		US 04.04.01 (addresses) As a driver, I should be able to see the addresses of the requests.
-		
-	Request:
-
-		
-	Accepting:
-		US 05.01.01(accept a request I agree with and accept that offered payment upon completion)
-		US 05.02.01(view a list of things I have accepted that are pending, each request with its description, and locations.)
-		US 05.03.01(see if my acceptance was accepted.)
 		
 	Offline behavior:
 		US 08.01.01(see requests that I already accepted while offline.)
 		US 08.02.01(see requests that I have made while offline.)
 		US 08.03.01(make requests that will be sent once I get connectivity again.)
 		US 08.04.01(accept requests that will be sent once I get connectivity again.)
+	New:
+		US 04.03.01 (price search) As a driver, I should be able filter request searches by price per KM and price.
+
+Nolan:
+	Demo video
+
+To-do:
+	US 04.04.01 (addresses) As a driver, I should be able to see the addresses of the requests.

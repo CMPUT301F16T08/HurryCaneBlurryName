@@ -579,7 +579,6 @@ public class ElasticSearchRequestController {
                 if (result.isSucceeded()) {
                     List<Notification> foundNotifs = result.getSourceAsObjectList(Notification.class);
                     notifs.addAll(foundNotifs);
-                    Log.i("Debug", notifs.get(0).getMessage());
                 }
                 else {
                     Log.i("ErrorGetNotif", "The search query failed to find any notifs that matched.");
