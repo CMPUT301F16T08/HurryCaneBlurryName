@@ -14,9 +14,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- MapView inside, show location markup -->
+        <LinearLayout
+            android:id="@+id/rideInfoLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+
+            <!-- MapView inside -->
+
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rideInfoLayout">
 
             <!-- description -->
             <TextView android:id="@+id/descTextView"
