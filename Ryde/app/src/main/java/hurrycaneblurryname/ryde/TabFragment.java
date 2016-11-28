@@ -2,6 +2,7 @@ package hurrycaneblurryname.ryde;
 
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class TabFragment extends Fragment {
     protected ArrayList<Request> filteredRequests = new ArrayList<Request>();
     protected TextView filteredText;
     protected ArrayList<Request> requestList;
+    protected ArrayAdapter<Request> filteredViewAdapter;
 
     protected void factorLists(String searchStatus){
         filteredRequests.clear();
@@ -30,6 +32,9 @@ public class TabFragment extends Fragment {
         }
     }
 
+    protected void refresh() {
+
+    }
 
     protected void changeTextStatus(){
         if(filteredRequests.size()>0)

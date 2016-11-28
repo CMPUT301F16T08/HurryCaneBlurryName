@@ -5,12 +5,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import hurrycaneblurryname.ryde.RiderPagerAdapter;
 import hurrycaneblurryname.ryde.R;
 
 public class MyRideRequestsRemake extends AppCompatActivity {
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    RiderPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +27,15 @@ public class MyRideRequestsRemake extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Opened"));
         tabLayout.addTab(tabLayout.newTab().setText("Ongoings"));
         tabLayout.addTab(tabLayout.newTab().setText("Closed"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final RiderPagerAdapter adapter = new RiderPagerAdapter
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        adapter = new RiderPagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -67,7 +72,13 @@ public class MyRideRequestsRemake extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
+        adapter.refreshTabs();
+
+
+
+
     }
 
 }

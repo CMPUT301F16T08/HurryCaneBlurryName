@@ -79,8 +79,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
-    <string name="distanceFormat">%d km</string>
-    <string name="priceFormat">$%1$d</string>
     <string name="distance">Price/km</string>
     <string name="price">Price</string>
 

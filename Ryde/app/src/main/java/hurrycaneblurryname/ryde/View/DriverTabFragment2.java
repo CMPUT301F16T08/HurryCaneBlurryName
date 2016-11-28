@@ -29,9 +29,6 @@ public class DriverTabFragment2 extends TabFragment {
     private User user;
     //ListViews
     private ListView offerView;
-    //Adapters
-    private ArrayAdapter<Request> offerViewAdapter;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,8 +36,8 @@ public class DriverTabFragment2 extends TabFragment {
 
         filteredText = (TextView) view.findViewById(R.id.offerText);
         offerView = (ListView) view.findViewById(R.id.offerView);
-        offerViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
-        offerView.setAdapter(offerViewAdapter);
+        filteredViewAdapter = new ArrayAdapter<Request>(getActivity(), R.layout.list_item, filteredRequests);
+        offerView.setAdapter(filteredViewAdapter);
         offerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,7 +83,7 @@ public class DriverTabFragment2 extends TabFragment {
             Log.i("ErrorGetRequest", "Failed to get open requests");
         }
         factorLists("accepted");
-        offerViewAdapter.notifyDataSetChanged();
+        filteredViewAdapter.notifyDataSetChanged();
         changeTextStatus();
 
     }
