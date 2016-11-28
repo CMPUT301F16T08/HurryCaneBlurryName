@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -253,8 +254,8 @@ public class RideInfoFromSearch extends AppCompatActivity implements OnMapReadyC
         //Get the lat lng
         double [] requestFrom = request.getFrom();
         double [] requestTo = request.getTo();
-        LatLng from = new LatLng(requestFrom[1], requestFrom[0]);
-        LatLng to = new LatLng(requestTo[1], requestTo[0]);
+        final LatLng from = new LatLng(requestFrom[1], requestFrom[0]);
+        final LatLng to = new LatLng(requestTo[1], requestTo[0]);
 
         // Creating MarkerOptions
         MarkerOptions options = new MarkerOptions();
@@ -277,17 +278,25 @@ public class RideInfoFromSearch extends AppCompatActivity implements OnMapReadyC
         // Add new marker to the Google Map Android API V2
         mMap.addMarker(options);
 
-        //move map camera to show both points
-        //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
-        //Date Accessed : 11/24/2016
-        //Author: andr
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(from);
-        builder.include(to);
-        LatLngBounds bounds = builder.build();
-        int padding = 130; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        mMap.animateCamera(cu);
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+            @Override
+            public void onCameraChange(CameraPosition arg0) {
+                //move map camera to show both points
+                //Source : http://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
+                //Date Accessed : 11/24/2016
+                //Author: andr
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(from);
+                builder.include(to);
+                LatLngBounds bounds = builder.build();
+                int padding = 130; // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mMap.animateCamera(cu);
+                // Remove listener to prevent position reset on camera move.
+                mMap.setOnCameraChangeListener(null);
+            }
+        });
 
         if(NetworkUtil.getConnectivityStatusString(RideInfoFromSearch.this) != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             // Getting URL to the Google Directions API

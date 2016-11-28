@@ -82,6 +82,11 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
         solo.clickOnView(solo.getView(R.id.cancelButton));
         solo.clickOnView(solo.getView(android.R.id.button2));
         solo.goBack();
+        solo.goBack();
+
+        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
+        /////////////////
+        solo.clickOnText("My Ride Requests");
 
         boolean correctInput2 = solo.searchText(String.valueOf(n));
         assertEquals(true, !correctInput2);
