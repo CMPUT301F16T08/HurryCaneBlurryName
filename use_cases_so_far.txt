@@ -11,6 +11,8 @@ Working:
 		US 01.09.01 (car details) As a rider, I should see a description of the driver's vehicle.
 		US 01.07.01(confirm the completion)
 		US 01.08.01(confirm a driver's acceptance)
+		US 04.04.01 (addresses) As a driver, I should be able to see the addresses of the requests.
+		
 	Accepting:
 		US 05.01.01(accept a request I agree with and accept that offered payment upon completion)
 		US 05.02.01(view a list of things I have accepted that are pending, each request with its description, and locations.)
@@ -43,4 +45,4 @@ Nolan:
 	Demo video
 
 To-do:
-	US 04.04.01 (addresses) As a driver, I should be able to see the addresses of the requests.
+	
