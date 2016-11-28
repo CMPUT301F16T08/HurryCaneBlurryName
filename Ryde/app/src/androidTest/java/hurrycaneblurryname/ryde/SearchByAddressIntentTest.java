@@ -21,8 +21,6 @@ import hurrycaneblurryname.ryde.View.MapsActivity;
  *  - SearchByAddress(UC-16)
  *  - PriceEstimate(UC-14)
  *  - RideRequestsNewRide (UC-1)
- *  - DriverAcceptsRequestIntent (UC-10)
- *  - ConfirmDriverAcceptance (UC-5)
  */
 
 public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<LoginScreenActivity> {
@@ -42,6 +40,7 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
         solo.enterText((EditText) solo.getView(R.id.userEditText), "test1");
         solo.enterText((EditText) solo.getView(R.id.passwordEditText), "123456");
         solo.clickOnButton("Login");
+        solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", MapsActivity.class);
 
         solo.enterText((EditText) solo.getView(R.id.text_map_search_start), "University of Alberta");
@@ -81,7 +80,7 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
         //http://stackoverflow.com/questions/5323487/verify-alertdialog-shown-on-invalid-text-input
         boolean correctInput = solo.searchText(ride_item);
         assertEquals(true, correctInput);
-        /*
+
         solo.clickOnText(String.valueOf(n));
         solo.clickOnView(solo.getView(R.id.cancelButton));
         solo.clickOnView(solo.getView(android.R.id.button2));
@@ -94,60 +93,8 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
 
         boolean correctInput2 = solo.searchText(String.valueOf(n));
         assertEquals(true, !correctInput2);
-        */
-        solo.goBack();
-
-        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
-        solo.clickOnText("Logout");
-
-        //DriverAcceptsRequestIntent (UC-10)
-        //open as user test3
-        solo.assertCurrentActivity("Wrong Activity", LoginScreenActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.userEditText), "test3");
-        solo.enterText((EditText) solo.getView(R.id.passwordEditText), "123456");
-        solo.clickOnButton("Login");
-        solo.assertCurrentActivity("Wrong Activity", MapsActivity.class);
-
-        //http://stackoverflow.com/questions/26118480/how-to-open-navigation-drawer-menu-in-robotium-automation-script-in-android/29645959#29645959
-        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
-        /////////////////
-        solo.clickOnText("Search Requests");
-        solo.clickOnButton("by keyword");
-        solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.sleep(1000);
-        solo.clickOnText(ride_item);
-        solo.sleep(5000);
-        solo.clickOnView(solo.getView(R.id.interestButton));
-        solo.goBack();
-        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
-        solo.clickOnText("My Pickups");
-        solo.sleep(1000);
-        solo.goBack();
-        solo.sleep(1000);
-        solo.drag(xStart, xEnd, height / 2, height / 2, 1); //open menu again to logout
-        solo.clickOnText("Logout");
-
-    /*
-    Testing User COnfirmDriverAcceptane
-     */
-        solo.assertCurrentActivity("Wrong Activity", LoginScreenActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.userEditText), "test1");
-        solo.enterText((EditText) solo.getView(R.id.passwordEditText), "123456");
-        solo.clickOnButton("Login");
-        solo.assertCurrentActivity("Wrong Activity", MapsActivity.class);
-
-        //sees notification
-        //solo.clickOnView(solo.getView(R.id.menu_hotlist));
 
 
-        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
-        solo.clickOnText("My Ride Requests");
-        solo.clickOnText(ride_item);
-        solo.clickOnView(solo.getView(R.id.driverUsernameText));
-        solo.clickInList(0);
-        solo.clickOnView(solo.getView(R.id.confirmButton));
-        //http://stackoverflow.com/questions/10359192/how-to-select-which-button-to-click-on-robotium-for-an-alert-dialog
-        solo.clickOnView(solo.getView(android.R.id.button2));
 
     }
 
