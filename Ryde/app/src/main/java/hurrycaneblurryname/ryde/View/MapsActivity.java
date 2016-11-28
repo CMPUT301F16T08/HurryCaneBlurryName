@@ -144,7 +144,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         startMarker = null;
         endMarker = null;
         routeLine = null;
-
+        distance=0.0; //John added
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -843,6 +843,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestConfirm(View view){
         User user = UserHolder.getInstance().getUser();
         sendRequest = new Request(user);
+        //int distance= 0; //I dont know
         sendRequest.setEstimate(4 + (distance/1000.0));
         sendRequest.setDistance(distance/1000.0);
         try {
