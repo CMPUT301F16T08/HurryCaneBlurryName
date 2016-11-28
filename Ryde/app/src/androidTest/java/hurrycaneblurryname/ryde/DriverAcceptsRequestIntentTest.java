@@ -85,7 +85,9 @@ public class DriverAcceptsRequestIntentTest extends ActivityInstrumentationTestC
         solo.goBack();
         solo.goBack();
         */
+    }
 
-
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
     }
 }
