@@ -23,6 +23,8 @@ Working:
 		
 	Status:
 		US 02.01.01(status of a request that I am involved in)
+		US 01.03.01(if my request is accepted)
+		US 05.04.01(notified if my ride offer was accepted.)
 
 	Location:
 		US 10.01.01(specify a start and end geo locations on a map for a request)
@@ -40,9 +42,5 @@ Working:
 Nolan:
 	Demo video
 
-Christina:
-	US 01.03.01(if my request is accepted)
-	US 05.04.01(notified if my ride offer was accepted.)
-	
 To-do:
 	US 04.04.01 (addresses) As a driver, I should be able to see the addresses of the requests.
