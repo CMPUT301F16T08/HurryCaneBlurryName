@@ -60,6 +60,11 @@ public class DataParser {
         return routes;
     }
 
+    /**
+     * Gets distance by calculating the sum of all distances of every leg of the route.
+     * @param jObject
+     * @return Integer
+     */
     public Integer getDistance(JSONObject jObject){
 
         JSONArray jRoutes;
