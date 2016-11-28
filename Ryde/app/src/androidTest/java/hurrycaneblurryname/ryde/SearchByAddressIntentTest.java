@@ -16,7 +16,10 @@ import hurrycaneblurryname.ryde.View.MapsActivity;
 
 /**
  * Created by john on 2016-11-26.
- *
+ * this test includes use cases:
+ *  - SearchByAddress(UC-16)
+ *  - PriceEstimate(UC-14)
+ *  - RideRequestsNewRide (UC-1)
  */
 
 public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<LoginScreenActivity> {
@@ -51,6 +54,7 @@ public class SearchByAddressIntentTest extends ActivityInstrumentationTestCase2<
         int n=rand.nextInt(1000);
         solo.enterText(0, String.valueOf(n));
         /*
+        click confirm, confirm and send from 3 alert dialog
         http://stackoverflow.com/questions/10359192/how-to-select-which-button-to-click-on-robotium-for-an-alert-dialog
          */
         solo.clickOnView(solo.getView(android.R.id.button2));

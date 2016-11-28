@@ -32,7 +32,7 @@ public class SearchForOpenRequestsIntentTest extends ActivityInstrumentationTest
 
     public void testSetup(){
         solo.assertCurrentActivity("Wrong Activity", LoginScreenActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.userEditText), "test1");
+        solo.enterText((EditText) solo.getView(R.id.userEditText), "test3");
         solo.enterText((EditText) solo.getView(R.id.passwordEditText), "123456");
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("Wrong Activity", MapsActivity.class);
@@ -47,7 +47,14 @@ public class SearchForOpenRequestsIntentTest extends ActivityInstrumentationTest
         solo.drag(xStart, xEnd, height / 2, height / 2, 1);
         /////////////////
         solo.clickOnText("Search Requests");
+        solo.clickOnView(solo.getView(R.id.radio_keyword));
+        solo.clickOnView(solo.getView(R.id.searchButton));
+        solo.sleep(5000);
 
+    }
+
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
     }
 
 }

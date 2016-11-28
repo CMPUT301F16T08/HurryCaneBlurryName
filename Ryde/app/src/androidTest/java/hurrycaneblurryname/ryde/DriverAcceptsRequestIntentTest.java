@@ -12,6 +12,8 @@ import hurrycaneblurryname.ryde.View.MapsActivity;
 
 /**
  * Created by john on 2016-11-26.
+ * this test include use case:
+ *  -
  */
 
 public class DriverAcceptsRequestIntentTest extends ActivityInstrumentationTestCase2<LoginScreenActivity> {
