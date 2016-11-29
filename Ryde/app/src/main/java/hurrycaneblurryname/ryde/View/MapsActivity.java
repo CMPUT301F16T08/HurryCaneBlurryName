@@ -935,9 +935,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     notificationList.remove(item.getTitle()); //remove notification after clicked (read)
                     updateNotifCount(notificationList.size());
 
-                    Intent offerIntent = new Intent(MapsActivity.this, MyRideRequestsRemake.class);
+                    Intent offerIntent;
+                    if (item.getTitle().toString().contains("accept")) {
+                        offerIntent = new Intent(MapsActivity.this, MyRideRequestsRemake.class);
+                    } else {
+                        offerIntent = new Intent(MapsActivity.this, MyPickupActivity.class);
+                    }
                     offerIntent.putExtra("tabpage", 0);
 
+                    if (offerIntent == null) {
+                        return false;
+                    }
                     startActivity(offerIntent);
                     popup.dismiss();
 

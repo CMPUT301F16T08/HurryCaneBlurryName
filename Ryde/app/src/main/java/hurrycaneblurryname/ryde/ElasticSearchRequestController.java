@@ -54,7 +54,7 @@ public class ElasticSearchRequestController {
 
             // {"query" :  { bool : { should : [ { "match" : { "status" : "open" }}] } },"filter" : {"geo_distance" : {"distance" : "10km", "from" : [-113.49026,53.54565] }} };
             if (searchParam.length == 2) {
-                search_string = "{\"query\" :  { bool : { should : [ { \"match\" : { \"status\" : " +
+                search_string = "{\"query\" :  { bool : { must : [ { \"match\" : { \"status\" : " +
                         "\"open\" }}] } },\"filter\" : {\"geo_distance\" : {\"distance\" : \"10km\", \"from\" : ["+searchParam[1]+","+searchParam[0]+"] }} }";
             } else {
                 search_string = "";
