@@ -22,6 +22,8 @@ public class UpdateRequestCommand extends Command{
         ElasticSearchRequestController.UpdateRequestsTask updateRequestsTask =
                 new ElasticSearchRequestController.UpdateRequestsTask();
         updateRequestsTask.execute(request);
+
+        NotificationManager.sendAcceptNotification(request.getRider(), request.getDescription());
     }
 
 }
