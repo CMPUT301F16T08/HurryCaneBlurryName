@@ -565,7 +565,7 @@ public class ElasticSearchRequestController {
 
             // "{ "query": {"term": {"toUser": "search_parameters[0]"}}}";
 
-            String search_string = "{ \"query\": {\"term\": {\"toUser\": \""+user[0]+"\"}}}";
+            String search_string = "{ \"query\": {\"term\": {\"toUser\": \""+user[0].toLowerCase()+"\"}}}";
             Log.i("Debug", search_string);
 
             // assume that search_parameters[0] is the only search term we are interested in using

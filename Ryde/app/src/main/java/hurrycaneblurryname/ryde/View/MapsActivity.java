@@ -195,6 +195,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Enable driver menu
         toggleDriverMenu(user);
 
+        Log.i("GETNOTIF", "Getting notifications");
         // Notifications
         notificationList = NotificationManager.updateNotifs();
         notif_number = notificationList.size();
@@ -919,7 +920,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void populateNotifItems(final PopupMenu popup) {
         if (notificationList.size() > 0) {
             for (Notification n : notificationList) {
-                MenuItem i = popup.getMenu().add(n.getMessage());
+                popup.getMenu().add(n.getMessage());
             }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
