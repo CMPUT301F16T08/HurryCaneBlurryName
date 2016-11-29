@@ -131,7 +131,6 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                 if (!request.getDriver().getUsername().equals("")) {
                     Toast.makeText(RiderConfirmDriverActivity.this, "You have confirmed a driver for this request!", Toast.LENGTH_SHORT).show();
 
-                    NotificationManager.sendConfirmNotification(request.getRider(), request.getDescription());
                     return;
                 }
                 RequestHolder.getInstance().getRequest().setDriver(user);
@@ -144,6 +143,7 @@ public class RiderConfirmDriverActivity extends AppCompatActivity {
                 updateRequestsTask.execute(RequestHolder.getInstance().getRequest());
 
                 Toast.makeText(RiderConfirmDriverActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                NotificationManager.sendConfirmNotification(user, request.getDescription());
                 finish();
             }
         });
