@@ -936,7 +936,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     updateNotifCount(notificationList.size());
 
                     Intent offerIntent;
-                    if (item.getTitle().toString().contains("accept")) {
+                    if (item.getTitle().toString().contains("interested")) {
                         offerIntent = new Intent(MapsActivity.this, MyRideRequestsRemake.class);
                     } else {
                         offerIntent = new Intent(MapsActivity.this, MyPickupActivity.class);
