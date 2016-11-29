@@ -28,6 +28,8 @@ public class NotificationManager {
         Notification n =  new Notification(UserHolder.getInstance().getUser().getUsername(), requestString);
         n.setToUser(toUser);
         n.compileMessage("confirm");
+        ElasticSearchRequestController.AddNotifTask addNotifTask = new ElasticSearchRequestController.AddNotifTask();
+        addNotifTask.execute(n);
     }
 
     public static ArrayList<Notification> updateNotifs() {
